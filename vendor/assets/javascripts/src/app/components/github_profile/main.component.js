@@ -8,6 +8,8 @@ import githubAPI from './api/githubAPI.js';
 export default class GithubMainComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.getUserData = this.getUserData.bind(this);
+    this.getUserRepo = this.getUserRepo.bind(this);
     this.state = {
       username: 'giancarlosio',
       userData: [],
@@ -16,8 +18,11 @@ export default class GithubMainComponent extends React.Component {
     };
   }
 
-  componentDidMount() {
-    let userDataPromise = githubAPI.getUserData(this.props.clientId, this.props.clientSecret, this.state.username);
+  // api functions
+  getUserData() {
+    let {clientId, clientSecret} = this.props;
+    let {username, perPage} = this.state;
+    let userDataPromise = githubAPI.getUserData(clientId, clientSecret, username);
     userDataPromise.then(
       (data)=>{
         console.log('data of promise', data);
@@ -35,7 +40,29 @@ export default class GithubMainComponent extends React.Component {
           }
         });
       }
-    )
+    );
+  }
+  getUserRepo() {
+    let {clientId, clientSecret} = this.props;
+    let {username, perPage} = this.state;
+    let userRepoPromise = githubAPI.getUserRepo(clientId, clientSecret, username, perPage);
+    userRepoPromise.then(
+      (data) => {
+        console.log('repos data', data)
+        this.setState((prevState, props)=>{
+          return {
+            userRepos: data
+          }
+        })
+      },
+      (error) => {
+        console.log('error userRepo', error)
+      }
+    );
+  }
+  componentDidMount() {
+    this.getUserData();
+    this.getUserRepo();
   }
 
   render() {

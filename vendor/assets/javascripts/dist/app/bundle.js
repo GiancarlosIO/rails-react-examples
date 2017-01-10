@@ -26577,6 +26577,8 @@
 
 	    var _this = _possibleConstructorReturn(this, (GithubMainComponent.__proto__ || Object.getPrototypeOf(GithubMainComponent)).call(this, props));
 
+	    _this.getUserData = _this.getUserData.bind(_this);
+	    _this.getUserRepo = _this.getUserRepo.bind(_this);
 	    _this.state = {
 	      username: 'giancarlosio',
 	      userData: [],
@@ -26586,12 +26588,22 @@
 	    return _this;
 	  }
 
+	  // api functions
+
+
 	  _createClass(GithubMainComponent, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
+	    key: 'getUserData',
+	    value: function getUserData() {
 	      var _this2 = this;
 
-	      var userDataPromise = _githubAPI2.default.getUserData(this.props.clientId, this.props.clientSecret, this.state.username);
+	      var _props = this.props,
+	          clientId = _props.clientId,
+	          clientSecret = _props.clientSecret;
+	      var _state = this.state,
+	          username = _state.username,
+	          perPage = _state.perPage;
+
+	      var userDataPromise = _githubAPI2.default.getUserData(clientId, clientSecret, username);
 	      userDataPromise.then(function (data) {
 	        console.log('data of promise', data);
 	        _this2.setState(function (prevState, props) {
@@ -26607,6 +26619,36 @@
 	          };
 	        });
 	      });
+	    }
+	  }, {
+	    key: 'getUserRepo',
+	    value: function getUserRepo() {
+	      var _this3 = this;
+
+	      var _props2 = this.props,
+	          clientId = _props2.clientId,
+	          clientSecret = _props2.clientSecret;
+	      var _state2 = this.state,
+	          username = _state2.username,
+	          perPage = _state2.perPage;
+
+	      var userRepoPromise = _githubAPI2.default.getUserRepo(clientId, clientSecret, username, perPage);
+	      userRepoPromise.then(function (data) {
+	        console.log('repos data', data);
+	        _this3.setState(function (prevState, props) {
+	          return {
+	            userRepos: data
+	          };
+	        });
+	      }, function (error) {
+	        console.log('error userRepo', error);
+	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getUserData();
+	      this.getUserRepo();
 	    }
 	  }, {
 	    key: 'render',
@@ -26759,12 +26801,17 @@
 	      url: 'https://api.github.com/users/' + username + '?client_id=' + clientId + '&client_secret=' + clientSecret,
 	      dataType: 'json',
 	      cache: false,
-	      success: function success(data) {
-	        // console.log('data', data);
-	      },
-	      error: function error(_error) {
-	        // console.log(error);
-	      }
+	      success: function success(data) {},
+	      error: function error(_error) {}
+	    });
+	  },
+	  getUserRepo: function getUserRepo(clientId, clientSecret, username, perPage) {
+	    return $.ajax({
+	      url: 'https://api.github.com/users/' + username + '/repos?per_page=' + perPage + '&client_id=' + clientId + '&client_secret=' + clientSecret + '&sort=created',
+	      dataType: 'json',
+	      cache: false,
+	      success: function success(data) {},
+	      error: function error(_error2) {}
 	    });
 	  }
 	};
