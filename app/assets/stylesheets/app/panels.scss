@@ -1,0 +1,13 @@
+.panel {
+  width: 80%;
+  margin: 0 auto;
+  border: 1px solid rgba(0,0,0,0.4);
+  &__header, &__body { padding: 10px; }
+  &__header {
+    background-color: rgba(0,0,0,0.4);
+    color: #fff;
+  }
+  &__body {
+    
+  }
+}
