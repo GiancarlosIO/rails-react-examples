@@ -1,0 +1,20 @@
+.button {
+  display: block;
+  text-decoration: none;
+  &:focus, &:visited, &:hover {
+    outline: none;
+    text-decoration: none;
+  }
+  &--medium {
+    color: 14px;
+    padding: 10px 15px;
+  }
+  &--blue {
+    background-color: rgba(blue,0.6);
+    color: white;
+    transition: all 0.3s ease;
+    &:hover {
+      box-shadow: 0px 4px 10px rgba(black, 0.5);
+    }
+  }
+}
