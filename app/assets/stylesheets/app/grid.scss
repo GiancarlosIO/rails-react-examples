@@ -1,5 +1,5 @@
 .container {
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
 }
 .row {
@@ -17,6 +17,7 @@
   }
 }
 .flex {
+  padding: 10px;
   width: 100%;
   display: flex;
   &--row {
@@ -24,6 +25,17 @@
     &--space-around {
       justify-content: space-around;
       align-items: center;
+    }
+    &--start {
+      justify-content: flex-start;
+      align-items: center;
+    }
+  }
+  &--column {
+    flex-flow: column;
+    &--start {
+      align-items: flex-start;
+      justify-content: center;
     }
   }
 }
