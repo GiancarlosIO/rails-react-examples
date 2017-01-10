@@ -1,0 +1,20 @@
+.label {
+  padding: 5px 10px;
+  border-radius: 5px;
+  &--red {
+    background-color: rgba(red, 0.5);
+    color: white;
+  }
+  &--blue {
+    background-color: rgba(blue, 0.5);
+    color: white;
+  }
+  &--grey {
+    background-color: rgba(grey, 0.5);
+    color: white;
+  }
+  &--orange {
+    background-color: rgba(orange, 0.5);
+    color: white;
+  }
+}
