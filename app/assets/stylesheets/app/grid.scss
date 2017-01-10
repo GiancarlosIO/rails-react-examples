@@ -1,0 +1,29 @@
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+.row {
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+.column {
+  padding: 10px;
+  @for $i from 1 through 10 {
+    &--#{$i} {
+      width: #{$i * 10%};
+    }
+  }
+}
+.flex {
+  width: 100%;
+  display: flex;
+  &--row {
+    flex-flow: row;
+    &--space-around {
+      justify-content: space-around;
+      align-items: center;
+    }
+  }
+}
