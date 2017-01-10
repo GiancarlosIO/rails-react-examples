@@ -26548,6 +26548,14 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _profile = __webpack_require__(240);
+
+	var _profile2 = _interopRequireDefault(_profile);
+
+	var _githubAPI = __webpack_require__(239);
+
+	var _githubAPI2 = _interopRequireDefault(_githubAPI);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -26556,16 +26564,51 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	// Components
+
+	// API service
+
+
 	var GithubMainComponent = function (_React$Component) {
 	  _inherits(GithubMainComponent, _React$Component);
 
 	  function GithubMainComponent(props) {
 	    _classCallCheck(this, GithubMainComponent);
 
-	    return _possibleConstructorReturn(this, (GithubMainComponent.__proto__ || Object.getPrototypeOf(GithubMainComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (GithubMainComponent.__proto__ || Object.getPrototypeOf(GithubMainComponent)).call(this, props));
+
+	    _this.state = {
+	      username: 'giancarlosio',
+	      userData: [],
+	      userRepos: [],
+	      perPage: 5
+	    };
+	    return _this;
 	  }
 
 	  _createClass(GithubMainComponent, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      var userDataPromise = _githubAPI2.default.getUserData(this.props.clientId, this.props.clientSecret, this.state.username);
+	      userDataPromise.then(function (data) {
+	        console.log('data of promise', data);
+	        _this2.setState(function (prevState, props) {
+	          return {
+	            userData: data
+	          };
+	        });
+	      }, function (error) {
+	        console.log('error of promise', error);
+	        _this2.setState(function (prevState, props) {
+	          return {
+	            username: 'none'
+	          };
+	        });
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -26574,8 +26617,9 @@
 	        _react2.default.createElement(
 	          'h1',
 	          null,
-	          'Github component'
-	        )
+	          'Github Profile'
+	        ),
+	        _react2.default.createElement(_profile2.default, { userData: this.state.userData })
 	      );
 	    }
 	  }]);
@@ -26584,6 +26628,15 @@
 	}(_react2.default.Component);
 
 	exports.default = GithubMainComponent;
+
+	GithubMainComponent.propTypes = {
+	  clientId: _react2.default.PropTypes.string,
+	  clientSecret: _react2.default.PropTypes.string
+	};
+	GithubMainComponent.defaultProps = {
+	  clientId: 'a8274030a947f5ce123d',
+	  clientSecret: '705f02a679ae35797593b63a29839ce965a41273'
+	};
 
 /***/ },
 /* 237 */
@@ -26690,6 +26743,201 @@
 	}(_react2.default.Component);
 
 	exports.default = Children2Component;
+
+/***/ },
+/* 239 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var githubAPI = {
+	  getUserData: function getUserData(clientId, clientSecret, username) {
+	    return $.ajax({
+	      url: 'https://api.github.com/users/' + username + '?client_id=' + clientId + '&client_secret=' + clientSecret,
+	      dataType: 'json',
+	      cache: false,
+	      success: function success(data) {
+	        // console.log('data', data);
+	      },
+	      error: function error(_error) {
+	        // console.log(error);
+	      }
+	    });
+	  }
+	};
+
+	exports.default = githubAPI;
+
+/***/ },
+/* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Profile = function (_React$Component) {
+	  _inherits(Profile, _React$Component);
+
+	  function Profile(props) {
+	    _classCallCheck(this, Profile);
+
+	    return _possibleConstructorReturn(this, (Profile.__proto__ || Object.getPrototypeOf(Profile)).call(this, props));
+	  }
+
+	  _createClass(Profile, [{
+	    key: "render",
+	    value: function render() {
+	      var _props$userData = this.props.userData,
+	          name = _props$userData.name,
+	          avatar_url = _props$userData.avatar_url,
+	          public_repos = _props$userData.public_repos,
+	          public_gists = _props$userData.public_gists,
+	          followers = _props$userData.followers,
+	          following = _props$userData.following,
+	          login = _props$userData.login,
+	          location = _props$userData.location,
+	          email = _props$userData.email,
+	          html_url = _props$userData.html_url;
+
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "panel" },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "panel__header" },
+	          name
+	        ),
+	        _react2.default.createElement(
+	          "div",
+	          { className: "panel__body" },
+	          _react2.default.createElement(
+	            "div",
+	            { className: "row" },
+	            _react2.default.createElement(
+	              "div",
+	              { className: "column--3" },
+	              _react2.default.createElement("img", { src: avatar_url })
+	            ),
+	            _react2.default.createElement(
+	              "div",
+	              { className: "column--7" },
+	              _react2.default.createElement(
+	                "div",
+	                { className: "container" },
+	                _react2.default.createElement(
+	                  "div",
+	                  { className: "column--10" },
+	                  _react2.default.createElement(
+	                    "div",
+	                    { className: "flex flex--row flex--row--space-around" },
+	                    _react2.default.createElement(
+	                      "span",
+	                      { className: "label label--red" },
+	                      public_repos,
+	                      " repos"
+	                    ),
+	                    _react2.default.createElement(
+	                      "span",
+	                      { className: "label label--blue" },
+	                      public_gists,
+	                      " gists"
+	                    ),
+	                    _react2.default.createElement(
+	                      "span",
+	                      { className: "label label--grey" },
+	                      followers,
+	                      " followers"
+	                    ),
+	                    _react2.default.createElement(
+	                      "span",
+	                      { className: "label label--orange" },
+	                      following,
+	                      " following"
+	                    )
+	                  ),
+	                  _react2.default.createElement(
+	                    "div",
+	                    { className: "flex flex--column flex--column--start" },
+	                    _react2.default.createElement(
+	                      "ul",
+	                      { className: "list-group" },
+	                      _react2.default.createElement(
+	                        "li",
+	                        { className: "list-group__item" },
+	                        _react2.default.createElement(
+	                          "strong",
+	                          null,
+	                          "Username: "
+	                        ),
+	                        " ",
+	                        login
+	                      ),
+	                      _react2.default.createElement(
+	                        "li",
+	                        { className: "list-group__item" },
+	                        _react2.default.createElement(
+	                          "strong",
+	                          null,
+	                          "Location: "
+	                        ),
+	                        " ",
+	                        location
+	                      ),
+	                      _react2.default.createElement(
+	                        "li",
+	                        { className: "list-group__item" },
+	                        _react2.default.createElement(
+	                          "strong",
+	                          null,
+	                          "Email: "
+	                        ),
+	                        " ",
+	                        email
+	                      )
+	                    )
+	                  ),
+	                  _react2.default.createElement(
+	                    "div",
+	                    { className: "flex flex--row flex--row--start" },
+	                    _react2.default.createElement(
+	                      "a",
+	                      { className: "button button--medium button--blue", href: html_url, target: "_blank" },
+	                      " Visit profile "
+	                    )
+	                  )
+	                )
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Profile;
+	}(_react2.default.Component);
+
+	exports.default = Profile;
 
 /***/ }
 /******/ ]);
