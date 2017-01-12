@@ -26552,6 +26552,10 @@
 
 	var _profile2 = _interopRequireDefault(_profile);
 
+	var _search = __webpack_require__(243);
+
+	var _search2 = _interopRequireDefault(_search);
+
 	var _githubAPI = __webpack_require__(240);
 
 	var _githubAPI2 = _interopRequireDefault(_githubAPI);
@@ -26579,6 +26583,8 @@
 
 	    _this.getUserData = _this.getUserData.bind(_this);
 	    _this.getUserRepo = _this.getUserRepo.bind(_this);
+	    _this.handleSubmit = _this.handleSubmit.bind(_this);
+	    _this.handleChange = _this.handleChange.bind(_this);
 	    _this.state = {
 	      username: 'giancarlosio',
 	      userData: [],
@@ -26651,6 +26657,32 @@
 	      this.getUserRepo();
 	    }
 	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit(username) {
+	      var _this4 = this;
+
+	      this.setState({
+	        username: username
+	      }, function () {
+	        console.log(_this4.state.username);
+	        // update the props using in profile component
+	        _this4.getUserData();
+	        _this4.getUserRepo();
+	      });
+	    }
+	  }, {
+	    key: 'handleChange',
+	    value: function handleChange(username) {
+	      var _this5 = this;
+
+	      this.setState({
+	        username: username
+	      }, function () {
+	        _this5.getUserData();
+	        _this5.getUserRepo();
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -26661,6 +26693,12 @@
 	          null,
 	          'Github Profile'
 	        ),
+	        _react2.default.createElement(
+	          'h2',
+	          null,
+	          this.state.username
+	        ),
+	        _react2.default.createElement(_search2.default, { onSubmit: this.handleSubmit, onChange: this.handleChange }),
 	        _react2.default.createElement(_profile2.default, this.state)
 	      );
 	    }
@@ -26928,7 +26966,7 @@
 /* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -26958,20 +26996,19 @@
 	  }
 
 	  _createClass(Repository, [{
-	    key: 'render',
+	    key: "render",
 	    value: function render() {
-	      console.log('repo props', this.props);
 	      var repo = this.props.repo;
 
 	      return _react2.default.createElement(
-	        'li',
-	        { className: 'list-group__item' },
+	        "li",
+	        { className: "list-group__item" },
 	        _react2.default.createElement(
-	          'a',
-	          { href: repo.html_url, target: '_blank' },
+	          "a",
+	          { href: repo.html_url, target: "_blank" },
 	          repo.name
 	        ),
-	        ': ',
+	        ": ",
 	        repo.description
 	      );
 	    }
@@ -27119,6 +27156,101 @@
 	}(_react2.default.Component);
 
 	exports.default = Children2Component;
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SearchBox = function (_React$Component) {
+	  _inherits(SearchBox, _React$Component);
+
+	  function SearchBox(props) {
+	    _classCallCheck(this, SearchBox);
+
+	    var _this = _possibleConstructorReturn(this, (SearchBox.__proto__ || Object.getPrototypeOf(SearchBox)).call(this, props));
+
+	    _this.handleSubmit = _this.handleSubmit.bind(_this);
+	    _this.handleChange = _this.handleChange.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(SearchBox, [{
+	    key: 'handleSubmit',
+	    value: function handleSubmit(e) {
+	      e.preventDefault();
+	      var username = this.refs.username.value;
+	      if (username.length > 0) {
+	        this.refs.username.value = '';
+	        this.props.onSubmit(username);
+	      } else {
+	        alert('please enter a username');
+	      }
+	    }
+	  }, {
+	    key: 'handleChange',
+	    value: function handleChange() {
+	      var username = this.refs.usernameChange.value;
+	      if (username.length > 0) {
+	        this.props.onChange(username);
+	      } else if (username.length === 0) {
+	        this.props.onChange('giancarlosio');
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'form',
+	          { className: 'form', onSubmit: this.handleSubmit },
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            'Search Github Users'
+	          ),
+	          _react2.default.createElement('input', { type: 'text', ref: 'username', className: 'form-input', placeholder: 'Github username' }),
+	          _react2.default.createElement('input', { type: 'submit', value: 'search' })
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { className: 'form' },
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            'Search writing a github username'
+	          ),
+	          _react2.default.createElement('input', { className: 'form-input', ref: 'usernameChange', type: 'text', onChange: this.handleChange })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return SearchBox;
+	}(_react2.default.Component);
+
+	exports.default = SearchBox;
 
 /***/ }
 /******/ ]);

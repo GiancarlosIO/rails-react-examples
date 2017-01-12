@@ -6,7 +6,6 @@ export default class Repository extends React.Component {
   }
 
   render() {
-    console.log('repo props', this.props);
     let {repo} = this.props;
     return (
       <li className="list-group__item">

@@ -2,6 +2,7 @@ import React from 'react';
 
 // Components
 import Profile from './profile.component';
+import SearchBox from './search.component';
 // API service
 import githubAPI from './api/githubAPI.js';
 
@@ -10,6 +11,8 @@ export default class GithubMainComponent extends React.Component {
     super(props);
     this.getUserData = this.getUserData.bind(this);
     this.getUserRepo = this.getUserRepo.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.state = {
       username: 'giancarlosio',
       userData: [],
@@ -65,10 +68,32 @@ export default class GithubMainComponent extends React.Component {
     this.getUserRepo();
   }
 
+  handleSubmit(username) {
+    this.setState({
+      username: username
+    }, ()=>{
+      console.log(this.state.username);
+      // update the props using in profile component
+      this.getUserData();
+      this.getUserRepo();
+    });
+  }
+
+  handleChange(username) {
+    this.setState({
+      username: username
+    }, () => {
+      this.getUserData();
+      this.getUserRepo();
+    });
+  }
+
   render() {
     return (
       <div>
         <h1>Github Profile</h1>
+        <h2>{this.state.username}</h2>
+        <SearchBox onSubmit={this.handleSubmit} onChange={this.handleChange}/>
         <Profile {...this.state} />
       </div>
     )

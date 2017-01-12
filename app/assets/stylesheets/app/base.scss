@@ -1,4 +1,4 @@
-div, ul, table {
+div, ul, table, form {
   box-sizing: border-box;
 }
 img {
@@ -11,5 +11,19 @@ a {
   transition: all 0.3s ease;
   &:hover {
     color: #41d2b9;
+  }
+}
+.form {
+  width: 80%;
+  margin: 0 auto;
+  border: 1px solid rgba(0,0,0,0.3);
+  padding: 10px;
+  &__input {
+    padding: 10px 15px;
+    font-size: 12px;
+    border: 1px solid rgba(200,0,0,0.5);
+    &:focus {
+      outline: none;
+    }
   }
 }
