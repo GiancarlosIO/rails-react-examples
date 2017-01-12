@@ -26665,7 +26665,7 @@
 	        username: username
 	      }, function () {
 	        console.log(_this4.state.username);
-	        // update the props using in profile component
+	        // update the props used in profile component
 	        _this4.getUserData();
 	        _this4.getUserRepo();
 	      });
@@ -26692,11 +26692,6 @@
 	          'h1',
 	          null,
 	          'Github Profile'
-	        ),
-	        _react2.default.createElement(
-	          'h2',
-	          null,
-	          this.state.username
 	        ),
 	        _react2.default.createElement(_search2.default, { onSubmit: this.handleSubmit, onChange: this.handleChange }),
 	        _react2.default.createElement(_profile2.default, this.state)

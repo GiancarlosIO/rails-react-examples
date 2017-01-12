@@ -73,7 +73,7 @@ export default class GithubMainComponent extends React.Component {
       username: username
     }, ()=>{
       console.log(this.state.username);
-      // update the props using in profile component
+      // update the props used in profile component
       this.getUserData();
       this.getUserRepo();
     });
@@ -92,7 +92,6 @@ export default class GithubMainComponent extends React.Component {
     return (
       <div>
         <h1>Github Profile</h1>
-        <h2>{this.state.username}</h2>
         <SearchBox onSubmit={this.handleSubmit} onChange={this.handleChange}/>
         <Profile {...this.state} />
       </div>
