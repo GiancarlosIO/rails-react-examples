@@ -6,3 +6,10 @@ img {
   height: auto;
   border-radius: 5px;
 }
+a {
+  color: #37af74;
+  transition: all 0.3s ease;
+  &:hover {
+    color: #41d2b9;
+  }
+}
