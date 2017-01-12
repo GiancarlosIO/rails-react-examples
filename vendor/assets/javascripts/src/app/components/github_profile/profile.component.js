@@ -1,5 +1,7 @@
 import React from 'react';
 
+import RepoList from './repoList.component';
+
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -38,6 +40,10 @@ export default class Profile extends React.Component {
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="column--10">
+              <h3>User Repositories</h3>
+              <RepoList userRepos={this.props.userRepos} />
             </div>
           </div>
         </div>

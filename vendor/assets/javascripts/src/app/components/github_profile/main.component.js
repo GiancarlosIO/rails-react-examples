@@ -48,7 +48,7 @@ export default class GithubMainComponent extends React.Component {
     let userRepoPromise = githubAPI.getUserRepo(clientId, clientSecret, username, perPage);
     userRepoPromise.then(
       (data) => {
-        console.log('repos data', data)
+        console.log('repos data promise', data)
         this.setState((prevState, props)=>{
           return {
             userRepos: data
@@ -69,7 +69,7 @@ export default class GithubMainComponent extends React.Component {
     return (
       <div>
         <h1>Github Profile</h1>
-        <Profile userData={this.state.userData} />
+        <Profile {...this.state} />
       </div>
     )
   }
