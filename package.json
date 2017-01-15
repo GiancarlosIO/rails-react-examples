@@ -9,7 +9,7 @@
   "scripts": {
     "test": "karma start",
     "start": "npm run build",
-    "build": "webpack -d"
+    "build": "webpack -w"
   },
   "author": "giancarlos isasi",
   "license": "MIT",
