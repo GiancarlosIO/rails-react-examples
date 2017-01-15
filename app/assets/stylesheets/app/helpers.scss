@@ -1,0 +1,33 @@
+.background {
+  &-color {
+    &--white {
+      background-color: #fff;
+    }
+    &--turquiose {
+      background-color: rgb(26, 188, 156);
+    }
+    &--emerald {
+      background-color: rgb(46, 204, 113);
+    }
+    &--alizarin {
+      background-color: rgb(231, 76, 60);
+    }
+    &--peter-river {
+      background-color: rgb(52, 152, 219);
+    }
+  }
+}
+.padding {
+  &--20 {
+    padding: 10px 20px;
+  }
+}
+.hr {
+  outline: none;
+  border: 1px solid transparent;
+}
+.container {
+  &__items {
+    div:not(:last-child) { margin-bottom: 20px;}
+  }
+}

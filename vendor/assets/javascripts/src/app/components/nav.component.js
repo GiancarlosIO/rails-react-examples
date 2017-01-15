@@ -5,7 +5,7 @@ const NavComponent = () =>
   <nav>
     <ul>
       <li><IndexLink to="/" activeClassName="link__active">Github Profile</IndexLink></li>
-      <li><Link to="/children2" activeClassName="link__active">Children 2</Link></li>
+      <li><Link to="/quizzes" activeClassName="link__active">Quiz App</Link></li>
     </ul>
   </nav>
 export default NavComponent;
