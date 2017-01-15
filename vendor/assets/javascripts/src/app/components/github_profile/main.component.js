@@ -28,7 +28,6 @@ export default class GithubMainComponent extends React.Component {
     let userDataPromise = githubAPI.getUserData(clientId, clientSecret, username);
     userDataPromise.then(
       (data)=>{
-        console.log('data of promise', data);
         this.setState((prevState, props)=>{
           return {
             userData: data
@@ -36,7 +35,6 @@ export default class GithubMainComponent extends React.Component {
         });
       },
       (error)=>{
-        console.log('error of promise', error);
         this.setState((prevState, props)=>{
           return {
             username: 'none'
@@ -51,7 +49,6 @@ export default class GithubMainComponent extends React.Component {
     let userRepoPromise = githubAPI.getUserRepo(clientId, clientSecret, username, perPage);
     userRepoPromise.then(
       (data) => {
-        console.log('repos data promise', data)
         this.setState((prevState, props)=>{
           return {
             userRepos: data
