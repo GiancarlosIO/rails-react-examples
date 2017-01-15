@@ -15,7 +15,7 @@ export default class QuestionList extends React.Component{
       }
     });
     return (
-      <div className="container container__items">
+      <div className="container__items">
         {questionsList}
       </div>
     )

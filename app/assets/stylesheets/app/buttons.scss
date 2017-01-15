@@ -1,6 +1,8 @@
 .button {
   display: block;
   text-decoration: none;
+  outline: none;
+  border: 1px solid transparent;
   &:focus, &:visited, &:hover {
     outline: none;
     text-decoration: none;
@@ -8,6 +10,7 @@
   &--medium {
     color: 14px;
     padding: 10px 15px;
+    border-radius: 5px;
   }
   &--blue {
     background-color: rgba(blue,0.6);
@@ -15,6 +18,14 @@
     transition: all 0.3s ease;
     &:hover {
       box-shadow: 0px 4px 10px rgba(black, 0.5);
+    }
+  }
+  &--emerald {
+    background-color: rgb(46, 204, 113);
+    color: #fff;
+    transition: all 0.3s ease;
+    &:hover {
+      background-color: rgba(46, 204, 113, .5);
     }
   }
 }

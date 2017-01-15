@@ -1,12 +1,15 @@
 import React from 'react';
 
 import QuestionList from './questionList.component';
+import ScoreBox from './scoreBox.component';
+import Results from './results.component';
 
 export default class QuizMainComponent extends React.Component {
   constructor(props) {
     super(props);
     this.setCurrent = this.setCurrent.bind(this);
     this.setScore = this.setScore.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.state = {
       questions: [
         {
@@ -99,10 +102,22 @@ export default class QuizMainComponent extends React.Component {
     this.setState({current})
   }
 
+  handleClick() {
+    this.setState({
+      score: 0,
+      current: 1
+    });
+  }
+
   render() {
+    let {current, questions} = this.state;
+    let searchBoxOrResults = () => {
+      return current <= questions.length ? (<ScoreBox {...this.state} />) : (<Results {...this.state} handleClick={this.handleClick}/>)
+    }
     return (
-      <div>
+      <div className="container">
         <h1>Quiz Main Component</h1>
+        {searchBoxOrResults()}
         <QuestionList {...this.state} setCurrent= {this.setCurrent} setScore={this.setScore}/>
       </div>
     )

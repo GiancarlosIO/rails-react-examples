@@ -23,7 +23,10 @@ export default class Question extends React.Component {
     let choices = question.choices.map((choice) => {
       return (
         <li className="list-group__item background-color--white" key={choice.id}>
-          {choice.id} <input type="radio" onChange={this.onChange} name={question.id} value={choice.id}/> {choice.text}
+          <label>
+            <input type="radio" onChange={this.onChange} name={question.id} value={choice.id}/>
+            {choice.id} ) {choice.text}
+          </label>
         </li>
       )
     });
