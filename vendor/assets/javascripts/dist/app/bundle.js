@@ -27142,7 +27142,7 @@
 /* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -27153,6 +27153,10 @@
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _questionList = __webpack_require__(244);
+
+	var _questionList2 = _interopRequireDefault(_questionList);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27168,20 +27172,84 @@
 	  function QuizMainComponent(props) {
 	    _classCallCheck(this, QuizMainComponent);
 
-	    return _possibleConstructorReturn(this, (QuizMainComponent.__proto__ || Object.getPrototypeOf(QuizMainComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (QuizMainComponent.__proto__ || Object.getPrototypeOf(QuizMainComponent)).call(this, props));
+
+	    _this.state = {
+	      questions: [{
+	        id: 1,
+	        text: 'What is your name?',
+	        choices: [{
+	          id: 'a',
+	          text: 'Miguel'
+	        }, {
+	          id: 'b',
+	          text: 'Jose'
+	        }, {
+	          id: 'c',
+	          text: 'Giancarlos'
+	        }],
+	        correct: 'c'
+	      }, {
+	        id: 2,
+	        text: 'What is your last name?',
+	        choices: [{
+	          id: 'a',
+	          text: 'Oyolo'
+	        }, {
+	          id: 'b',
+	          text: 'Isasi'
+	        }, {
+	          id: 'c',
+	          text: 'Fernando'
+	        }],
+	        correct: 'b'
+	      }, {
+	        id: 3,
+	        text: 'What is your fathers name?',
+	        choices: [{
+	          id: 'a',
+	          text: 'Jose'
+	        }, {
+	          id: 'b',
+	          text: 'Jhon'
+	        }, {
+	          id: 'c',
+	          text: 'Julian'
+	        }],
+	        correct: 'c'
+	      }, {
+	        id: 4,
+	        text: 'What is your friends name?',
+	        choices: [{
+	          id: 'a',
+	          text: 'Naraku'
+	        }, {
+	          id: 'b',
+	          text: 'Miguel'
+	        }, {
+	          id: 'c',
+	          text: 'Luis'
+	        }],
+	        correct: 'a'
+	      }],
+	      score: 0,
+	      current: 1
+	    };
+	    return _this;
 	  }
 
 	  _createClass(QuizMainComponent, [{
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "container" },
+	        'div',
+	        null,
 	        _react2.default.createElement(
-	          "h1",
+	          'h1',
 	          null,
-	          "Quiz Main Component"
-	        )
+	          'Quiz Main Component'
+	        ),
+	        _react2.default.createElement(_questionList2.default, this.state)
 	      );
 	    }
 	  }]);
@@ -27243,6 +27311,150 @@
 	}(_react2.default.Component);
 
 	exports.default = Children2Component;
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _question = __webpack_require__(245);
+
+	var _question2 = _interopRequireDefault(_question);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var QuestionList = function (_React$Component) {
+	  _inherits(QuestionList, _React$Component);
+
+	  function QuestionList(props) {
+	    _classCallCheck(this, QuestionList);
+
+	    return _possibleConstructorReturn(this, (QuestionList.__proto__ || Object.getPrototypeOf(QuestionList)).call(this, props));
+	  }
+
+	  _createClass(QuestionList, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var questions = this.props.questions;
+
+	      var questionsList = questions.map(function (question) {
+	        return _react2.default.createElement(_question2.default, _extends({ question: question, key: question.id }, _this2.props));
+	      });
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'container container__items' },
+	        questionsList
+	      );
+	    }
+	  }]);
+
+	  return QuestionList;
+	}(_react2.default.Component);
+
+	exports.default = QuestionList;
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Question = function (_React$Component) {
+	  _inherits(Question, _React$Component);
+
+	  function Question(props) {
+	    _classCallCheck(this, Question);
+
+	    var _this = _possibleConstructorReturn(this, (Question.__proto__ || Object.getPrototypeOf(Question)).call(this, props));
+
+	    _this.onChange = _this.onChange.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(Question, [{
+	    key: 'onChange',
+	    value: function onChange() {
+	      console.log('holi');
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var question = this.props.question;
+
+	      var choices = question.choices.map(function (choice) {
+	        return _react2.default.createElement(
+	          'li',
+	          { className: 'list-group__item background-color--white', key: choice.id },
+	          choice.id,
+	          ' ',
+	          _react2.default.createElement('input', { type: 'radio', onChange: _this2.onChange, name: question.id, value: choice.id }),
+	          ' ',
+	          choice.text
+	        );
+	      });
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'background-color--turquiose padding--20' },
+	        _react2.default.createElement(
+	          'h3',
+	          { className: 'text--white' },
+	          question.text
+	        ),
+	        _react2.default.createElement('hr', { className: 'hr background-color--white' }),
+	        _react2.default.createElement(
+	          'ul',
+	          { className: 'list-group' },
+	          choices
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Question;
+	}(_react2.default.Component);
+
+	exports.default = Question;
 
 /***/ }
 /******/ ]);
