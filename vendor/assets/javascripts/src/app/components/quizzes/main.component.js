@@ -5,6 +5,8 @@ import QuestionList from './questionList.component';
 export default class QuizMainComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.setCurrent = this.setCurrent.bind(this);
+    this.setScore = this.setScore.bind(this);
     this.state = {
       questions: [
         {
@@ -89,11 +91,19 @@ export default class QuizMainComponent extends React.Component {
     }
   }
 
+  setScore(score) {
+    this.setState({score})
+  }
+
+  setCurrent(current) {
+    this.setState({current})
+  }
+
   render() {
     return (
       <div>
         <h1>Quiz Main Component</h1>
-        <QuestionList {...this.state}/>
+        <QuestionList {...this.state} setCurrent= {this.setCurrent} setScore={this.setScore}/>
       </div>
     )
   }

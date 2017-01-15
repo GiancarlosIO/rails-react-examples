@@ -27148,6 +27148,8 @@
 	  value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(2);
@@ -27174,6 +27176,8 @@
 
 	    var _this = _possibleConstructorReturn(this, (QuizMainComponent.__proto__ || Object.getPrototypeOf(QuizMainComponent)).call(this, props));
 
+	    _this.setCurrent = _this.setCurrent.bind(_this);
+	    _this.setScore = _this.setScore.bind(_this);
 	    _this.state = {
 	      questions: [{
 	        id: 1,
@@ -27239,6 +27243,16 @@
 	  }
 
 	  _createClass(QuizMainComponent, [{
+	    key: 'setScore',
+	    value: function setScore(score) {
+	      this.setState({ score: score });
+	    }
+	  }, {
+	    key: 'setCurrent',
+	    value: function setCurrent(current) {
+	      this.setState({ current: current });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -27249,7 +27263,7 @@
 	          null,
 	          'Quiz Main Component'
 	        ),
-	        _react2.default.createElement(_questionList2.default, this.state)
+	        _react2.default.createElement(_questionList2.default, _extends({}, this.state, { setCurrent: this.setCurrent, setScore: this.setScore }))
 	      );
 	    }
 	  }]);
@@ -27356,10 +27370,14 @@
 	    value: function render() {
 	      var _this2 = this;
 
-	      var questions = this.props.questions;
+	      var _props = this.props,
+	          questions = _props.questions,
+	          current = _props.current;
 
 	      var questionsList = questions.map(function (question) {
-	        return _react2.default.createElement(_question2.default, _extends({ question: question, key: question.id }, _this2.props));
+	        if (question.id === current) {
+	          return _react2.default.createElement(_question2.default, _extends({ question: question, key: question.id }, _this2.props));
+	        }
 	      });
 	      return _react2.default.createElement(
 	        'div',
@@ -27378,7 +27396,7 @@
 /* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -27411,12 +27429,24 @@
 	  }
 
 	  _createClass(Question, [{
-	    key: 'onChange',
-	    value: function onChange() {
-	      console.log('holi');
+	    key: "onChange",
+	    value: function onChange(e) {
+	      e.preventDefault();
+	      var _props = this.props,
+	          setCurrent = _props.setCurrent,
+	          setScore = _props.setScore,
+	          question = _props.question;
+
+
+	      var selected = e.target.value;
+	      if (selected == question.correct) {
+	        setScore(this.props.score + 1);
+	      };
+
+	      setCurrent(this.props.current + 1);
 	    }
 	  }, {
-	    key: 'render',
+	    key: "render",
 	    value: function render() {
 	      var _this2 = this;
 
@@ -27424,27 +27454,27 @@
 
 	      var choices = question.choices.map(function (choice) {
 	        return _react2.default.createElement(
-	          'li',
-	          { className: 'list-group__item background-color--white', key: choice.id },
+	          "li",
+	          { className: "list-group__item background-color--white", key: choice.id },
 	          choice.id,
-	          ' ',
-	          _react2.default.createElement('input', { type: 'radio', onChange: _this2.onChange, name: question.id, value: choice.id }),
-	          ' ',
+	          " ",
+	          _react2.default.createElement("input", { type: "radio", onChange: _this2.onChange, name: question.id, value: choice.id }),
+	          " ",
 	          choice.text
 	        );
 	      });
 	      return _react2.default.createElement(
-	        'div',
-	        { className: 'background-color--turquiose padding--20' },
+	        "div",
+	        { className: "background-color--turquiose padding--20" },
 	        _react2.default.createElement(
-	          'h3',
-	          { className: 'text--white' },
+	          "h3",
+	          { className: "text--white" },
 	          question.text
 	        ),
-	        _react2.default.createElement('hr', { className: 'hr background-color--white' }),
+	        _react2.default.createElement("hr", { className: "hr background-color--white" }),
 	        _react2.default.createElement(
-	          'ul',
-	          { className: 'list-group' },
+	          "ul",
+	          { className: "list-group" },
 	          choices
 	        )
 	      );

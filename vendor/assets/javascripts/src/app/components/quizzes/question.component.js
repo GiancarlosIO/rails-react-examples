@@ -6,8 +6,16 @@ export default class Question extends React.Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  onChange() {
-    console.log('holi');
+  onChange(e) {
+    e.preventDefault();
+    const {setCurrent, setScore, question} = this.props;
+
+    let selected = e.target.value;
+    if (selected == question.correct) {
+      setScore(this.props.score + 1)
+    };
+
+    setCurrent(this.props.current +1 );
   }
 
   render() {

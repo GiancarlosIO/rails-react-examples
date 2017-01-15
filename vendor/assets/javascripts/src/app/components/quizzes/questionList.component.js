@@ -8,9 +8,11 @@ export default class QuestionList extends React.Component{
   }
 
   render() {
-    let {questions} = this.props;
+    let {questions, current} = this.props;
     let questionsList = questions.map((question) => {
-      return (<Question question={question} key={question.id} {...this.props} />)
+      if (question.id === current) {
+        return (<Question question={question} key={question.id} {...this.props} />)
+      }
     });
     return (
       <div className="container container__items">
