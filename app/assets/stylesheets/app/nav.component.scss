@@ -13,6 +13,8 @@ nav {
     li {
       &:not(:last-child) { margin-right: 15px;}
       a {
+        display: block;
+        font-size: 12px;
         padding: 10px 15px;
         color: black;
         text-decoration: none;
