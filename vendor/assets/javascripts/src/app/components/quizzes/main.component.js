@@ -116,7 +116,6 @@ export default class QuizMainComponent extends React.Component {
     }
     return (
       <div className="container">
-        <h1>Quiz Main Component</h1>
         {searchBoxOrResults()}
         <QuestionList {...this.state} setCurrent= {this.setCurrent} setScore={this.setScore}/>
       </div>

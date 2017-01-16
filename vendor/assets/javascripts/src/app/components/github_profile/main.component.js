@@ -88,7 +88,6 @@ export default class GithubMainComponent extends React.Component {
   render() {
     return (
       <div>
-        <h1>Github Profile</h1>
         <SearchBox onSubmit={this.handleSubmit} onChange={this.handleChange}/>
         <Profile {...this.state} />
       </div>

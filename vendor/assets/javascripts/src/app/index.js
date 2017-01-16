@@ -5,7 +5,7 @@ import {Route, Router, IndexRoute, browserHistory} from 'react-router';
 import AppComponent from './components/app.component';
 import GithubMainComponent from './components/github_profile/main.component';
 import QuizMainComponent from './components/quizzes/main.component';
-import MovieMainComponent from './components/movie_find/main.component';
+import MovieMainComponent from './components/movie_find/components/main.component';
 import Children2Component from "./components/children2.component";
 
 $(document).on('ready', () => {
