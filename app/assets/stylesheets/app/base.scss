@@ -1,4 +1,4 @@
-div, ul, table, form {
+div, ul, table, form, input {
   box-sizing: border-box;
 }
 img {
@@ -18,12 +18,16 @@ a {
   margin: 0 auto;
   border: 1px solid rgba(0,0,0,0.3);
   padding: 10px;
+  label { margin-right: 15px; }
   &__input {
-    padding: 10px 15px;
+    padding: 8px 10px;
+    border-radius: 5px;
     font-size: 12px;
-    border: 1px solid rgba(200,0,0,0.5);
+    border: 1px solid rgb(41, 128, 185);
+    margin-right: 15px;
     &:focus {
       outline: none;
+      border-color: rgb(52, 152, 219);
     }
   }
 }
