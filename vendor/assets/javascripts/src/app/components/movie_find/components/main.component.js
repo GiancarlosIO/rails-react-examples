@@ -23,7 +23,6 @@ export default class MovieMainComponent extends React.Component {
         this.setState({
           moviesData: data
         });
-        console.log(this.state.moviesData);
       },
       (error) => {
         console.log(error);
@@ -45,7 +44,6 @@ export default class MovieMainComponent extends React.Component {
 
   render() {
     let {moviesData} = this.state;
-    console.log('data of render',this.state);
     let showMovies = () => {
       if (moviesData.Error) {
         return ( <h4>{moviesData.Error}</h4> )

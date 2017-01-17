@@ -27688,7 +27688,6 @@
 	        _this2.setState({
 	          moviesData: data
 	        });
-	        console.log(_this2.state.moviesData);
 	      }, function (error) {
 	        console.log(error);
 	      });
@@ -27714,7 +27713,6 @@
 	    value: function render() {
 	      var moviesData = this.state.moviesData;
 
-	      console.log('data of render', this.state);
 	      var showMovies = function showMovies() {
 	        if (moviesData.Error) {
 	          return _react2.default.createElement(
