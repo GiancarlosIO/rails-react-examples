@@ -12,6 +12,7 @@
   padding: 10px;
   @for $i from 1 through 10 {
     &--#{$i} {
+      padding: 15px 0;
       width: #{$i * 10%};
     }
   }
