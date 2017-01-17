@@ -32,12 +32,12 @@ export default class SearchBox extends React.Component {
       <div>
         <form className="form" onSubmit={this.handleSubmit}>
           <label>Search Github Users</label>
-          <input type="text" ref="username" className="form-input" placeholder="Github username"/>
-          <input type="submit" value="search" />
+          <input type="text" ref="username" className="form__input" placeholder="Github username"/>
+          <input type="submit" value="search" className="button button--medium button--emerald"/>
         </form>
         <form className="form">
           <label>Search writing a github username</label>
-          <input className="form-input" ref="usernameChange" type="text" onChange={this.handleChange}/>
+          <input className="form__input" ref="usernameChange" type="text" onChange={this.handleChange} placeholder="Write a Github username"/>
         </form>
       </div>
     )

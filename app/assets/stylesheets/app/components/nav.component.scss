@@ -13,14 +13,16 @@ nav {
     li {
       &:not(:last-child) { margin-right: 15px;}
       a {
+        display: block;
+        font-size: 12px;
         padding: 10px 15px;
         color: black;
         text-decoration: none;
         border-bottom: 1px solid rgba(0,0,0,0.6);
         transition: all 0.3s ease;
         &.link__active {
-          color: green;
-          border-bottom-color: green;
+          color: #41d2b9;
+          border-bottom-color: #41d2b9;
         }
       }
     }
