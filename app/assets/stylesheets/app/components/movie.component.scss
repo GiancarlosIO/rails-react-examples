@@ -1,4 +1,4 @@
-.movie {
+.movieList {
   &__container {
     display: flex;
     flex-flow: column wrap;
@@ -17,8 +17,13 @@
     flex-flow: row wrap;
     align-items: center;
     justify-content: space-between;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    &:hover {
+      background-color: rgba(0,0,0,0.1);
+    }
     &__header {
-      width: 15%;
+      width: 10%;
       height: 100%;
       min-height: 100%;
       img {
@@ -29,7 +34,7 @@
       }
     }
     &__body {
-      width: 80%;
+      width: 85%;
       p {
         padding: 8px 0;
         margin: 0;
