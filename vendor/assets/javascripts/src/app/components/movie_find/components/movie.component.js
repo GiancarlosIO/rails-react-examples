@@ -18,7 +18,7 @@ export default class Movie extends React.Component {
             Title:
             <span> {movie.Title}</span>
           </p>
-          <p>Año:
+          <p>Year:
             <span> {movie.Year}</span>
           </p>
         </div>

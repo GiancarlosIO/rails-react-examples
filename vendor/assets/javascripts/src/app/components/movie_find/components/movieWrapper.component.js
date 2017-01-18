@@ -34,7 +34,6 @@ export default class MovieWrapper extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     let {movieData} = this.state;
     let showData = () => {
       if (movieData.Error) {
