@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link, IndexLink} from 'react-router';
 
 export default class Movie extends React.Component {
   constructor(props) {
@@ -8,11 +9,11 @@ export default class Movie extends React.Component {
   render() {
     let {movie} = this.props;
     return (
-      <div className="movie__item">
-        <div className="movie__item__header">
+      <Link to={"/movies/"+movie.imdbID} className="movieList__item">
+        <div className="movieList__item__header">
           <img src={movie.Poster} alt={movie.Title}/>
         </div>
-        <div className="movie__item__body">
+        <div className="movieList__item__body">
           <p>
             Title:
             <span> {movie.Title}</span>
@@ -21,7 +22,7 @@ export default class Movie extends React.Component {
             <span> {movie.Year}</span>
           </p>
         </div>
-      </div>
+      </Link>
     )
   }
 }
