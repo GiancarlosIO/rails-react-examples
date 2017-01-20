@@ -18,7 +18,10 @@ export default class MovieMainComponent extends React.Component {
 
   getMoviesData() {
     let {movie} = this.state;
-    MovieAPI.getListMovie(movie).then(
+    // only the $.ajax(..) return a xhr object (that has a abort method)
+    this.xhrListMovie = MovieAPI.getListMovie(movie);
+    // the xhrListMovie.then(..) return a promise
+    this.promiseListMovie = this.xhrListMovie.then(
       (data) => {
         this.setState({
           moviesData: data
@@ -33,6 +36,12 @@ export default class MovieMainComponent extends React.Component {
 
   componentDidMount() {
     this.getMoviesData();
+  }
+
+  componentWillUnmount() {
+    if (this.xhrListMovie && this.xhrListMovie.abort) {
+      this.xhrListMovie.abort();
+    }
   }
 
   handleChange(movie) {
@@ -61,4 +70,5 @@ export default class MovieMainComponent extends React.Component {
       </div>
     )
   }
+
 }
