@@ -29,7 +29,6 @@ export default class MovieMainComponent extends React.Component {
       },
       (error) => {
         console.log(error);
-        moviesData: {Error: 'Server Error'}
       }
     )
   }

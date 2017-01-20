@@ -27698,9 +27698,6 @@
 	        });
 	      }, function (error) {
 	        console.log(error);
-	        moviesData: {
-	          Error: 'Server Error';
-	        }
 	      });
 	    }
 	  }, {
@@ -28060,21 +28057,26 @@
 
 	      var movieId = this.state.movieId;
 
-	      _movie2.default.getMovieById(movieId).then(function (data) {
+	      this.xhrGetMovieById = _movie2.default.getMovieById(movieId);
+	      this.promiseGetMovieById = this.xhrGetMovieById.then(function (data) {
 	        _this2.setState({
 	          movieData: data
 	        });
 	      }, function (error) {
-	        console.log('error');
-	        movieData: {
-	          Error: "Server Error";
-	        }
+	        console.log(error);
 	      });
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.getMovieById();
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      if (this.xhrGetMovieById && this.xhrGetMovieById.abort) {
+	        this.xhrGetMovieById.abort();
+	      }
 	    }
 	  }, {
 	    key: 'render',
