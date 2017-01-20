@@ -27688,22 +27688,29 @@
 	      var _this2 = this;
 
 	      var movie = this.state.movie;
+	      // only the $.ajax(..) return a xhr object (that has a abort method)
 
-	      _movie2.default.getListMovie(movie).then(function (data) {
+	      this.xhrListMovie = _movie2.default.getListMovie(movie);
+	      // the xhrListMovie.then(..) return a promise
+	      this.promiseListMovie = this.xhrListMovie.then(function (data) {
 	        _this2.setState({
 	          moviesData: data
 	        });
 	      }, function (error) {
 	        console.log(error);
-	        moviesData: {
-	          Error: 'Server Error';
-	        }
 	      });
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.getMoviesData();
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      if (this.xhrListMovie && this.xhrListMovie.abort) {
+	        this.xhrListMovie.abort();
+	      }
 	    }
 	  }, {
 	    key: 'handleChange',
@@ -28050,21 +28057,26 @@
 
 	      var movieId = this.state.movieId;
 
-	      _movie2.default.getMovieById(movieId).then(function (data) {
+	      this.xhrGetMovieById = _movie2.default.getMovieById(movieId);
+	      this.promiseGetMovieById = this.xhrGetMovieById.then(function (data) {
 	        _this2.setState({
 	          movieData: data
 	        });
 	      }, function (error) {
-	        console.log('error');
-	        movieData: {
-	          Error: "Server Error";
-	        }
+	        console.log(error);
 	      });
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.getMovieById();
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      if (this.xhrGetMovieById && this.xhrGetMovieById.abort) {
+	        this.xhrGetMovieById.abort();
+	      }
 	    }
 	  }, {
 	    key: 'render',

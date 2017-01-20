@@ -16,21 +16,27 @@ export default class MovieWrapper extends React.Component {
 
   getMovieById() {
     let {movieId} = this.state;
-    MovieAPI.getMovieById(movieId).then(
+    this.xhrGetMovieById = MovieAPI.getMovieById(movieId);
+    this.promiseGetMovieById = this.xhrGetMovieById.then(
       (data) => {
         this.setState({
           movieData: data
         })
       },
       (error) => {
-        console.log('error');
-        movieData: {Error: "Server Error"}
+        console.log(error);
       }
     )
   }
 
   componentDidMount() {
     this.getMovieById();
+  }
+
+  componentWillUnmount() {
+    if ( this.xhrGetMovieById && this.xhrGetMovieById.abort ) {
+      this.xhrGetMovieById.abort();
+    }
   }
 
   render() {
