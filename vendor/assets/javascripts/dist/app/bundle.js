@@ -26628,8 +26628,8 @@
 	          username = _state.username,
 	          perPage = _state.perPage;
 
-	      var userDataPromise = _githubAPI2.default.getUserData(clientId, clientSecret, username);
-	      userDataPromise.then(function (data) {
+	      this.xhrUserData = _githubAPI2.default.getUserData(clientId, clientSecret, username);
+	      this.xhrUserData.then(function (data) {
 	        _this2.setState(function (prevState, props) {
 	          return {
 	            userData: data
@@ -26655,8 +26655,8 @@
 	          username = _state2.username,
 	          perPage = _state2.perPage;
 
-	      var userRepoPromise = _githubAPI2.default.getUserRepo(clientId, clientSecret, username, perPage);
-	      userRepoPromise.then(function (data) {
+	      this.xhrUserRepo = _githubAPI2.default.getUserRepo(clientId, clientSecret, username, perPage);
+	      this.xhrUserRepo.then(function (data) {
 	        _this3.setState(function (prevState, props) {
 	          return {
 	            userRepos: data
@@ -26665,12 +26665,6 @@
 	      }, function (error) {
 	        console.log('error userRepo', error);
 	      });
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.getUserData();
-	      this.getUserRepo();
 	    }
 	  }, {
 	    key: 'handleSubmit',
@@ -26697,6 +26691,22 @@
 	        _this5.getUserData();
 	        _this5.getUserRepo();
 	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getUserData();
+	      this.getUserRepo();
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      if (this.xhrUserData && this.xhrUserData.abort) {
+	        this.xhrUserData.abort();
+	      }
+	      if (this.xhrUserRepo && this.xhrUserRepo.abort) {
+	        this.xhrUserRepo.abort();
+	      }
 	    }
 	  }, {
 	    key: 'render',
