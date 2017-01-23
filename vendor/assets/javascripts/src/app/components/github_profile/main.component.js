@@ -25,8 +25,8 @@ export default class GithubMainComponent extends React.Component {
   getUserData() {
     let {clientId, clientSecret} = this.props;
     let {username, perPage} = this.state;
-    let userDataPromise = githubAPI.getUserData(clientId, clientSecret, username);
-    userDataPromise.then(
+    this.xhrUserData = githubAPI.getUserData(clientId, clientSecret, username);
+    this.xhrUserData.then(
       (data)=>{
         this.setState((prevState, props)=>{
           return {
@@ -46,8 +46,8 @@ export default class GithubMainComponent extends React.Component {
   getUserRepo() {
     let {clientId, clientSecret} = this.props;
     let {username, perPage} = this.state;
-    let userRepoPromise = githubAPI.getUserRepo(clientId, clientSecret, username, perPage);
-    userRepoPromise.then(
+    this.xhrUserRepo = githubAPI.getUserRepo(clientId, clientSecret, username, perPage);
+    this.xhrUserRepo.then(
       (data) => {
         this.setState((prevState, props)=>{
           return {
@@ -59,10 +59,6 @@ export default class GithubMainComponent extends React.Component {
         console.log('error userRepo', error)
       }
     );
-  }
-  componentDidMount() {
-    this.getUserData();
-    this.getUserRepo();
   }
 
   handleSubmit(username) {
@@ -84,6 +80,21 @@ export default class GithubMainComponent extends React.Component {
       this.getUserRepo();
     });
   }
+
+  componentDidMount() {
+    this.getUserData();
+    this.getUserRepo();
+  }
+
+  componentWillUnmount() {
+    if (this.xhrUserData && this.xhrUserData.abort) {
+      this.xhrUserData.abort();
+    }
+    if (this.xhrUserRepo && this.xhrUserRepo.abort) {
+      this.xhrUserRepo.abort();
+    }
+  }
+
 
   render() {
     return (
