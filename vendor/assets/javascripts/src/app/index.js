@@ -7,7 +7,7 @@ import GithubMainComponent from './components/github_profile/main.component';
 import QuizMainComponent from './components/quizzes/main.component';
 import MovieMainComponent from './components/movie_find/components/main.component';
 import MovieWrapperComponent from './components/movie_find/components/movieWrapper.component';
-import ImgurMainComponent from './components/imgur/main.component';
+import WeatherMainComponent from './components/weather/main.component';
 
 $(document).on('ready', () => {
   ReactDOM.render(
@@ -17,7 +17,7 @@ $(document).on('ready', () => {
         <Route path="/quizzes" component={QuizMainComponent}></Route>
         <Route path="/movies" component={MovieMainComponent}></Route>
         <Route path="/movies/:movie_id" component={MovieWrapperComponent}></Route>
-        <Route path="/imgur" component={ImgurMainComponent}></Route>
+        <Route path="/weather" component={WeatherMainComponent}></Route>
       </Route>
     </Router>,
   document.getElementById('app-wrapper'))

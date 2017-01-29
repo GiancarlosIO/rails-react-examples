@@ -83,7 +83,7 @@
 
 	var _movieWrapper2 = _interopRequireDefault(_movieWrapper);
 
-	var _main7 = __webpack_require__(255);
+	var _main7 = __webpack_require__(256);
 
 	var _main8 = _interopRequireDefault(_main7);
 
@@ -100,7 +100,7 @@
 	      _react2.default.createElement(_reactRouter.Route, { path: '/quizzes', component: _main4.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/movies', component: _main6.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/movies/:movie_id', component: _movieWrapper2.default }),
-	      _react2.default.createElement(_reactRouter.Route, { path: '/imgur', component: _main8.default })
+	      _react2.default.createElement(_reactRouter.Route, { path: '/weather', component: _main8.default })
 	    )
 	  ), document.getElementById('app-wrapper'));
 	});
@@ -26552,8 +26552,8 @@
 	        null,
 	        _react2.default.createElement(
 	          _reactRouter.Link,
-	          { to: '/imgur', activeClassName: 'link__active' },
-	          'Imgur App'
+	          { to: '/weather', activeClassName: 'link__active' },
+	          'Weather App'
 	        )
 	      )
 	    )
@@ -28362,7 +28362,8 @@
 
 /***/ },
 /* 254 */,
-/* 255 */
+/* 255 */,
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28385,16 +28386,16 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var ImgurMainComponent = function (_React$Component) {
-	  _inherits(ImgurMainComponent, _React$Component);
+	var WeatherMainComponent = function (_React$Component) {
+	  _inherits(WeatherMainComponent, _React$Component);
 
-	  function ImgurMainComponent(props) {
-	    _classCallCheck(this, ImgurMainComponent);
+	  function WeatherMainComponent(props) {
+	    _classCallCheck(this, WeatherMainComponent);
 
-	    return _possibleConstructorReturn(this, (ImgurMainComponent.__proto__ || Object.getPrototypeOf(ImgurMainComponent)).call(this, props));
+	    return _possibleConstructorReturn(this, (WeatherMainComponent.__proto__ || Object.getPrototypeOf(WeatherMainComponent)).call(this, props));
 	  }
 
-	  _createClass(ImgurMainComponent, [{
+	  _createClass(WeatherMainComponent, [{
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -28403,16 +28404,16 @@
 	        _react2.default.createElement(
 	          'h1',
 	          null,
-	          'Imgur component'
+	          'Weather component'
 	        )
 	      );
 	    }
 	  }]);
 
-	  return ImgurMainComponent;
+	  return WeatherMainComponent;
 	}(_react2.default.Component);
 
-	exports.default = ImgurMainComponent;
+	exports.default = WeatherMainComponent;
 
 /***/ }
 /******/ ]);

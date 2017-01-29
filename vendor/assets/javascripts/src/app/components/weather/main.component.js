@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class ImgurMainComponent extends React.Component {
+export default class WeatherMainComponent extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -8,7 +8,7 @@ export default class ImgurMainComponent extends React.Component {
   render() {
     return (
       <div>
-        <h1>Imgur component</h1>
+        <h1>Weather component</h1>
       </div>
     )
   }
