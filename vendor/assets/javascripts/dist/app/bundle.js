@@ -83,9 +83,9 @@
 
 	var _movieWrapper2 = _interopRequireDefault(_movieWrapper);
 
-	var _children = __webpack_require__(254);
+	var _main7 = __webpack_require__(255);
 
-	var _children2 = _interopRequireDefault(_children);
+	var _main8 = _interopRequireDefault(_main7);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -99,7 +99,8 @@
 	      _react2.default.createElement(_reactRouter.IndexRoute, { component: _main2.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/quizzes', component: _main4.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/movies', component: _main6.default }),
-	      _react2.default.createElement(_reactRouter.Route, { path: '/movies/:movie_id', component: _movieWrapper2.default })
+	      _react2.default.createElement(_reactRouter.Route, { path: '/movies/:movie_id', component: _movieWrapper2.default }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/imgur', component: _main8.default })
 	    )
 	  ), document.getElementById('app-wrapper'));
 	});
@@ -26525,7 +26526,7 @@
 	        _react2.default.createElement(
 	          _reactRouter.IndexLink,
 	          { to: '/', activeClassName: 'link__active' },
-	          'Github Profile'
+	          'Github Profile App'
 	        )
 	      ),
 	      _react2.default.createElement(
@@ -26544,6 +26545,15 @@
 	          _reactRouter.Link,
 	          { to: '/movies', activeClassName: 'link__active' },
 	          'MovieFind App'
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/imgur', activeClassName: 'link__active' },
+	          'Imgur App'
 	        )
 	      )
 	    )
@@ -28351,7 +28361,8 @@
 	exports.default = MovieShow;
 
 /***/ },
-/* 254 */
+/* 254 */,
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28374,34 +28385,34 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Children2Component = function (_React$Component) {
-	  _inherits(Children2Component, _React$Component);
+	var ImgurMainComponent = function (_React$Component) {
+	  _inherits(ImgurMainComponent, _React$Component);
 
-	  function Children2Component(props) {
-	    _classCallCheck(this, Children2Component);
+	  function ImgurMainComponent(props) {
+	    _classCallCheck(this, ImgurMainComponent);
 
-	    return _possibleConstructorReturn(this, (Children2Component.__proto__ || Object.getPrototypeOf(Children2Component)).call(this, props));
+	    return _possibleConstructorReturn(this, (ImgurMainComponent.__proto__ || Object.getPrototypeOf(ImgurMainComponent)).call(this, props));
 	  }
 
-	  _createClass(Children2Component, [{
+	  _createClass(ImgurMainComponent, [{
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(
-	          'h2',
+	          'h1',
 	          null,
-	          'Children2 Component'
+	          'Imgur component'
 	        )
 	      );
 	    }
 	  }]);
 
-	  return Children2Component;
+	  return ImgurMainComponent;
 	}(_react2.default.Component);
 
-	exports.default = Children2Component;
+	exports.default = ImgurMainComponent;
 
 /***/ }
 /******/ ]);
