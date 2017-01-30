@@ -83,7 +83,7 @@
 
 	var _movieWrapper2 = _interopRequireDefault(_movieWrapper);
 
-	var _main7 = __webpack_require__(256);
+	var _main7 = __webpack_require__(254);
 
 	var _main8 = _interopRequireDefault(_main7);
 
@@ -28361,9 +28361,7 @@
 	exports.default = MovieShow;
 
 /***/ },
-/* 254 */,
-/* 255 */,
-/* 256 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28378,15 +28376,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _weather = __webpack_require__(257);
+	var _weather = __webpack_require__(255);
 
 	var _weather2 = _interopRequireDefault(_weather);
 
-	var _search = __webpack_require__(259);
+	var _search = __webpack_require__(256);
 
 	var _search2 = _interopRequireDefault(_search);
 
-	var _info = __webpack_require__(258);
+	var _info = __webpack_require__(257);
 
 	var _info2 = _interopRequireDefault(_info);
 
@@ -28518,7 +28516,7 @@
 	exports.default = WeatherMainComponent;
 
 /***/ },
-/* 257 */
+/* 255 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -28526,7 +28524,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?appid=2a15bf2f02239e2fcc566ad41e8b46b3&units=metric";
+	var WEATHER_URL = "//api.openweathermap.org/data/2.5/weather?appid=2a15bf2f02239e2fcc566ad41e8b46b3&units=metric";
 	var WeatherAPI = {
 	  getTempData: function getTempData(location) {
 	    var encodeLocation = encodeURIComponent(location);
@@ -28545,7 +28543,85 @@
 	exports.default = WeatherAPI;
 
 /***/ },
-/* 258 */
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SearchComponent = function (_React$Component) {
+	  _inherits(SearchComponent, _React$Component);
+
+	  function SearchComponent(props) {
+	    _classCallCheck(this, SearchComponent);
+
+	    var _this = _possibleConstructorReturn(this, (SearchComponent.__proto__ || Object.getPrototypeOf(SearchComponent)).call(this, props));
+
+	    _this.onChange = function (e) {
+	      var location = _this.refs.location.value;
+	      if (location.length > 0) {
+	        _this.props.handleChange(location);
+	      } else {
+	        _this.props.handleChange('ica');
+	      }
+	    };
+
+	    return _this;
+	  }
+
+	  _createClass(SearchComponent, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row weather__form' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'weather__form__header' },
+	          _react2.default.createElement(
+	            'h4',
+	            null,
+	            'Search the weather information of your city!'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'weather__form__input' },
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            'Write the name of your city'
+	          ),
+	          _react2.default.createElement('input', { type: 'text', placeholder: 'ica', onChange: this.onChange, ref: 'location' })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return SearchComponent;
+	}(_react2.default.Component);
+
+	exports.default = SearchComponent;
+
+/***/ },
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -28690,84 +28766,6 @@
 	}(_react2.default.Component);
 
 	exports.default = InfoComponent;
-
-/***/ },
-/* 259 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var SearchComponent = function (_React$Component) {
-	  _inherits(SearchComponent, _React$Component);
-
-	  function SearchComponent(props) {
-	    _classCallCheck(this, SearchComponent);
-
-	    var _this = _possibleConstructorReturn(this, (SearchComponent.__proto__ || Object.getPrototypeOf(SearchComponent)).call(this, props));
-
-	    _this.onChange = function (e) {
-	      var location = _this.refs.location.value;
-	      if (location.length > 0) {
-	        _this.props.handleChange(location);
-	      } else {
-	        _this.props.handleChange('ica');
-	      }
-	    };
-
-	    return _this;
-	  }
-
-	  _createClass(SearchComponent, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'row weather__form' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'weather__form__header' },
-	          _react2.default.createElement(
-	            'h4',
-	            null,
-	            'Search the weather information of your city!'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'weather__form__input' },
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            'Write the name of your city'
-	          ),
-	          _react2.default.createElement('input', { type: 'text', placeholder: 'ica', onChange: this.onChange, ref: 'location' })
-	        )
-	      );
-	    }
-	  }]);
-
-	  return SearchComponent;
-	}(_react2.default.Component);
-
-	exports.default = SearchComponent;
 
 /***/ }
 /******/ ]);
