@@ -28418,23 +28418,33 @@
 	      _this.xhrTempData = _weather2.default.getTempData(location);
 	      _this.promiseTempData = _this.xhrTempData.then(function (data) {
 	        _this.setState({
-	          tempData: data
+	          tempData: data,
+	          status: "loaded"
 	        }, function () {
 	          console.log(_this.state);
 	        });
 	      }, function (error) {
 	        console.log(error);
+	        var responseText = JSON.parse(error.responseText);
 	        _this.setState({
 	          tempData: {
-	            cod: 401,
-	            message: "Error server"
-	          }
+	            cod: responseText.cod,
+	            message: responseText.message
+	          },
+	          status: "error"
 	        });
+	      });
+	    };
+
+	    _this.handleChange = function (location) {
+	      _this.setState({ location: location, status: "loading" }, function () {
+	        return _this.getTempData();
 	      });
 	    };
 
 	    _this.state = {
 	      location: "ica",
+	      status: "loading",
 	      tempData: {}
 	    };
 	    return _this;
@@ -28455,14 +28465,38 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
+	      var _state$tempData = this.state.tempData,
+	          cod = _state$tempData.cod,
+	          message = _state$tempData.message;
+	      var status = this.state.status;
+
+	      var renderWithStatus = function renderWithStatus() {
+	        if (status === "loading") {
+	          return _react2.default.createElement(
+	            'h3',
+	            null,
+	            'Loading'
+	          );
+	        } else if (status === "loaded") {
+	          return _react2.default.createElement(_info2.default, _this2.state);
+	        } else if (status === "error") {
+	          return _react2.default.createElement(
+	            'h3',
+	            null,
+	            message
+	          );
+	        }
+	      };
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'row' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'column--300 weather' },
-	          _react2.default.createElement(_search2.default, null),
-	          _react2.default.createElement(_info2.default, null)
+	          _react2.default.createElement(_search2.default, { handleChange: this.handleChange }),
+	          renderWithStatus()
 	        )
 	      );
 	    }
@@ -28645,7 +28679,7 @@
 /* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -28671,37 +28705,44 @@
 	  function SearchComponent(props) {
 	    _classCallCheck(this, SearchComponent);
 
-	    return _possibleConstructorReturn(this, (SearchComponent.__proto__ || Object.getPrototypeOf(SearchComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (SearchComponent.__proto__ || Object.getPrototypeOf(SearchComponent)).call(this, props));
+
+	    _this.onChange = function (e) {
+	      var location = _this.refs.location.value;
+	      if (location.length > 0) {
+	        _this.props.handleChange(location);
+	      } else {
+	        _this.props.handleChange('ica');
+	      }
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(SearchComponent, [{
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "row weather__form" },
+	        'div',
+	        { className: 'row weather__form' },
 	        _react2.default.createElement(
-	          "form",
-	          { className: "row" },
+	          'div',
+	          { className: 'weather__form__header' },
 	          _react2.default.createElement(
-	            "div",
-	            { className: "weather__form__header" },
-	            _react2.default.createElement(
-	              "h4",
-	              null,
-	              "Search the weather information for your city!"
-	            )
-	          ),
-	          _react2.default.createElement(
-	            "div",
-	            { className: "weather__form__input" },
-	            _react2.default.createElement(
-	              "label",
-	              null,
-	              "Write the name of your city"
-	            ),
-	            _react2.default.createElement("input", { type: "text", placeholder: "ica" })
+	            'h4',
+	            null,
+	            'Search the weather information for your city!'
 	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'weather__form__input' },
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            'Write the name of your city'
+	          ),
+	          _react2.default.createElement('input', { type: 'text', placeholder: 'ica', onChange: this.onChange, ref: 'location' })
 	        )
 	      );
 	    }

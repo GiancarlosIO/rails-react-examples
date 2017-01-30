@@ -12,6 +12,7 @@ export default class WeatherMainComponent extends React.Component {
     super(props);
     this.state = {
       location: "ica",
+      status: "loading",
       tempData: {}
     };
   }
@@ -22,16 +23,19 @@ export default class WeatherMainComponent extends React.Component {
     this.promiseTempData = this.xhrTempData.then(
       (data) => {
         this.setState({
-          tempData: data
+          tempData: data,
+          status: "loaded"
         }, () => {console.log(this.state)});
       },
       (error) => {
         console.log(error);
+        let responseText = JSON.parse(error.responseText);
         this.setState({
           tempData: {
-            cod: 401,
-            message: "Error server"
-          }
+            cod: responseText.cod,
+            message: responseText.message
+          },
+          status: "error"
         })
       }
     );
@@ -47,12 +51,33 @@ export default class WeatherMainComponent extends React.Component {
     }
   }
 
+  handleChange = (location) => {
+    this.setState(
+      {location, status: "loading"},
+      () => this.getTempData());
+  }
+
   render() {
+    let {cod, message} = this.state.tempData;
+    let {status} = this.state;
+    let renderWithStatus = () => {
+      if (status === "loading") {
+        return ( <h3>Loading</h3> )
+      } else if (status === "loaded") {
+        return (
+          <InfoComponent {...this.state}/>
+        )
+      } else if (status === "error") {
+        return (
+          <h3>{message}</h3>
+        )
+      }
+    }
     return (
       <div className="row">
         <div className="column--300 weather">
-          <SearchComponent />
-          <InfoComponent />
+          <SearchComponent handleChange={this.handleChange}/>
+          {renderWithStatus()}
         </div>
       </div>
     )
