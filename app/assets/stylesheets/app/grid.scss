@@ -16,6 +16,7 @@
       width: #{$i * 10%};
     }
   }
+  &--300 { width: 300px; }
 }
 .flex {
   padding: 10px;
