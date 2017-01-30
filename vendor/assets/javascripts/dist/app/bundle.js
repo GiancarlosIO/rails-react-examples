@@ -28418,8 +28418,6 @@
 	        _this.setState({
 	          tempData: data,
 	          status: "loaded"
-	        }, function () {
-	          console.log(_this.state);
 	        });
 	      }, function (error) {
 	        console.log(error);
