@@ -29,14 +29,16 @@ export default class WeatherMainComponent extends React.Component {
       },
       (error) => {
         console.log(error);
-        let responseText = JSON.parse(error.responseText);
-        this.setState({
-          tempData: {
-            cod: responseText.cod,
-            message: responseText.message
-          },
-          status: "error"
-        })
+        if (error.responseText) {
+          let responseText = JSON.parse(error.responseText);
+          this.setState({
+            tempData: {
+              cod: responseText.cod,
+              message: responseText.message
+            },
+            status: "error"
+          })
+        }
       }
     );
   }

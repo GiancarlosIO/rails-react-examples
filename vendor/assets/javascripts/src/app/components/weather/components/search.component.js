@@ -18,7 +18,7 @@ export default class SearchComponent extends React.Component {
     return (
       <div className="row weather__form">
         <div className="weather__form__header">
-          <h4>Search the weather information for your city!</h4>
+          <h4>Search the weather information of your city!</h4>
         </div>
         <div className="weather__form__input">
           <label>Write the name of your city</label>

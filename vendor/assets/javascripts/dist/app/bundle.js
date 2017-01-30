@@ -28425,14 +28425,16 @@
 	        });
 	      }, function (error) {
 	        console.log(error);
-	        var responseText = JSON.parse(error.responseText);
-	        _this.setState({
-	          tempData: {
-	            cod: responseText.cod,
-	            message: responseText.message
-	          },
-	          status: "error"
-	        });
+	        if (error.responseText) {
+	          var responseText = JSON.parse(error.responseText);
+	          _this.setState({
+	            tempData: {
+	              cod: responseText.cod,
+	              message: responseText.message
+	            },
+	            status: "error"
+	          });
+	        }
 	      });
 	    };
 
@@ -28570,6 +28572,9 @@
 	  _createClass(InfoComponent, [{
 	    key: "render",
 	    value: function render() {
+	      var data = this.props.tempData;
+
+	      var iconWeatherURL = "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png";
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "row" },
@@ -28582,7 +28587,10 @@
 	            _react2.default.createElement(
 	              "h4",
 	              null,
-	              " Ica - PE"
+	              " ",
+	              data.name,
+	              " - ",
+	              data.sys.country
 	            ),
 	            _react2.default.createElement(
 	              "h5",
@@ -28590,9 +28598,11 @@
 	              "Weather"
 	            ),
 	            _react2.default.createElement(
-	              "span",
+	              "p",
 	              null,
-	              "(Clear Sky)"
+	              data.weather[0].description,
+	              " - ",
+	              _react2.default.createElement("img", { src: iconWeatherURL, alt: data.weather[0].description })
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -28606,7 +28616,8 @@
 	            _react2.default.createElement(
 	              "p",
 	              null,
-	              "123"
+	              data.main.temp,
+	              "\xBA"
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -28620,7 +28631,8 @@
 	            _react2.default.createElement(
 	              "p",
 	              null,
-	              "123"
+	              data.main.temp_max,
+	              "\xBA"
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -28634,7 +28646,8 @@
 	            _react2.default.createElement(
 	              "p",
 	              null,
-	              "123"
+	              data.main.temp_min,
+	              "\xBA"
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -28648,7 +28661,7 @@
 	            _react2.default.createElement(
 	              "p",
 	              null,
-	              "123"
+	              data.main.humidity
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -28662,7 +28675,7 @@
 	            _react2.default.createElement(
 	              "p",
 	              null,
-	              "123"
+	              data.main.pressure
 	            )
 	          )
 	        )
@@ -28731,7 +28744,7 @@
 	          _react2.default.createElement(
 	            'h4',
 	            null,
-	            'Search the weather information for your city!'
+	            'Search the weather information of your city!'
 	          )
 	        ),
 	        _react2.default.createElement(
