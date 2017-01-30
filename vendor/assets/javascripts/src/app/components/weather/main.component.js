@@ -64,14 +64,20 @@ export default class WeatherMainComponent extends React.Component {
     let {status} = this.state;
     let renderWithStatus = () => {
       if (status === "loading") {
-        return ( <h3>Loading</h3> )
+        return (
+          <div className="weather__loading">
+            <h3>Loading</h3>
+          </div>
+        )
       } else if (status === "loaded") {
         return (
           <InfoComponent {...this.state}/>
         )
       } else if (status === "error") {
         return (
-          <h3>{message}</h3>
+          <div className="weather__error">
+            <h3>{message}</h3>
+          </div>
         )
       }
     }

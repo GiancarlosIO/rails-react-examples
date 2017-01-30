@@ -1,0 +1,119 @@
+.weather {
+  border-radius: 5px;
+  margin: 0 auto;
+  border: 1px solid #3498db;
+  box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  &__form {
+    width: 100%;
+    border-bottom: 1px solid #3498db;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+    border-radius: 4px;
+    &__header {
+      h4 {
+        font-size: 18px;
+        text-align: center;
+        color: #2c3e50;
+        font-family: sans-serif;
+      }
+    }
+    &__input {
+      text-align: center;
+      width: 100%;
+      padding-bottom: 1.33em;
+      label {
+        font-family: sans-serif;
+        display: block;
+        margin-bottom: 10px;
+        font-size: 13px;
+        font-weight: 300;
+        color: #AAB69B;
+      }
+      input {
+        font-family: sans-serif;
+        border: 1px solid transparent;
+        border-bottom: 1px solid #95a5a6;
+        transition: all 0.3s ease-in-out;
+        width: 60%;
+        padding-bottom: 5px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 300;
+        letter-spacing: 1px;
+        word-spacing: 4px;
+        color: #34495e;
+        &:focus {
+          width: 95%;
+          outline: none;
+          border-bottom: 1px solid #2c3e50;
+        }
+      }
+    }
+  }
+  &__message {
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    &__header {
+      text-align: center;
+      h4 {
+        letter-spacing: 1px;
+        word-spacing: 4px;
+        font-size: 24px;
+        color: #60646D;
+        margin: 10px;
+        margin-bottom: 0px;
+        color: #888888;
+      }
+      &__img {
+        margin-top: 0px;
+        margin-bottom: 5px;
+        display: flex;
+        flex-flow: row;
+        justify-content: center;
+        align-items: center;
+        color: #1DABB8;
+        img {
+          width: 50px;
+          height: 50px;
+        }
+      }
+    }
+    &__item {
+      width: 100%;
+      padding: 10px 0;
+      text-align: center;
+      border-top: 1px solid #D6DAC2;
+      display: flex;
+      flex-flow: column;
+      justify-content: center;
+      align-content: center;
+      span {
+        color: #6C8784;
+        margin-bottom: 5px;
+      }
+      p {
+        font-size: 14px;
+        margin: 0;
+        &.red {
+          color: #FD5B03;
+        }
+      }
+    }
+  }
+  &__error, &__loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+  }
+  &__error { color: #E22211; }
+  &__loading { color: #3498db }
+}

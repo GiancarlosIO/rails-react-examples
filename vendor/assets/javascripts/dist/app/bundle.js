@@ -28477,17 +28477,25 @@
 	      var renderWithStatus = function renderWithStatus() {
 	        if (status === "loading") {
 	          return _react2.default.createElement(
-	            'h3',
-	            null,
-	            'Loading'
+	            'div',
+	            { className: 'weather__loading' },
+	            _react2.default.createElement(
+	              'h3',
+	              null,
+	              'Loading'
+	            )
 	          );
 	        } else if (status === "loaded") {
 	          return _react2.default.createElement(_info2.default, _this2.state);
 	        } else if (status === "error") {
 	          return _react2.default.createElement(
-	            'h3',
-	            null,
-	            message
+	            'div',
+	            { className: 'weather__error' },
+	            _react2.default.createElement(
+	              'h3',
+	              null,
+	              message
+	            )
 	          );
 	        }
 	      };
@@ -28593,16 +28601,11 @@
 	              data.sys.country
 	            ),
 	            _react2.default.createElement(
-	              "h5",
-	              null,
-	              "Weather"
-	            ),
-	            _react2.default.createElement(
 	              "p",
-	              null,
-	              data.weather[0].description,
-	              " - ",
-	              _react2.default.createElement("img", { src: iconWeatherURL, alt: data.weather[0].description })
+	              { className: "weather__message__header__img" },
+	              _react2.default.createElement("img", { src: iconWeatherURL, alt: data.weather[0].description }),
+	              " ",
+	              data.weather[0].description
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -28615,7 +28618,7 @@
 	            ),
 	            _react2.default.createElement(
 	              "p",
-	              null,
+	              { className: "red" },
 	              data.main.temp,
 	              "\xBA"
 	            )
@@ -28630,7 +28633,7 @@
 	            ),
 	            _react2.default.createElement(
 	              "p",
-	              null,
+	              { className: "red" },
 	              data.main.temp_max,
 	              "\xBA"
 	            )
@@ -28645,7 +28648,7 @@
 	            ),
 	            _react2.default.createElement(
 	              "p",
-	              null,
+	              { className: "red" },
 	              data.main.temp_min,
 	              "\xBA"
 	            )

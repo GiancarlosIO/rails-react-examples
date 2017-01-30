@@ -13,20 +13,19 @@ export default class InfoComponent extends React.Component {
         <div className="weather__message">
           <div className="weather__message__header">
             <h4> {data.name} - {data.sys.country}</h4>
-            <h5>Weather</h5>
-            <p>{data.weather[0].description} - <img src={iconWeatherURL} alt={data.weather[0].description} /></p>
+            <p className="weather__message__header__img"><img src={iconWeatherURL} alt={data.weather[0].description} /> {data.weather[0].description}</p>
           </div>
           <div className="weather__message__item">
             <span>Temperature</span>
-            <p>{data.main.temp}º</p>
+            <p className="red">{data.main.temp}º</p>
           </div>
           <div className="weather__message__item">
             <span>Temperature Maximun</span>
-            <p>{data.main.temp_max}º</p>
+            <p className="red">{data.main.temp_max}º</p>
           </div>
           <div className="weather__message__item">
             <span>Temperature Minimun</span>
-            <p>{data.main.temp_min}º</p>
+            <p className="red">{data.main.temp_min}º</p>
           </div>
           <div className="weather__message__item">
             <span>Humidity</span>
