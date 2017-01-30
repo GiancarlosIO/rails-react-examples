@@ -25,7 +25,7 @@ export default class WeatherMainComponent extends React.Component {
         this.setState({
           tempData: data,
           status: "loaded"
-        }, () => {console.log(this.state)});
+        });
       },
       (error) => {
         console.log(error);
