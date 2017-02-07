@@ -27696,7 +27696,7 @@
 	    _this.getMoviesData = _this.getMoviesData.bind(_this);
 	    _this.handleChange = _this.handleChange.bind(_this);
 	    _this.state = {
-	      movie: 'superman',
+	      movie: 'ring',
 	      moviesData: {}
 	    };
 	    return _this;
@@ -27717,7 +27717,8 @@
 	          moviesData: data
 	        });
 	      }, function (error) {
-	        console.log(error);
+	        console.log('error data', error);
+	        _this2.setState({ moviesData: { Error: error.statusText } });
 	      });
 	    }
 	  }, {
@@ -27787,7 +27788,7 @@
 	var MovieAPI = {
 	  getListMovie: function getListMovie(movie) {
 	    return $.ajax({
-	      url: "https://www.omdbapi.com/?s=" + movie + "&r=json",
+	      url: "http://www.omdbapi.com/?s=" + movie,
 	      dataType: "json",
 	      cache: false,
 	      success: function success(data) {},
@@ -27796,7 +27797,7 @@
 	  },
 	  getMovieById: function getMovieById(movieId) {
 	    return $.ajax({
-	      url: "https://www.omdbapi.com/?i=" + movieId + "&plot=full&r=json",
+	      url: "http://www.omdbapi.com/?i=" + movieId + "&plot=full",
 	      dataType: "json",
 	      cache: false,
 	      success: function success(data) {},
@@ -27866,7 +27867,7 @@
 	            { className: 'text--center' },
 	            'Write the title to search for a Movie'
 	          ),
-	          _react2.default.createElement('input', { onChange: this.onChange, className: 'form__input full-width', type: 'text', ref: 'title', placeholder: 'Superman' })
+	          _react2.default.createElement('input', { onChange: this.onChange, className: 'form__input full-width', type: 'text', ref: 'title', placeholder: 'Ring' })
 	        )
 	      );
 	    }

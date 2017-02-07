@@ -1,7 +1,7 @@
 const MovieAPI = {
   getListMovie: (movie) => {
     return $.ajax({
-      url: "https://www.omdbapi.com/?s=" + movie + "&r=json",
+      url: "http://www.omdbapi.com/?s=" + movie,
       dataType: "json",
       cache: false,
       success: (data) => { },
@@ -10,7 +10,7 @@ const MovieAPI = {
   },
   getMovieById: (movieId) => {
     return $.ajax({
-      url: "https://www.omdbapi.com/?i=" + movieId + "&plot=full&r=json",
+      url: "http://www.omdbapi.com/?i=" + movieId + "&plot=full",
       dataType: "json",
       cache: false,
       success: (data) => { },

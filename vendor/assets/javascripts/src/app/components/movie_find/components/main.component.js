@@ -11,7 +11,7 @@ export default class MovieMainComponent extends React.Component {
     this.getMoviesData = this.getMoviesData.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.state = {
-      movie: 'superman',
+      movie: 'ring',
       moviesData: {}
     }
   }
@@ -28,9 +28,10 @@ export default class MovieMainComponent extends React.Component {
         });
       },
       (error) => {
-        console.log(error);
+        console.log('error data', error);
+        this.setState( {moviesData: {Error: error.statusText}} );
       }
-    )
+    );
   }
 
   componentDidMount() {
