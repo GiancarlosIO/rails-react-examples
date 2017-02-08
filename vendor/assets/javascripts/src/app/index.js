@@ -8,6 +8,7 @@ import QuizMainComponent from './components/quizzes/main.component';
 import MovieMainComponent from './components/movie_find/components/main.component';
 import MovieWrapperComponent from './components/movie_find/components/movieWrapper.component';
 import WeatherMainComponent from './components/weather/main.component';
+import NoteMainComponent from './components/simplenote/main.component';
 
 $(document).on('ready', () => {
   ReactDOM.render(
@@ -18,6 +19,7 @@ $(document).on('ready', () => {
         <Route path="/movies" component={MovieMainComponent}></Route>
         <Route path="/movies/:movie_id" component={MovieWrapperComponent}></Route>
         <Route path="/weather" component={WeatherMainComponent}></Route>
+        <Route path="/simplenote" component={NoteMainComponent}></Route>
       </Route>
     </Router>,
   document.getElementById('app-wrapper'))
