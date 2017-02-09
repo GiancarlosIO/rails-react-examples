@@ -36,6 +36,9 @@
     justify-content: flex-start;
     align-items: stretch;
     padding: 0 !important;
+    overflow: auto;
+    min-height: 500px;
+    height: 500px;
     &__item {
       padding: 15px 10px;
       font-size: 14px;
