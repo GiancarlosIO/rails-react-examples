@@ -28840,6 +28840,10 @@
 
 	    var _this = _possibleConstructorReturn(this, (NoteMainComponent.__proto__ || Object.getPrototypeOf(NoteMainComponent)).call(this, props));
 
+	    _this.selectNote = function (note) {
+	      _this.setState({ noteSelected: note });
+	    };
+
 	    _this.shouldCancelAllRequest = function (reason) {
 	      if (reason) {
 	        for (var i in _this.cancelRequests) {
@@ -28851,7 +28855,8 @@
 	    _this.unmounted = false;
 	    _this.cancelRequests = [];
 	    _this.state = {
-	      notesList: []
+	      notesList: [],
+	      noteSelected: {}
 	    };
 	    return _this;
 	  }
@@ -28866,7 +28871,12 @@
 	        _this2.cancelRequests.push(xhrPromise.cancel);
 	        _this2.shouldCancelAllRequest(_this2.unmounted);
 	        xhrPromise.request.then(function (response) {
-	          _this2.setState({ notesList: response.data.notes });
+	          _this2.setState({ notesList: response.data.notes }, function () {
+	            if (_this2.state.notesList.length > 0) {
+	              var noteSelected = _this2.state.notesList[0];
+	              _this2.setState({ noteSelected: noteSelected });
+	            }
+	          });
 	          console.log('list response', response);
 	        }).catch(function (error) {
 	          if (error.response) {
@@ -28889,7 +28899,9 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var notesList = this.state.notesList;
+	      var _state = this.state,
+	          notesList = _state.notesList,
+	          noteSelected = _state.noteSelected;
 
 	      return _react2.default.createElement(
 	        'div',
@@ -28909,8 +28921,8 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
-	          _react2.default.createElement(_noteList2.default, { notesList: notesList }),
-	          _react2.default.createElement(_noteTextarea2.default, null)
+	          _react2.default.createElement(_noteList2.default, { notesList: notesList, noteSelected: noteSelected, selectNote: this.selectNote }),
+	          _react2.default.createElement(_noteTextarea2.default, { note: noteSelected })
 	        )
 	      );
 	    }
@@ -30654,10 +30666,12 @@
 	  _createClass(NoteTextareaComponent, [{
 	    key: "render",
 	    value: function render() {
+	      var note = this.props.note;
+
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "column--6 padding--rl-10 note__column-right note__textarea" },
-	        _react2.default.createElement("textarea", null)
+	        _react2.default.createElement("textarea", { value: note.text })
 	      );
 	    }
 	  }]);
@@ -30842,8 +30856,6 @@
 	  value: true
 	});
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(2);
@@ -30868,17 +30880,27 @@
 	  function NoteListComponent(props) {
 	    _classCallCheck(this, NoteListComponent);
 
-	    return _possibleConstructorReturn(this, (NoteListComponent.__proto__ || Object.getPrototypeOf(NoteListComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (NoteListComponent.__proto__ || Object.getPrototypeOf(NoteListComponent)).call(this, props));
+
+	    _this.handleClickNote = function (note) {
+	      _this.props.selectNote(note);
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(NoteListComponent, [{
 	    key: 'render',
 	    value: function render() {
-	      console.log(this.props);
-	      var notesList = this.props.notesList;
+	      var _this2 = this;
+
+	      var _props = this.props,
+	          notesList = _props.notesList,
+	          noteSelected = _props.noteSelected;
 
 	      var notes = notesList.map(function (note) {
-	        return _react2.default.createElement(_note2.default, _extends({ key: note.id, text: note.text }, note));
+	        var selected = noteSelected === note;
+	        return _react2.default.createElement(_note2.default, { key: note.id, note: note, selected: selected, handleClick: _this2.handleClickNote });
 	      });
 	      return _react2.default.createElement(
 	        'div',
@@ -30897,7 +30919,7 @@
 /* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -30923,16 +30945,28 @@
 	  function NoteComponent(props) {
 	    _classCallCheck(this, NoteComponent);
 
-	    return _possibleConstructorReturn(this, (NoteComponent.__proto__ || Object.getPrototypeOf(NoteComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (NoteComponent.__proto__ || Object.getPrototypeOf(NoteComponent)).call(this, props));
+
+	    _this.onClick = function () {
+	      var note = _this.props.note;
+	      _this.props.handleClick(note);
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(NoteComponent, [{
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
+	      var _props = this.props,
+	          selected = _props.selected,
+	          note = _props.note;
+
+	      var classNote = selected ? 'selected' : '';
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "note__list__item" },
-	        this.props.text
+	        'div',
+	        { className: 'note__list__item ' + classNote, onClick: this.onClick },
+	        note.text
 	      );
 	    }
 	  }]);

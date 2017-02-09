@@ -49,6 +49,9 @@
       font-family: sans-serif;
       cursor: pointer;
       transition: all 0.2 ease-in-out;
+      &.selected {
+        background-color: rgba(105, 223, 228, 0.23);
+      }
       &:not(:last-child) { border-bottom: 1px solid rgba(0,0,0,0.1);}
       &:hover { background-color: rgba(0,0,0,0.05); }
     }

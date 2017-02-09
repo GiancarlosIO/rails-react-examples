@@ -6,9 +6,10 @@ export default class NoteTextareaComponent extends React.Component {
   }
 
   render() {
+    let {note} = this.props;
     return (
       <div className="column--6 padding--rl-10 note__column-right note__textarea">
-        <textarea />
+        <textarea value={note.text} />
       </div>
     )
   }

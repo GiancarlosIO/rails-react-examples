@@ -7,11 +7,15 @@ export default class NoteListComponent extends React.Component {
     super(props);
   }
 
+  handleClickNote = (note) => {
+    this.props.selectNote(note);
+  }
+
   render() {
-    console.log(this.props);
-    let {notesList} = this.props;
+    let {notesList, noteSelected} = this.props;
     let notes = notesList.map((note)=> {
-      return (<NoteComponent key={note.id} text={note.text} {...note} />);
+      let selected = noteSelected === note;
+      return (<NoteComponent key={note.id} note={note} selected={selected} handleClick={this.handleClickNote}/>);
     })
     return (
       <div className="column--4 padding--rl-10 position-fixed note__list note__column-left">

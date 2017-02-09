@@ -15,8 +15,13 @@ export default class NoteMainComponent extends React.Component {
     this.unmounted = false;
     this.cancelRequests = [];
     this.state = {
-      notesList: []
+      notesList: [],
+      noteSelected: {}
     }
+  }
+
+  selectNote = (note) => {
+    this.setState({noteSelected: note});
   }
 
   shouldCancelAllRequest = (reason) => {
@@ -34,7 +39,12 @@ export default class NoteMainComponent extends React.Component {
       this.shouldCancelAllRequest(this.unmounted);
       xhrPromise.request.then(
         response => {
-          this.setState({notesList: response.data.notes});
+          this.setState({notesList: response.data.notes}, ()=>{
+            if (this.state.notesList.length > 0) {
+              let noteSelected = this.state.notesList[0];
+              this.setState({noteSelected});
+            }
+          });
           console.log('list response', response);
         }
       ).catch(
@@ -58,7 +68,7 @@ export default class NoteMainComponent extends React.Component {
   }
 
   render() {
-    let {notesList} = this.state;
+    let {notesList, noteSelected} = this.state;
     return (
       <div>
         <div className="row">
@@ -70,8 +80,8 @@ export default class NoteMainComponent extends React.Component {
           <InputTagComponent />
         </div>
         <div className="row">
-          <NoteListComponent notesList={notesList}/>
-          <NoteTextareaComponent />
+          <NoteListComponent notesList={notesList} noteSelected={noteSelected} selectNote={this.selectNote}/>
+          <NoteTextareaComponent note={noteSelected} />
         </div>
       </div>
     )
