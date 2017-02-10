@@ -43,3 +43,7 @@
 .border {
   &--top-1 { border-top: 1px solid rgba(0,0,0,0.2);}
 }
+.text {
+  &-center { text-align: center;}
+  &-grey { color: #ccc}
+}

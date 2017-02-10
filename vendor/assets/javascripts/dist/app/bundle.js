@@ -28816,13 +28816,13 @@
 
 	var _noteList2 = _interopRequireDefault(_noteList);
 
-	var _inputTag = __webpack_require__(294);
-
-	var _inputTag2 = _interopRequireDefault(_inputTag);
-
 	var _selectTag = __webpack_require__(295);
 
 	var _selectTag2 = _interopRequireDefault(_selectTag);
+
+	var _tagBar = __webpack_require__(297);
+
+	var _tagBar2 = _interopRequireDefault(_tagBar);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28844,6 +28844,10 @@
 	      _this.setState({ noteSelected: note });
 	    };
 
+	    _this.handleChangeTextarea = function (text) {
+	      _this.updateNote(_this.state.noteSelected.id, text);
+	    };
+
 	    _this.shouldCancelAllRequest = function (reason) {
 	      if (reason) {
 	        for (var i in _this.cancelRequests) {
@@ -28852,44 +28856,73 @@
 	      };
 	    };
 
+	    _this.getNotesList = function () {
+	      setTimeout(function () {
+	        var xhrPromise = _note2.default.getNotes();
+	        _this.cancelRequests.push(xhrPromise.cancel);
+	        _this.shouldCancelAllRequest(_this.unmounted);
+	        xhrPromise.request.then(function (response) {
+	          var notesList = response.data.notes;
+	          _this.setState({
+	            notesList: notesList,
+	            noteSelected: notesList.length > 0 ? notesList[0] : {}
+	          });
+	        }).catch(function (error) {
+	          console.log('error to get notesList', error);
+	        });
+	      }, 1000);
+	    };
+
+	    _this.updateNote = function (id, text) {
+	      _this.setState({ saveStatus: 'saving...' }, function () {
+	        var xhrPromise = _note2.default.updateNote(id, text);
+	        _this.cancelRequests.push(xhrPromise.cancel);
+	        _this.shouldCancelAllRequest(_this.unmounted);
+	        xhrPromise.request.then(function (response) {
+	          if (response.statusText === 'OK') {
+	            var newNotesList = _this.state.notesList.map(function (note) {
+	              if (note.id == id) {
+	                note.text = text;
+	              };
+	              return note;
+	            });
+	            _this.setState({
+	              noteSelected: response.data,
+	              notesList: newNotesList,
+	              saveStatus: 'saved!'
+	            });
+	          }
+	        }).catch(function (error) {
+	          console.log('updated failed', error);
+	          requestAPI.error = error;
+	        });
+	      });
+	    };
+
 	    _this.unmounted = false;
 	    _this.cancelRequests = [];
 	    _this.state = {
 	      notesList: [],
-	      noteSelected: {}
+	      noteSelected: {},
+	      saveStatus: ''
 	    };
 	    return _this;
 	  }
 
+	  // ====== custom events =======
+
+	  // ====== end custom events =======
+
+	  // ====== custom call api functions =======
+
+
 	  _createClass(NoteMainComponent, [{
 	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var _this2 = this;
 
-	      setTimeout(function () {
-	        var xhrPromise = _note2.default.getNotes();
-	        _this2.cancelRequests.push(xhrPromise.cancel);
-	        _this2.shouldCancelAllRequest(_this2.unmounted);
-	        xhrPromise.request.then(function (response) {
-	          _this2.setState({ notesList: response.data.notes }, function () {
-	            if (_this2.state.notesList.length > 0) {
-	              var noteSelected = _this2.state.notesList[0];
-	              _this2.setState({ noteSelected: noteSelected });
-	            }
-	          });
-	          console.log('list response', response);
-	        }).catch(function (error) {
-	          if (error.response) {
-	            // The request was made, but the server responded with a status code
-	            // that falls out of the range of 2xx
-	            console.log('error != 2xx', error);
-	          } else {
-	            // Something happened in setting up the request that triggered an Error
-	            console.log('error throw', error);
-	          }
-	          console.log('catch error', error);
-	        });
-	      }, 1000);
+	    // ====== end custom call api functions =======
+
+	    value: function componentDidMount() {
+	      this.getNotesList();
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
@@ -28901,7 +28934,8 @@
 	    value: function render() {
 	      var _state = this.state,
 	          notesList = _state.notesList,
-	          noteSelected = _state.noteSelected;
+	          noteSelected = _state.noteSelected,
+	          saveStatus = _state.saveStatus;
 
 	      return _react2.default.createElement(
 	        'div',
@@ -28916,13 +28950,13 @@
 	          'div',
 	          { className: 'row' },
 	          _react2.default.createElement(_selectTag2.default, null),
-	          _react2.default.createElement(_inputTag2.default, null)
+	          _react2.default.createElement(_tagBar2.default, { saveStatus: saveStatus })
 	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
 	          _react2.default.createElement(_noteList2.default, { notesList: notesList, noteSelected: noteSelected, selectNote: this.selectNote }),
-	          _react2.default.createElement(_noteTextarea2.default, { note: noteSelected })
+	          _react2.default.createElement(_noteTextarea2.default, { note: noteSelected, handleChangeTextarea: this.handleChangeTextarea })
 	        )
 	      );
 	    }
@@ -28961,6 +28995,20 @@
 	      responseType: 'json',
 	      cancelToken: new CancelToken(function (c) {
 	        // An executor function receives a cancel function as a parameter
+	        cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
+	  updateNote: function updateNote(id, text) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'put',
+	      url: BASE_URL + 'notes/' + id,
+	      responseType: 'json',
+	      data: { note: { text: text } },
+	      cancelToken: new CancelToken(function (c) {
 	        cancel = c;
 	      })
 	    });
@@ -30660,18 +30708,31 @@
 	  function NoteTextareaComponent(props) {
 	    _classCallCheck(this, NoteTextareaComponent);
 
-	    return _possibleConstructorReturn(this, (NoteTextareaComponent.__proto__ || Object.getPrototypeOf(NoteTextareaComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (NoteTextareaComponent.__proto__ || Object.getPrototypeOf(NoteTextareaComponent)).call(this, props));
+
+	    _this.onChange = function () {
+	      var text = _this.textarea.value;
+	      if (text.length > 0) {
+	        _this.props.handleChangeTextarea(text);
+	      }
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(NoteTextareaComponent, [{
 	    key: "render",
 	    value: function render() {
+	      var _this2 = this;
+
 	      var note = this.props.note;
 
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "column--6 padding--rl-10 note__column-right note__textarea" },
-	        _react2.default.createElement("textarea", { value: note.text })
+	        _react2.default.createElement("textarea", { value: note.text, onChange: this.onChange, ref: function ref(el) {
+	            return _this2.textarea = el;
+	          } })
 	      );
 	    }
 	  }]);
@@ -30680,6 +30741,11 @@
 	}(_react2.default.Component);
 
 	exports.default = NoteTextareaComponent;
+
+
+	NoteTextareaComponent.propTypes = {
+	  note: _react2.default.PropTypes.object.isRequired
+	};
 
 /***/ },
 /* 289 */
@@ -31014,7 +31080,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "column--6 note__column-right note__tag" },
+	        { className: "column--8" },
 	        _react2.default.createElement("input", { type: "text", placeholder: "tag", className: "input__text" })
 	      );
 	    }
@@ -31096,6 +31162,121 @@
 	}(_react2.default.Component);
 
 	exports.default = SelectTagComponent;
+
+/***/ },
+/* 296 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SaveStatusComponent = function (_React$Component) {
+	  _inherits(SaveStatusComponent, _React$Component);
+
+	  function SaveStatusComponent(props) {
+	    _classCallCheck(this, SaveStatusComponent);
+
+	    return _possibleConstructorReturn(this, (SaveStatusComponent.__proto__ || Object.getPrototypeOf(SaveStatusComponent)).call(this, props));
+	  }
+
+	  _createClass(SaveStatusComponent, [{
+	    key: "render",
+	    value: function render() {
+	      var saveStatus = this.props.saveStatus;
+
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "column--2 text-center text-grey" },
+	        _react2.default.createElement(
+	          "span",
+	          null,
+	          saveStatus
+	        )
+	      );
+	    }
+	  }]);
+
+	  return SaveStatusComponent;
+	}(_react2.default.Component);
+
+	exports.default = SaveStatusComponent;
+
+/***/ },
+/* 297 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _inputTag = __webpack_require__(294);
+
+	var _inputTag2 = _interopRequireDefault(_inputTag);
+
+	var _saveStatus = __webpack_require__(296);
+
+	var _saveStatus2 = _interopRequireDefault(_saveStatus);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TagBarComponent = function (_React$Component) {
+	  _inherits(TagBarComponent, _React$Component);
+
+	  function TagBarComponent(props) {
+	    _classCallCheck(this, TagBarComponent);
+
+	    return _possibleConstructorReturn(this, (TagBarComponent.__proto__ || Object.getPrototypeOf(TagBarComponent)).call(this, props));
+	  }
+
+	  _createClass(TagBarComponent, [{
+	    key: 'render',
+	    value: function render() {
+	      var saveStatus = this.props.saveStatus;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'column--6 row note__column-right note__tag' },
+	        _react2.default.createElement(_inputTag2.default, null),
+	        _react2.default.createElement(_saveStatus2.default, { saveStatus: saveStatus })
+	      );
+	    }
+	  }]);
+
+	  return TagBarComponent;
+	}(_react2.default.Component);
+
+	exports.default = TagBarComponent;
 
 /***/ }
 /******/ ]);

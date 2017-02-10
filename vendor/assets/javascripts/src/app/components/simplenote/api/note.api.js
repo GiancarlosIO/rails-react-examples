@@ -17,6 +17,18 @@ const NoteAPI = {
     });
     return { request,cancel };
   },
+  updateNote: (id, text) => {
+    let CancelToken = axios.CancelToken;
+    let cancel;
+    let request = axios({
+      method: 'put',
+      url: `${BASE_URL}notes/${id}`,
+      responseType: 'json',
+      data: {note: {text}},
+      cancelToken: new CancelToken( c => { cancel = c })
+    });
+    return { request, cancel }
+  },
   getNoteById: (id) => {
     axios({
       method: 'get',

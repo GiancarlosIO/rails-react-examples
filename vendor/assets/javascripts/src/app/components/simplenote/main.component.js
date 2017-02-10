@@ -6,8 +6,8 @@ import MenuComponent from './menu/menu.component';
 import NoteTextareaComponent from './note/note.textarea.component';
 import NoteMenuComponent from './note-menu/note.menu.component';
 import NoteListComponent from './note/note.list.component';
-import InputTagComponent from './tags/inputTag.component';
 import SelectTagComponent from './tags/selectTag.component';
+import TagBarComponent from './tags/tagBar.component';
 
 export default class NoteMainComponent extends React.Component {
   constructor(props) {
@@ -16,14 +16,21 @@ export default class NoteMainComponent extends React.Component {
     this.cancelRequests = [];
     this.state = {
       notesList: [],
-      noteSelected: {}
+      noteSelected: {},
+      saveStatus: '',
     }
   }
 
+  // ====== custom events =======
   selectNote = (note) => {
     this.setState({noteSelected: note});
   }
+  handleChangeTextarea = (text) => {
+    this.updateNote(this.state.noteSelected.id, text);
+  }
+  // ====== end custom events =======
 
+  // ====== custom call api functions =======
   shouldCancelAllRequest = (reason) => {
     if (reason) {
       for(let i in this.cancelRequests) {
@@ -31,36 +38,54 @@ export default class NoteMainComponent extends React.Component {
       }
     };
   }
-
-  componentDidMount() {
+  getNotesList = () => {
     setTimeout(() => {
       let xhrPromise = NoteAPI.getNotes();
       this.cancelRequests.push(xhrPromise.cancel);
       this.shouldCancelAllRequest(this.unmounted);
       xhrPromise.request.then(
         response => {
-          this.setState({notesList: response.data.notes}, ()=>{
-            if (this.state.notesList.length > 0) {
-              let noteSelected = this.state.notesList[0];
-              this.setState({noteSelected});
-            }
-          });
-          console.log('list response', response);
+          let notesList = response.data.notes;
+          this.setState({
+            notesList: notesList,
+            noteSelected: notesList.length > 0 ? notesList[0] : {}
+          })
         }
-      ).catch(
-        error => {
-          if (error.response) {
-            // The request was made, but the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log('error != 2xx', error)
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('error throw', error);
-          }
-          console.log('catch error', error);
-        }
+      ).catch( error => { console.log('error to get notesList', error); }
       );
     }, 1000);
+  }
+  updateNote = (id, text) => {
+    this.setState({saveStatus: 'saving...'}, () => {
+      let xhrPromise = NoteAPI.updateNote(id, text);
+      this.cancelRequests.push(xhrPromise.cancel);
+      this.shouldCancelAllRequest(this.unmounted);
+      xhrPromise.request.then(
+        response => {
+          if (response.statusText === 'OK') {
+            let newNotesList = this.state.notesList.map(
+              (note) => {
+                if (note.id == id) { note.text = text; };
+                return note
+              }
+            );
+            this.setState({
+              noteSelected: response.data,
+              notesList: newNotesList,
+              saveStatus: 'saved!'
+            });
+          }
+        }
+      ).catch( error => {
+        console.log('updated failed', error)
+        requestAPI.error = error;
+      });
+    })
+  }
+// ====== end custom call api functions =======
+
+  componentDidMount() {
+    this.getNotesList();
   }
 
   componentWillUnmount() {
@@ -68,7 +93,7 @@ export default class NoteMainComponent extends React.Component {
   }
 
   render() {
-    let {notesList, noteSelected} = this.state;
+    let {notesList, noteSelected, saveStatus} = this.state;
     return (
       <div>
         <div className="row">
@@ -77,11 +102,11 @@ export default class NoteMainComponent extends React.Component {
         </div>
         <div className="row">
           <SelectTagComponent />
-          <InputTagComponent />
+          <TagBarComponent saveStatus={saveStatus}/>
         </div>
         <div className="row">
           <NoteListComponent notesList={notesList} noteSelected={noteSelected} selectNote={this.selectNote}/>
-          <NoteTextareaComponent note={noteSelected} />
+          <NoteTextareaComponent note={noteSelected} handleChangeTextarea={this.handleChangeTextarea}/>
         </div>
       </div>
     )

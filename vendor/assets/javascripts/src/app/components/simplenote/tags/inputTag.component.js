@@ -7,7 +7,7 @@ export default class InputTagComponent extends React.Component {
 
   render() {
     return (
-      <div className="column--6 note__column-right note__tag">
+      <div className="column--8">
         <input type="text" placeholder="tag" className="input__text"/>
       </div>
     )
