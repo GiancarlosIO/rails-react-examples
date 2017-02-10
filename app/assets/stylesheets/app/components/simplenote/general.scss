@@ -35,7 +35,7 @@
     flex-flow: column;
     justify-content: flex-start;
     align-items: stretch;
-    padding: 0 !important;
+    padding: 0 0 40px 0 !important;
     overflow: auto;
     min-height: 500px;
     height: 500px;
@@ -43,8 +43,7 @@
       padding: 15px 10px;
       font-size: 14px;
       font-weight: 300;
-      letter-spacing: 1px;
-      word-spacing: 5px;
+      word-spacing: 3px;
       line-height: 1.8;
       font-family: sans-serif;
       cursor: pointer;
