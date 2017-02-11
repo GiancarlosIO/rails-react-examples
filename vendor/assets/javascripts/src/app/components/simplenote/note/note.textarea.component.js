@@ -9,6 +9,8 @@ export default class NoteTextareaComponent extends React.Component {
     let text = this.textarea.value;
     if (text.length > 0) {
       this.props.handleChangeTextarea(text);
+    } else {
+      this.props.handleChangeTextarea('Nothing...');
     }
   }
 

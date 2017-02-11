@@ -30696,7 +30696,7 @@
 /* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -30728,6 +30728,8 @@
 	      var text = _this.textarea.value;
 	      if (text.length > 0) {
 	        _this.props.handleChangeTextarea(text);
+	      } else {
+	        _this.props.handleChangeTextarea('Nothing...');
 	      }
 	    };
 
@@ -30735,16 +30737,16 @@
 	  }
 
 	  _createClass(NoteTextareaComponent, [{
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
 
 	      var note = this.props.note;
 
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "column--6 padding--rl-10 note__column-right note__textarea" },
-	        _react2.default.createElement("textarea", { value: note.text, onChange: this.onChange, ref: function ref(el) {
+	        'div',
+	        { className: 'column--6 padding--rl-10 note__column-right note__textarea' },
+	        _react2.default.createElement('textarea', { value: note.text, onChange: this.onChange, ref: function ref(el) {
 	            return _this2.textarea = el;
 	          } })
 	      );
