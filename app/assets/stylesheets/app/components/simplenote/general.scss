@@ -35,14 +35,14 @@
     flex-flow: column;
     justify-content: flex-start;
     align-items: stretch;
-    padding: 0 0 40px 0 !important;
+    padding: 0;
     overflow: auto;
-    min-height: 500px;
-    height: 500px;
+    height: calc( 100vh - 240px );
     &__item {
       padding: 15px 10px;
       font-size: 14px;
       font-weight: 300;
+      min-height: 55px;
       word-spacing: 3px;
       line-height: 1.8;
       font-family: sans-serif;
@@ -68,7 +68,7 @@
       letter-spacing: 1px;
       word-spacing: 4px;
       line-height: 1.8;
-      height: 400px;
+      height: calc( 100vh - 255px );
       &:focus { outline: none;}
     }
   }

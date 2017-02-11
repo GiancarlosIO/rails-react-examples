@@ -12,16 +12,21 @@ export default class NoteMenuComponent extends React.Component {
     this.props.handleSearchChange(value);
   }
 
+  handleClick = () => {
+    this.props.handleAddClick();
+  }
+
   render() {
     return (
       <div className="column--4 row padding--rl-10 position-fixed note__column-left">
         <NoteSearchComponent handleChange={this.handleChange}/>
-        <NoteAddComponent />
+        <NoteAddComponent handleClick={this.handleClick}/>
       </div>
     )
   }
 }
 
 NoteMenuComponent.propTypes = {
-  handleSearchChange: React.PropTypes.func.isRequired
+  handleSearchChange: React.PropTypes.func.isRequired,
+  handleAddClick: React.PropTypes.func.isRequired
 }

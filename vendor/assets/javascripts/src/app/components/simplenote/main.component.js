@@ -18,7 +18,9 @@ export default class NoteMainComponent extends React.Component {
       notesList: [],
       noteSelected: {},
       saveStatus: '',
-      searchText: ''
+      searchText: '',
+      loading: true,
+      focusTextarea: true
     }
   }
 
@@ -31,6 +33,9 @@ export default class NoteMainComponent extends React.Component {
   }
   handleSearchChange = (text)  => {
     this.setState({searchText: text});
+  }
+  handleAddClick = () => {
+    this.createNote();
   }
   // ====== end custom events =======
 
@@ -52,8 +57,9 @@ export default class NoteMainComponent extends React.Component {
           let notesList = response.data.notes;
           this.setState({
             notesList: notesList,
-            noteSelected: notesList.length > 0 ? notesList[0] : {}
-          })
+            noteSelected: notesList.length > 0 ? notesList[0] : {},
+            loading: false
+          });
         }
       ).catch( error => { console.log('error to get notesList', error); }
       );
@@ -82,9 +88,28 @@ export default class NoteMainComponent extends React.Component {
         }
       ).catch( error => {
         console.log('updated failed', error)
-        requestAPI.error = error;
       });
     })
+  }
+  createNote = () => {
+    this.setState({loading: true}, () => {
+      let xhrPromise = NoteAPI.createNote();
+      this.cancelRequests.push(xhrPromise.cancel);
+      this.shouldCancelAllRequest(this.unmounted);
+      xhrPromise.request.then(
+        response => {
+          let {notesList} = this.state;
+          if (response.statusText === 'OK') {
+            let newNotesList = [response.data].concat(notesList);
+            this.setState({
+              notesList: newNotesList,
+              noteSelected: newNotesList[0],
+              loading: false
+            });
+          }
+        }
+      ).catch(() => { console.log(); })
+    });
   }
 // ====== end custom call api functions =======
 
@@ -97,17 +122,24 @@ export default class NoteMainComponent extends React.Component {
   }
 
   render() {
-    let {notesList, noteSelected, saveStatus, searchText} = this.state;
-    let notes;
-    if (searchText.length > 0) {
-      notes = notesList.filter( note => (note.text.indexOf(searchText) > -1) );
-    } else {
-      notes = notesList;
+    let {notesList, noteSelected, saveStatus, searchText, loading, focusTextarea} = this.state;
+    let notes = searchText.length > 0 ? notesList.filter( note => (note.text.indexOf(searchText) > -1) ) : notesList ;
+    let notesItems = () => {
+      if (loading) {
+        return (<div className="row">Loading</div>);
+      } else {
+        return (
+          <div className="row">
+            <NoteListComponent notesList={notes} noteSelected={noteSelected} selectNote={this.selectNote}/>
+            <NoteTextareaComponent note={noteSelected} handleChangeTextarea={this.handleChangeTextarea} focus={focusTextarea}/>
+          </div>
+        )
+      }
     }
     return (
       <div>
         <div className="row">
-          <NoteMenuComponent handleSearchChange={this.handleSearchChange}/>
+          <NoteMenuComponent handleSearchChange={this.handleSearchChange} handleAddClick={this.handleAddClick}/>
           <MenuComponent />
         </div>
         <div className="row">
@@ -115,8 +147,7 @@ export default class NoteMainComponent extends React.Component {
           <TagBarComponent saveStatus={saveStatus}/>
         </div>
         <div className="row">
-          <NoteListComponent notesList={notes} noteSelected={noteSelected} selectNote={this.selectNote}/>
-          <NoteTextareaComponent note={noteSelected} handleChangeTextarea={this.handleChangeTextarea}/>
+          {notesItems()}
         </div>
       </div>
     )

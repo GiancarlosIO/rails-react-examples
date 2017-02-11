@@ -28852,6 +28852,10 @@
 	      _this.setState({ searchText: text });
 	    };
 
+	    _this.handleAddClick = function () {
+	      _this.createNote();
+	    };
+
 	    _this.shouldCancelAllRequest = function (reason) {
 	      if (reason) {
 	        for (var i in _this.cancelRequests) {
@@ -28869,7 +28873,8 @@
 	          var notesList = response.data.notes;
 	          _this.setState({
 	            notesList: notesList,
-	            noteSelected: notesList.length > 0 ? notesList[0] : {}
+	            noteSelected: notesList.length > 0 ? notesList[0] : {},
+	            loading: false
 	          });
 	        }).catch(function (error) {
 	          console.log('error to get notesList', error);
@@ -28898,7 +28903,28 @@
 	          }
 	        }).catch(function (error) {
 	          console.log('updated failed', error);
-	          requestAPI.error = error;
+	        });
+	      });
+	    };
+
+	    _this.createNote = function () {
+	      _this.setState({ loading: true }, function () {
+	        var xhrPromise = _note2.default.createNote();
+	        _this.cancelRequests.push(xhrPromise.cancel);
+	        _this.shouldCancelAllRequest(_this.unmounted);
+	        xhrPromise.request.then(function (response) {
+	          var notesList = _this.state.notesList;
+
+	          if (response.statusText === 'OK') {
+	            var newNotesList = [response.data].concat(notesList);
+	            _this.setState({
+	              notesList: newNotesList,
+	              noteSelected: newNotesList[0],
+	              loading: false
+	            });
+	          }
+	        }).catch(function () {
+	          console.log();
 	        });
 	      });
 	    };
@@ -28909,7 +28935,9 @@
 	      notesList: [],
 	      noteSelected: {},
 	      saveStatus: '',
-	      searchText: ''
+	      searchText: '',
+	      loading: true,
+	      focusTextarea: true
 	    };
 	    return _this;
 	  }
@@ -28937,27 +28965,42 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      var _state = this.state,
 	          notesList = _state.notesList,
 	          noteSelected = _state.noteSelected,
 	          saveStatus = _state.saveStatus,
-	          searchText = _state.searchText;
+	          searchText = _state.searchText,
+	          loading = _state.loading,
+	          focusTextarea = _state.focusTextarea;
 
-	      var notes = void 0;
-	      if (searchText.length > 0) {
-	        notes = notesList.filter(function (note) {
-	          return note.text.indexOf(searchText) > -1;
-	        });
-	      } else {
-	        notes = notesList;
-	      }
+	      var notes = searchText.length > 0 ? notesList.filter(function (note) {
+	        return note.text.indexOf(searchText) > -1;
+	      }) : notesList;
+	      var notesItems = function notesItems() {
+	        if (loading) {
+	          return _react2.default.createElement(
+	            'div',
+	            { className: 'row' },
+	            'Loading'
+	          );
+	        } else {
+	          return _react2.default.createElement(
+	            'div',
+	            { className: 'row' },
+	            _react2.default.createElement(_noteList2.default, { notesList: notes, noteSelected: noteSelected, selectNote: _this2.selectNote }),
+	            _react2.default.createElement(_noteTextarea2.default, { note: noteSelected, handleChangeTextarea: _this2.handleChangeTextarea, focus: focusTextarea })
+	          );
+	        }
+	      };
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
-	          _react2.default.createElement(_noteMenu2.default, { handleSearchChange: this.handleSearchChange }),
+	          _react2.default.createElement(_noteMenu2.default, { handleSearchChange: this.handleSearchChange, handleAddClick: this.handleAddClick }),
 	          _react2.default.createElement(_menu2.default, null)
 	        ),
 	        _react2.default.createElement(
@@ -28969,8 +29012,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
-	          _react2.default.createElement(_noteList2.default, { notesList: notes, noteSelected: noteSelected, selectNote: this.selectNote }),
-	          _react2.default.createElement(_noteTextarea2.default, { note: noteSelected, handleChangeTextarea: this.handleChangeTextarea })
+	          notesItems()
 	        )
 	      );
 	    }
@@ -29022,6 +29064,20 @@
 	      url: BASE_URL + 'notes/' + id,
 	      responseType: 'json',
 	      data: { note: { text: text } },
+	      cancelToken: new CancelToken(function (c) {
+	        cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
+	  createNote: function createNote() {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'post',
+	      url: BASE_URL + 'notes',
+	      responseType: 'json',
+	      data: { note: { text: '' } },
 	      cancelToken: new CancelToken(function (c) {
 	        cancel = c;
 	      })
@@ -30729,7 +30785,7 @@
 	      if (text.length > 0) {
 	        _this.props.handleChangeTextarea(text);
 	      } else {
-	        _this.props.handleChangeTextarea('Nothing...');
+	        _this.props.handleChangeTextarea('');
 	      }
 	    };
 
@@ -30741,14 +30797,16 @@
 	    value: function render() {
 	      var _this2 = this;
 
-	      var note = this.props.note;
+	      var _props = this.props,
+	          note = _props.note,
+	          focus = _props.focus;
 
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'column--6 padding--rl-10 note__column-right note__textarea' },
 	        _react2.default.createElement('textarea', { value: note.text, onChange: this.onChange, ref: function ref(el) {
 	            return _this2.textarea = el;
-	          } })
+	          }, autoFocus: focus })
 	      );
 	    }
 	  }]);
@@ -30808,6 +30866,10 @@
 	      _this.props.handleSearchChange(value);
 	    };
 
+	    _this.handleClick = function () {
+	      _this.props.handleAddClick();
+	    };
+
 	    return _this;
 	  }
 
@@ -30818,7 +30880,7 @@
 	        'div',
 	        { className: 'column--4 row padding--rl-10 position-fixed note__column-left' },
 	        _react2.default.createElement(_noteSearch2.default, { handleChange: this.handleChange }),
-	        _react2.default.createElement(_noteAdd2.default, null)
+	        _react2.default.createElement(_noteAdd2.default, { handleClick: this.handleClick })
 	      );
 	    }
 	  }]);
@@ -30830,7 +30892,8 @@
 
 
 	NoteMenuComponent.propTypes = {
-	  handleSearchChange: _react2.default.PropTypes.func.isRequired
+	  handleSearchChange: _react2.default.PropTypes.func.isRequired,
+	  handleAddClick: _react2.default.PropTypes.func.isRequired
 	};
 
 /***/ },
@@ -30863,7 +30926,13 @@
 	  function NoteAddComponent(props) {
 	    _classCallCheck(this, NoteAddComponent);
 
-	    return _possibleConstructorReturn(this, (NoteAddComponent.__proto__ || Object.getPrototypeOf(NoteAddComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (NoteAddComponent.__proto__ || Object.getPrototypeOf(NoteAddComponent)).call(this, props));
+
+	    _this.onClick = function () {
+	      _this.props.handleClick();
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(NoteAddComponent, [{
@@ -30874,7 +30943,7 @@
 	        { className: "column--2 flex-center " },
 	        _react2.default.createElement(
 	          "div",
-	          { className: "icon__container" },
+	          { className: "icon__container", onClick: this.onClick },
 	          _react2.default.createElement("i", { className: "fa fa-plus" })
 	        )
 	      );
@@ -30885,6 +30954,11 @@
 	}(_react2.default.Component);
 
 	exports.default = NoteAddComponent;
+
+
+	NoteAddComponent.propTypes = {
+	  handleClick: _react2.default.PropTypes.func.isRequired
+	};
 
 /***/ },
 /* 291 */

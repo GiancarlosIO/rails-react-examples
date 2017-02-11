@@ -10,15 +10,15 @@ export default class NoteTextareaComponent extends React.Component {
     if (text.length > 0) {
       this.props.handleChangeTextarea(text);
     } else {
-      this.props.handleChangeTextarea('Nothing...');
+      this.props.handleChangeTextarea('');
     }
   }
 
   render() {
-    let {note} = this.props;
+    let {note, focus} = this.props;
     return (
       <div className="column--6 padding--rl-10 note__column-right note__textarea">
-        <textarea value={note.text} onChange={this.onChange} ref={ el => this.textarea = el }/>
+        <textarea value={note.text} onChange={this.onChange} ref={ el => this.textarea = el } autoFocus={focus}/>
       </div>
     )
   }
