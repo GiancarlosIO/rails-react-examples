@@ -18,3 +18,7 @@ export default class TagBarComponent extends React.Component {
     )
   }
 }
+
+TagBarComponent.propTypes = {
+  saveStatus: React.PropTypes.string.isRequired
+}

@@ -28816,11 +28816,11 @@
 
 	var _noteList2 = _interopRequireDefault(_noteList);
 
-	var _selectTag = __webpack_require__(295);
+	var _selectTag = __webpack_require__(294);
 
 	var _selectTag2 = _interopRequireDefault(_selectTag);
 
-	var _tagBar = __webpack_require__(297);
+	var _tagBar = __webpack_require__(295);
 
 	var _tagBar2 = _interopRequireDefault(_tagBar);
 
@@ -28846,6 +28846,10 @@
 
 	    _this.handleChangeTextarea = function (text) {
 	      _this.updateNote(_this.state.noteSelected.id, text);
+	    };
+
+	    _this.handleSearchChange = function (text) {
+	      _this.setState({ searchText: text });
 	    };
 
 	    _this.shouldCancelAllRequest = function (reason) {
@@ -28904,7 +28908,8 @@
 	    _this.state = {
 	      notesList: [],
 	      noteSelected: {},
-	      saveStatus: ''
+	      saveStatus: '',
+	      searchText: ''
 	    };
 	    return _this;
 	  }
@@ -28935,15 +28940,24 @@
 	      var _state = this.state,
 	          notesList = _state.notesList,
 	          noteSelected = _state.noteSelected,
-	          saveStatus = _state.saveStatus;
+	          saveStatus = _state.saveStatus,
+	          searchText = _state.searchText;
 
+	      var notes = void 0;
+	      if (searchText.length > 0) {
+	        notes = notesList.filter(function (note) {
+	          return note.text.indexOf(searchText) > -1;
+	        });
+	      } else {
+	        notes = notesList;
+	      }
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
-	          _react2.default.createElement(_noteMenu2.default, null),
+	          _react2.default.createElement(_noteMenu2.default, { handleSearchChange: this.handleSearchChange }),
 	          _react2.default.createElement(_menu2.default, null)
 	        ),
 	        _react2.default.createElement(
@@ -28955,7 +28969,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
-	          _react2.default.createElement(_noteList2.default, { notesList: notesList, noteSelected: noteSelected, selectNote: this.selectNote }),
+	          _react2.default.createElement(_noteList2.default, { notesList: notes, noteSelected: noteSelected, selectNote: this.selectNote }),
 	          _react2.default.createElement(_noteTextarea2.default, { note: noteSelected, handleChangeTextarea: this.handleChangeTextarea })
 	        )
 	      );
@@ -30744,7 +30758,8 @@
 
 
 	NoteTextareaComponent.propTypes = {
-	  note: _react2.default.PropTypes.object.isRequired
+	  note: _react2.default.PropTypes.object.isRequired,
+	  handleChangeTextarea: _react2.default.PropTypes.func.isRequired
 	};
 
 /***/ },
@@ -30785,7 +30800,13 @@
 	  function NoteMenuComponent(props) {
 	    _classCallCheck(this, NoteMenuComponent);
 
-	    return _possibleConstructorReturn(this, (NoteMenuComponent.__proto__ || Object.getPrototypeOf(NoteMenuComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (NoteMenuComponent.__proto__ || Object.getPrototypeOf(NoteMenuComponent)).call(this, props));
+
+	    _this.handleChange = function (value) {
+	      _this.props.handleSearchChange(value);
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(NoteMenuComponent, [{
@@ -30794,7 +30815,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'column--4 row padding--rl-10 position-fixed note__column-left' },
-	        _react2.default.createElement(_noteSearch2.default, null),
+	        _react2.default.createElement(_noteSearch2.default, { handleChange: this.handleChange }),
 	        _react2.default.createElement(_noteAdd2.default, null)
 	      );
 	    }
@@ -30804,6 +30825,11 @@
 	}(_react2.default.Component);
 
 	exports.default = NoteMenuComponent;
+
+
+	NoteMenuComponent.propTypes = {
+	  handleSearchChange: _react2.default.PropTypes.func.isRequired
+	};
 
 /***/ },
 /* 290 */
@@ -30888,19 +30914,30 @@
 	  function NoteSearchComponent(props) {
 	    _classCallCheck(this, NoteSearchComponent);
 
-	    return _possibleConstructorReturn(this, (NoteSearchComponent.__proto__ || Object.getPrototypeOf(NoteSearchComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (NoteSearchComponent.__proto__ || Object.getPrototypeOf(NoteSearchComponent)).call(this, props));
+
+	    _this.onChange = function () {
+	      var value = _this.inputSearch.value;
+	      _this.props.handleChange(value);
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(NoteSearchComponent, [{
 	    key: "render",
 	    value: function render() {
+	      var _this2 = this;
+
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "column--8 flex-center" },
 	        _react2.default.createElement(
 	          "div",
 	          { className: "input--icon" },
-	          _react2.default.createElement("input", { className: "input__text", type: "text", placeholder: "note name..." }),
+	          _react2.default.createElement("input", { className: "input__text", type: "text", placeholder: "note name...", onChange: this.onChange, ref: function ref(el) {
+	              return _this2.inputSearch = el;
+	            } }),
 	          _react2.default.createElement("i", { className: "fa fa-search" })
 	        )
 	      );
@@ -30911,6 +30948,11 @@
 	}(_react2.default.Component);
 
 	exports.default = NoteSearchComponent;
+
+
+	NoteSearchComponent.propTypes = {
+	  handleChange: _react2.default.PropTypes.func.isRequired
+	};
 
 /***/ },
 /* 292 */
@@ -30981,6 +31023,13 @@
 
 	exports.default = NoteListComponent;
 
+
+	NoteListComponent.propTypes = {
+	  notesList: _react2.default.PropTypes.array.isRequired,
+	  noteSelected: _react2.default.PropTypes.object.isRequired,
+	  selectNote: _react2.default.PropTypes.func.isRequired
+	};
+
 /***/ },
 /* 293 */
 /***/ function(module, exports, __webpack_require__) {
@@ -31029,10 +31078,11 @@
 	          note = _props.note;
 
 	      var classNote = selected ? 'selected' : '';
+	      var text = '' + note.text.substring(0, 40) + (note.text.length > 40 ? '...' : '');
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'note__list__item ' + classNote, onClick: this.onClick },
-	        note.text
+	        text
 	      );
 	    }
 	  }]);
@@ -31042,57 +31092,15 @@
 
 	exports.default = NoteComponent;
 
+
+	NoteComponent.propTypes = {
+	  selected: _react2.default.PropTypes.bool.isRequired,
+	  note: _react2.default.PropTypes.object.isRequired,
+	  handleClick: _react2.default.PropTypes.func.isRequired
+	};
+
 /***/ },
 /* 294 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var InputTagComponent = function (_React$Component) {
-	  _inherits(InputTagComponent, _React$Component);
-
-	  function InputTagComponent(props) {
-	    _classCallCheck(this, InputTagComponent);
-
-	    return _possibleConstructorReturn(this, (InputTagComponent.__proto__ || Object.getPrototypeOf(InputTagComponent)).call(this, props));
-	  }
-
-	  _createClass(InputTagComponent, [{
-	    key: "render",
-	    value: function render() {
-	      return _react2.default.createElement(
-	        "div",
-	        { className: "column--8" },
-	        _react2.default.createElement("input", { type: "text", placeholder: "tag", className: "input__text" })
-	      );
-	    }
-	  }]);
-
-	  return InputTagComponent;
-	}(_react2.default.Component);
-
-	exports.default = InputTagComponent;
-
-/***/ },
-/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31164,7 +31172,121 @@
 	exports.default = SelectTagComponent;
 
 /***/ },
+/* 295 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _inputTag = __webpack_require__(296);
+
+	var _inputTag2 = _interopRequireDefault(_inputTag);
+
+	var _saveStatus = __webpack_require__(297);
+
+	var _saveStatus2 = _interopRequireDefault(_saveStatus);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TagBarComponent = function (_React$Component) {
+	  _inherits(TagBarComponent, _React$Component);
+
+	  function TagBarComponent(props) {
+	    _classCallCheck(this, TagBarComponent);
+
+	    return _possibleConstructorReturn(this, (TagBarComponent.__proto__ || Object.getPrototypeOf(TagBarComponent)).call(this, props));
+	  }
+
+	  _createClass(TagBarComponent, [{
+	    key: 'render',
+	    value: function render() {
+	      var saveStatus = this.props.saveStatus;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'column--6 row note__column-right note__tag' },
+	        _react2.default.createElement(_inputTag2.default, null),
+	        _react2.default.createElement(_saveStatus2.default, { saveStatus: saveStatus })
+	      );
+	    }
+	  }]);
+
+	  return TagBarComponent;
+	}(_react2.default.Component);
+
+	exports.default = TagBarComponent;
+
+
+	TagBarComponent.propTypes = {
+	  saveStatus: _react2.default.PropTypes.string.isRequired
+	};
+
+/***/ },
 /* 296 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var InputTagComponent = function (_React$Component) {
+	  _inherits(InputTagComponent, _React$Component);
+
+	  function InputTagComponent(props) {
+	    _classCallCheck(this, InputTagComponent);
+
+	    return _possibleConstructorReturn(this, (InputTagComponent.__proto__ || Object.getPrototypeOf(InputTagComponent)).call(this, props));
+	  }
+
+	  _createClass(InputTagComponent, [{
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "column--8" },
+	        _react2.default.createElement("input", { type: "text", placeholder: "tag", className: "input__text" })
+	      );
+	    }
+	  }]);
+
+	  return InputTagComponent;
+	}(_react2.default.Component);
+
+	exports.default = InputTagComponent;
+
+/***/ },
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31217,66 +31339,6 @@
 	}(_react2.default.Component);
 
 	exports.default = SaveStatusComponent;
-
-/***/ },
-/* 297 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _inputTag = __webpack_require__(294);
-
-	var _inputTag2 = _interopRequireDefault(_inputTag);
-
-	var _saveStatus = __webpack_require__(296);
-
-	var _saveStatus2 = _interopRequireDefault(_saveStatus);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var TagBarComponent = function (_React$Component) {
-	  _inherits(TagBarComponent, _React$Component);
-
-	  function TagBarComponent(props) {
-	    _classCallCheck(this, TagBarComponent);
-
-	    return _possibleConstructorReturn(this, (TagBarComponent.__proto__ || Object.getPrototypeOf(TagBarComponent)).call(this, props));
-	  }
-
-	  _createClass(TagBarComponent, [{
-	    key: 'render',
-	    value: function render() {
-	      var saveStatus = this.props.saveStatus;
-
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'column--6 row note__column-right note__tag' },
-	        _react2.default.createElement(_inputTag2.default, null),
-	        _react2.default.createElement(_saveStatus2.default, { saveStatus: saveStatus })
-	      );
-	    }
-	  }]);
-
-	  return TagBarComponent;
-	}(_react2.default.Component);
-
-	exports.default = TagBarComponent;
 
 /***/ }
 /******/ ]);

@@ -23,5 +23,6 @@ export default class NoteTextareaComponent extends React.Component {
 }
 
 NoteTextareaComponent.propTypes = {
-  note: React.PropTypes.object.isRequired
+  note: React.PropTypes.object.isRequired,
+  handleChangeTextarea: React.PropTypes.func.isRequired
 }

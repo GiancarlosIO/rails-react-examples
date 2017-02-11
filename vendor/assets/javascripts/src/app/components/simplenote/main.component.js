@@ -18,6 +18,7 @@ export default class NoteMainComponent extends React.Component {
       notesList: [],
       noteSelected: {},
       saveStatus: '',
+      searchText: ''
     }
   }
 
@@ -27,6 +28,9 @@ export default class NoteMainComponent extends React.Component {
   }
   handleChangeTextarea = (text) => {
     this.updateNote(this.state.noteSelected.id, text);
+  }
+  handleSearchChange = (text)  => {
+    this.setState({searchText: text});
   }
   // ====== end custom events =======
 
@@ -93,11 +97,17 @@ export default class NoteMainComponent extends React.Component {
   }
 
   render() {
-    let {notesList, noteSelected, saveStatus} = this.state;
+    let {notesList, noteSelected, saveStatus, searchText} = this.state;
+    let notes;
+    if (searchText.length > 0) {
+      notes = notesList.filter( note => (note.text.indexOf(searchText) > -1) );
+    } else {
+      notes = notesList;
+    }
     return (
       <div>
         <div className="row">
-          <NoteMenuComponent />
+          <NoteMenuComponent handleSearchChange={this.handleSearchChange}/>
           <MenuComponent />
         </div>
         <div className="row">
@@ -105,7 +115,7 @@ export default class NoteMainComponent extends React.Component {
           <TagBarComponent saveStatus={saveStatus}/>
         </div>
         <div className="row">
-          <NoteListComponent notesList={notesList} noteSelected={noteSelected} selectNote={this.selectNote}/>
+          <NoteListComponent notesList={notes} noteSelected={noteSelected} selectNote={this.selectNote}/>
           <NoteTextareaComponent note={noteSelected} handleChangeTextarea={this.handleChangeTextarea}/>
         </div>
       </div>

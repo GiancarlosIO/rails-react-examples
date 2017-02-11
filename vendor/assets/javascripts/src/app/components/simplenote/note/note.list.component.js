@@ -24,3 +24,9 @@ export default class NoteListComponent extends React.Component {
     )
   }
 }
+
+NoteListComponent.propTypes = {
+  notesList: React.PropTypes.array.isRequired,
+  noteSelected: React.PropTypes.object.isRequired,
+  selectNote: React.PropTypes.func.isRequired
+}
