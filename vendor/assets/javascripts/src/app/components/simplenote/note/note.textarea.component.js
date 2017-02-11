@@ -14,11 +14,15 @@ export default class NoteTextareaComponent extends React.Component {
     }
   }
 
+  componentDidUpdate = () => {
+    this.textarea.focus();
+  }
+
   render() {
     let {note, focus} = this.props;
     return (
       <div className="column--6 padding--rl-10 note__column-right note__textarea">
-        <textarea value={note.text} onChange={this.onChange} ref={ el => this.textarea = el } autoFocus={focus}/>
+        <textarea value={note.text} onChange={this.onChange} ref={ el => this.textarea = el } autoFocus/>
       </div>
     )
   }

@@ -131,7 +131,7 @@ export default class NoteMainComponent extends React.Component {
         return (
           <div className="row">
             <NoteListComponent notesList={notes} noteSelected={noteSelected} selectNote={this.selectNote}/>
-            <NoteTextareaComponent note={noteSelected} handleChangeTextarea={this.handleChangeTextarea} focus={focusTextarea}/>
+            <NoteTextareaComponent note={noteSelected} handleChangeTextarea={this.handleChangeTextarea}/>
           </div>
         )
       }

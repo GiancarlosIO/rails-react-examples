@@ -28990,7 +28990,7 @@
 	            'div',
 	            { className: 'row' },
 	            _react2.default.createElement(_noteList2.default, { notesList: notes, noteSelected: noteSelected, selectNote: _this2.selectNote }),
-	            _react2.default.createElement(_noteTextarea2.default, { note: noteSelected, handleChangeTextarea: _this2.handleChangeTextarea, focus: focusTextarea })
+	            _react2.default.createElement(_noteTextarea2.default, { note: noteSelected, handleChangeTextarea: _this2.handleChangeTextarea })
 	          );
 	        }
 	      };
@@ -30789,6 +30789,10 @@
 	      }
 	    };
 
+	    _this.componentDidUpdate = function () {
+	      _this.textarea.focus();
+	    };
+
 	    return _this;
 	  }
 
@@ -30806,7 +30810,7 @@
 	        { className: 'column--6 padding--rl-10 note__column-right note__textarea' },
 	        _react2.default.createElement('textarea', { value: note.text, onChange: this.onChange, ref: function ref(el) {
 	            return _this2.textarea = el;
-	          }, autoFocus: focus })
+	          }, autoFocus: true })
 	      );
 	    }
 	  }]);
