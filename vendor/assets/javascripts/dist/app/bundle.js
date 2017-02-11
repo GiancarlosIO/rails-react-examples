@@ -28856,6 +28856,11 @@
 	      _this.createNote();
 	    };
 
+	    _this.handleDeleteClick = function () {
+	      var id = _this.state.noteSelected.id;
+	      _this.deleteNote(id);
+	    };
+
 	    _this.shouldCancelAllRequest = function (reason) {
 	      if (reason) {
 	        for (var i in _this.cancelRequests) {
@@ -28923,8 +28928,32 @@
 	              loading: false
 	            });
 	          }
-	        }).catch(function () {
-	          console.log();
+	        }).catch(function (error) {
+	          console.log(error);
+	        });
+	      });
+	    };
+
+	    _this.deleteNote = function (id) {
+	      _this.setState({ loading: true }, function () {
+	        var xhrPromise = _note2.default.deleteNote(id);
+	        _this.cancelRequests.push(xhrPromise.cancel);
+	        _this.shouldCancelAllRequest(_this.unmounted);
+	        xhrPromise.request.then(function (response) {
+	          var newNotesList = [].concat(_this.state.notesList);
+	          var note = newNotesList.find(function (note) {
+	            return note.id === id;
+	          });
+	          var index = newNotesList.indexOf(note);
+	          var newNoteSelected = newNotesList[index + 1];
+	          newNotesList.splice(index, 1);
+	          _this.setState({
+	            notesList: newNotesList,
+	            noteSelected: newNoteSelected,
+	            loading: false
+	          });
+	        }).catch(function (error) {
+	          return console.log(error);
 	        });
 	      });
 	    };
@@ -29001,7 +29030,7 @@
 	          'div',
 	          { className: 'row' },
 	          _react2.default.createElement(_noteMenu2.default, { handleSearchChange: this.handleSearchChange, handleAddClick: this.handleAddClick }),
-	          _react2.default.createElement(_menu2.default, null)
+	          _react2.default.createElement(_menu2.default, { handleDeleteClick: this.handleDeleteClick })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -29078,6 +29107,19 @@
 	      url: BASE_URL + 'notes',
 	      responseType: 'json',
 	      data: { note: { text: '' } },
+	      cancelToken: new CancelToken(function (c) {
+	        cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
+	  deleteNote: function deleteNote(id) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'delete',
+	      url: BASE_URL + 'notes/' + id,
+	      responseType: 'json',
 	      cancelToken: new CancelToken(function (c) {
 	        cancel = c;
 	      })
@@ -30622,7 +30664,13 @@
 	  function MenuComponent(props) {
 	    _classCallCheck(this, MenuComponent);
 
-	    return _possibleConstructorReturn(this, (MenuComponent.__proto__ || Object.getPrototypeOf(MenuComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (MenuComponent.__proto__ || Object.getPrototypeOf(MenuComponent)).call(this, props));
+
+	    _this.handleClick = function () {
+	      _this.props.handleDeleteClick();
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(MenuComponent, [{
@@ -30632,7 +30680,7 @@
 	        'div',
 	        { className: 'column--6 row flex--row--start padding--rl-10 note__column-right' },
 	        _react2.default.createElement(_noteInfo2.default, null),
-	        _react2.default.createElement(_noteDelete2.default, null)
+	        _react2.default.createElement(_noteDelete2.default, { handleClick: this.handleClick })
 	      );
 	    }
 	  }]);
@@ -30641,6 +30689,11 @@
 	}(_react2.default.Component);
 
 	exports.default = MenuComponent;
+
+
+	MenuComponent.propTypes = {
+	  handleDeleteClick: _react2.default.PropTypes.func.isRequired
+	};
 
 /***/ },
 /* 286 */
@@ -30672,7 +30725,13 @@
 	  function NoteDeleteComponent(props) {
 	    _classCallCheck(this, NoteDeleteComponent);
 
-	    return _possibleConstructorReturn(this, (NoteDeleteComponent.__proto__ || Object.getPrototypeOf(NoteDeleteComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (NoteDeleteComponent.__proto__ || Object.getPrototypeOf(NoteDeleteComponent)).call(this, props));
+
+	    _this.onClick = function () {
+	      _this.props.handleClick();
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(NoteDeleteComponent, [{
@@ -30683,7 +30742,7 @@
 	        { className: "column--1 flex-center" },
 	        _react2.default.createElement(
 	          "div",
-	          { className: "icon__container" },
+	          { className: "icon__container", onClick: this.onClick },
 	          _react2.default.createElement("i", { className: "fa fa-trash-o" })
 	        )
 	      );
@@ -30694,6 +30753,11 @@
 	}(_react2.default.Component);
 
 	exports.default = NoteDeleteComponent;
+
+
+	NoteDeleteComponent.propTypes = {
+	  handleClick: _react2.default.PropTypes.func.isRequired
+	};
 
 /***/ },
 /* 287 */

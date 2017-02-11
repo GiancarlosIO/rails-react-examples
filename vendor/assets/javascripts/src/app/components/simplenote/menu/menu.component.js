@@ -8,12 +8,20 @@ export default class MenuComponent extends React.Component {
     super(props);
   }
 
+  handleClick = () => {
+    this.props.handleDeleteClick();
+  }
+
   render() {
     return (
       <div className="column--6 row flex--row--start padding--rl-10 note__column-right">
         <NoteInfoComponent />
-        <NoteDeleteComponent />
+        <NoteDeleteComponent handleClick={this.handleClick}/>
       </div>
     )
   }
+}
+
+MenuComponent.propTypes = {
+  handleDeleteClick: React.PropTypes.func.isRequired
 }

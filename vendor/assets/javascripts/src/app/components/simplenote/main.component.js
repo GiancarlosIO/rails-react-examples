@@ -37,6 +37,10 @@ export default class NoteMainComponent extends React.Component {
   handleAddClick = () => {
     this.createNote();
   }
+  handleDeleteClick = () => {
+    let id = this.state.noteSelected.id;
+    this.deleteNote(id);
+  }
   // ====== end custom events =======
 
   // ====== custom call api functions =======
@@ -108,7 +112,28 @@ export default class NoteMainComponent extends React.Component {
             });
           }
         }
-      ).catch(() => { console.log(); })
+      ).catch((error) => { console.log(error); })
+    });
+  }
+  deleteNote = (id) => {
+    this.setState({loading: true}, () => {
+      let xhrPromise = NoteAPI.deleteNote(id);
+      this.cancelRequests.push(xhrPromise.cancel);
+      this.shouldCancelAllRequest(this.unmounted);
+      xhrPromise.request.then(
+        response => {
+          let newNotesList = [].concat(this.state.notesList);
+          let note = newNotesList.find( note => note.id === id );
+          let index = newNotesList.indexOf(note);
+          let newNoteSelected = newNotesList[index + 1];
+          newNotesList.splice(index, 1)
+          this.setState({
+            notesList: newNotesList,
+            noteSelected: newNoteSelected,
+            loading: false
+          });
+        }
+      ).catch( error => console.log(error) );
     });
   }
 // ====== end custom call api functions =======
@@ -140,7 +165,7 @@ export default class NoteMainComponent extends React.Component {
       <div>
         <div className="row">
           <NoteMenuComponent handleSearchChange={this.handleSearchChange} handleAddClick={this.handleAddClick}/>
-          <MenuComponent />
+          <MenuComponent handleDeleteClick={this.handleDeleteClick}/>
         </div>
         <div className="row">
           <SelectTagComponent />
