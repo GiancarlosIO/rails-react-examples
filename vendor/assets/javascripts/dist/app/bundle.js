@@ -28849,17 +28849,28 @@
 	    };
 
 	    _this.handleSearchChange = function (text) {
-	      _this.setState({ searchText: text, focusTextarea: false }, function () {
+	      _this.setState({ searchText: text, focusTextarea: false, loading: true }, function () {
 	        if (text.length > 0) {
-	          var notesFiltered = _this.state.notesList.filter(function (note) {
-	            return note.text.indexOf(text) > -1;
-	          });
-	          _this.setState({
-	            notesFiltered: notesFiltered,
-	            focusTextarea: false
-	          });
+	          (function () {
+	            var notesFiltered = _this.state.notesList.filter(function (note) {
+	              return note.text.indexOf(text) > -1;
+	            });
+	            var noteSelected = _this.state.noteSelected;
+	            var newNoteSelected = notesFiltered.findIndex(function (note) {
+	              return note === noteSelected;
+	            }) > 0 ? noteSelected : notesFiltered[0];
+	            _this.setState({
+	              notesFiltered: notesFiltered,
+	              noteSelected: newNoteSelected,
+	              focusTextarea: false,
+	              loading: false
+	            });
+	          })();
 	        } else {
-	          _this.setState({ focusTextarea: true });
+	          _this.setState({
+	            focusTextarea: true,
+	            loading: false
+	          });
 	        }
 	      });
 	    };

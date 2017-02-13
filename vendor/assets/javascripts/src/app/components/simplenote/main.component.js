@@ -33,17 +33,24 @@ export default class NoteMainComponent extends React.Component {
     this.updateNote(this.state.noteSelected.id, text);
   }
   handleSearchChange = (text)  => {
-    this.setState({searchText: text, focusTextarea: false}, () => {
+    this.setState({searchText: text, focusTextarea: false, loading: true}, () => {
       if (text.length > 0) {
         let notesFiltered = this.state.notesList.filter( note  => {
           return note.text.indexOf(text) > -1;
         });
+        let noteSelected = this.state.noteSelected;
+        let newNoteSelected =  notesFiltered.findIndex( note => note === noteSelected ) > 0 ? noteSelected : notesFiltered[0];
         this.setState({
           notesFiltered,
-          focusTextarea: false
+          noteSelected: newNoteSelected,
+          focusTextarea: false,
+          loading: false
         });
       } else {
-        this.setState({focusTextarea: true})
+        this.setState({
+          focusTextarea: true,
+          loading: false
+        })
       }
     });
   }
