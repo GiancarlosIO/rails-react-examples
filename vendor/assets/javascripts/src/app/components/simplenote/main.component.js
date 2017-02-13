@@ -19,6 +19,7 @@ export default class NoteMainComponent extends React.Component {
       noteSelected: {},
       saveStatus: '',
       searchText: '',
+      notesFiltered: [],
       loading: true,
       focusTextarea: true
     }
@@ -26,13 +27,25 @@ export default class NoteMainComponent extends React.Component {
 
   // ====== custom events =======
   selectNote = (note) => {
-    this.setState({noteSelected: note});
+    this.setState({noteSelected: note, focusTextarea: true});
   }
   handleChangeTextarea = (text) => {
     this.updateNote(this.state.noteSelected.id, text);
   }
   handleSearchChange = (text)  => {
-    this.setState({searchText: text});
+    this.setState({searchText: text, focusTextarea: false}, () => {
+      if (text.length > 0) {
+        let notesFiltered = this.state.notesList.filter( note  => {
+          return note.text.indexOf(text) > -1;
+        });
+        this.setState({
+          notesFiltered,
+          focusTextarea: false
+        });
+      } else {
+        this.setState({focusTextarea: true})
+      }
+    });
   }
   handleAddClick = () => {
     this.createNote();
@@ -154,8 +167,8 @@ export default class NoteMainComponent extends React.Component {
   }
 
   render() {
-    let {notesList, noteSelected, saveStatus, searchText, loading, focusTextarea} = this.state;
-    let notes = searchText.length > 0 ? notesList.filter( note => (note.text.indexOf(searchText) > -1) ) : notesList ;
+    let {notesList, notesFiltered, noteSelected, saveStatus, searchText, loading, focusTextarea} = this.state;
+    let notes = searchText.length > 0 ? notesFiltered : notesList;
     let notesItems = () => {
       if (loading) {
         return (<div className="row">Loading</div>);
@@ -163,7 +176,7 @@ export default class NoteMainComponent extends React.Component {
         return (
           <div className="row">
             <NoteListComponent notesList={notes} noteSelected={noteSelected} selectNote={this.selectNote}/>
-            <NoteTextareaComponent note={noteSelected} handleChangeTextarea={this.handleChangeTextarea}/>
+            <NoteTextareaComponent note={noteSelected} handleChangeTextarea={this.handleChangeTextarea} focus={focusTextarea}/>
           </div>
         )
       }

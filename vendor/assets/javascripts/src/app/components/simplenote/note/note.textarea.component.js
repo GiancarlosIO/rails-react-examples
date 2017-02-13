@@ -14,8 +14,14 @@ export default class NoteTextareaComponent extends React.Component {
     }
   }
 
-  componentDidUpdate = () => {
+  componentDidMount() {
     this.textarea.focus();
+  }
+
+  componentDidUpdate() {
+    if (this.props.focus) {
+      this.textarea.focus();
+    }
   }
 
   render() {
@@ -23,7 +29,7 @@ export default class NoteTextareaComponent extends React.Component {
     let isReadOnly = note.id === undefined;
     return (
       <div className="column--6 padding--rl-10 note__column-right note__textarea">
-        <textarea value={note.text} onChange={this.onChange} ref={ el => this.textarea = el } autoFocus readOnly={isReadOnly}/>
+        <textarea value={note.text} onChange={this.onChange} ref={ el => this.textarea = el } readOnly={isReadOnly}/>
       </div>
     )
   }

@@ -28841,7 +28841,7 @@
 	    var _this = _possibleConstructorReturn(this, (NoteMainComponent.__proto__ || Object.getPrototypeOf(NoteMainComponent)).call(this, props));
 
 	    _this.selectNote = function (note) {
-	      _this.setState({ noteSelected: note });
+	      _this.setState({ noteSelected: note, focusTextarea: true });
 	    };
 
 	    _this.handleChangeTextarea = function (text) {
@@ -28849,7 +28849,19 @@
 	    };
 
 	    _this.handleSearchChange = function (text) {
-	      _this.setState({ searchText: text });
+	      _this.setState({ searchText: text, focusTextarea: false }, function () {
+	        if (text.length > 0) {
+	          var notesFiltered = _this.state.notesList.filter(function (note) {
+	            return note.text.indexOf(text) > -1;
+	          });
+	          _this.setState({
+	            notesFiltered: notesFiltered,
+	            focusTextarea: false
+	          });
+	        } else {
+	          _this.setState({ focusTextarea: true });
+	        }
+	      });
 	    };
 
 	    _this.handleAddClick = function () {
@@ -28972,6 +28984,7 @@
 	      noteSelected: {},
 	      saveStatus: '',
 	      searchText: '',
+	      notesFiltered: [],
 	      loading: true,
 	      focusTextarea: true
 	    };
@@ -29005,15 +29018,14 @@
 
 	      var _state = this.state,
 	          notesList = _state.notesList,
+	          notesFiltered = _state.notesFiltered,
 	          noteSelected = _state.noteSelected,
 	          saveStatus = _state.saveStatus,
 	          searchText = _state.searchText,
 	          loading = _state.loading,
 	          focusTextarea = _state.focusTextarea;
 
-	      var notes = searchText.length > 0 ? notesList.filter(function (note) {
-	        return note.text.indexOf(searchText) > -1;
-	      }) : notesList;
+	      var notes = searchText.length > 0 ? notesFiltered : notesList;
 	      var notesItems = function notesItems() {
 	        if (loading) {
 	          return _react2.default.createElement(
@@ -29026,7 +29038,7 @@
 	            'div',
 	            { className: 'row' },
 	            _react2.default.createElement(_noteList2.default, { notesList: notes, noteSelected: noteSelected, selectNote: _this2.selectNote }),
-	            _react2.default.createElement(_noteTextarea2.default, { note: noteSelected, handleChangeTextarea: _this2.handleChangeTextarea })
+	            _react2.default.createElement(_noteTextarea2.default, { note: noteSelected, handleChangeTextarea: _this2.handleChangeTextarea, focus: focusTextarea })
 	          );
 	        }
 	      };
@@ -30860,14 +30872,22 @@
 	      }
 	    };
 
-	    _this.componentDidUpdate = function () {
-	      _this.textarea.focus();
-	    };
-
 	    return _this;
 	  }
 
 	  _createClass(NoteTextareaComponent, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.textarea.focus();
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      if (this.props.focus) {
+	        this.textarea.focus();
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -30882,7 +30902,7 @@
 	        { className: 'column--6 padding--rl-10 note__column-right note__textarea' },
 	        _react2.default.createElement('textarea', { value: note.text, onChange: this.onChange, ref: function ref(el) {
 	            return _this2.textarea = el;
-	          }, autoFocus: true, readOnly: isReadOnly })
+	          }, readOnly: isReadOnly })
 	      );
 	    }
 	  }]);
