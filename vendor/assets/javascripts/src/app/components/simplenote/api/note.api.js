@@ -29,14 +29,15 @@ const NoteAPI = {
     });
     return { request, cancel }
   },
-  createNote: () => {
+  createNote: (text) => {
+    let newText = text !== undefined ? text : '';
     let CancelToken = axios.CancelToken;
     let cancel;
     let request = axios({
       method: 'post',
       url: `${BASE_URL}notes`,
       responseType: 'json',
-      data: {note: { text: '' }},
+      data: {note: { text: newText }},
       cancelToken: new CancelToken( c => { cancel = c } )
     });
     return { request, cancel };

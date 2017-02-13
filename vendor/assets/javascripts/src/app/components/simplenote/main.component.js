@@ -27,7 +27,7 @@ export default class NoteMainComponent extends React.Component {
 
   // ====== custom events =======
   selectNote = (note) => {
-    this.setState({noteSelected: note, focusTextarea: true});
+    this.setState({noteSelected: note, focusTextarea: true, saveStatus: ''});
   }
   handleChangeTextarea = (text) => {
     this.updateNote(this.state.noteSelected.id, text);
@@ -39,7 +39,15 @@ export default class NoteMainComponent extends React.Component {
           return note.text.indexOf(text) > -1;
         });
         let noteSelected = this.state.noteSelected;
-        let newNoteSelected =  notesFiltered.findIndex( note => note === noteSelected ) > 0 ? noteSelected : notesFiltered[0];
+        let newNoteSelected = {};
+        if (notesFiltered.findIndex( note => note === noteSelected ) > 0) {
+          newNoteSelected = noteSelected;
+        } else {
+          newNoteSelected = notesFiltered[0];
+        }
+        if (notesFiltered.length == 0) {
+          newNoteSelected = {id: undefined, text: ''};
+        }
         this.setState({
           notesFiltered,
           noteSelected: newNoteSelected,
@@ -47,7 +55,10 @@ export default class NoteMainComponent extends React.Component {
           loading: false
         });
       } else {
+        let newNoteSelected = this.state.notesList[0];
         this.setState({
+          noteSelected: newNoteSelected,
+          notesFiltered: [],
           focusTextarea: true,
           loading: false
         })
@@ -55,11 +66,14 @@ export default class NoteMainComponent extends React.Component {
     });
   }
   handleAddClick = () => {
-    this.createNote();
+    let {searchText} = this.state;
+    this.createNote(searchText);
   }
   handleDeleteClick = () => {
-    let id = this.state.noteSelected.id;
-    this.deleteNote(id);
+    let {noteSelected} = this.state;
+    if (noteSelected.id !== undefined) {
+      this.deleteNote(noteSelected.id);
+    }
   }
   // ====== end custom events =======
 
@@ -114,9 +128,9 @@ export default class NoteMainComponent extends React.Component {
       });
     })
   }
-  createNote = () => {
+  createNote = (text) => {
     this.setState({loading: true}, () => {
-      let xhrPromise = NoteAPI.createNote();
+      let xhrPromise = NoteAPI.createNote(text);
       this.cancelRequests.push(xhrPromise.cancel);
       this.shouldCancelAllRequest(this.unmounted);
       xhrPromise.request.then(
@@ -128,6 +142,14 @@ export default class NoteMainComponent extends React.Component {
               notesList: newNotesList,
               noteSelected: newNotesList[0],
               loading: false
+            }, () => {
+              if (this.state.searchText.length > 0) {
+                this.setState((prevState, props) => {
+                  return {
+                    notesFiltered: [prevState.noteSelected].concat(prevState.notesFiltered)
+                  }
+                })
+              }
             });
           }
         }
@@ -142,17 +164,31 @@ export default class NoteMainComponent extends React.Component {
         this.shouldCancelAllRequest(this.unmounted);
         xhrPromise.request.then(
           response => {
+            let newNotesFiltered = this.state.notesFiltered;
             let newNotesList = [].concat(this.state.notesList);
             let newNoteSelected = {};
             let note = newNotesList.find( note => note.id === id );
             let index = newNotesList.indexOf(note);
-            newNoteSelected = newNotesList[index + 1] ? newNotesList[index + 1] : newNotesList[0] ;
-            newNotesList.splice(index, 1)
-            if (newNotesList.length == 0) {
-              newNoteSelected = {text: ''};
+            let noteF = newNotesFiltered.find( note => note.id === id );
+            let indexF = newNotesFiltered.indexOf(note);
+            if (this.state.searchText.length > 0) {
+              if (newNotesFiltered.length == 1 ) {
+                newNoteSelected = {text: ''};
+              } else {
+                newNoteSelected = newNotesFiltered[indexF + 1] ? newNotesFiltered[indexF + 1] : newNotesFiltered[0];
+              }
+            } else {
+              if (newNotesList.length == 0) {
+                newNoteSelected = {text: ''};
+              } else {
+                newNoteSelected = newNotesList[index + 1] ? newNotesList[index + 1] : newNotesList[0] ;
+              }
             }
+            newNotesFiltered.splice(indexF, 1)
+            newNotesList.splice(index, 1)
             this.setState({
               notesList: newNotesList,
+              notesFiltered: newNotesFiltered,
               noteSelected: newNoteSelected,
               loading: false
             });

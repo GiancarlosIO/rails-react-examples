@@ -15,7 +15,9 @@ export default class NoteTextareaComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.textarea.focus();
+    if (this.props.focus) {
+      this.textarea.focus();
+    }
   }
 
   componentDidUpdate() {

@@ -28841,7 +28841,7 @@
 	    var _this = _possibleConstructorReturn(this, (NoteMainComponent.__proto__ || Object.getPrototypeOf(NoteMainComponent)).call(this, props));
 
 	    _this.selectNote = function (note) {
-	      _this.setState({ noteSelected: note, focusTextarea: true });
+	      _this.setState({ noteSelected: note, focusTextarea: true, saveStatus: '' });
 	    };
 
 	    _this.handleChangeTextarea = function (text) {
@@ -28856,9 +28856,17 @@
 	              return note.text.indexOf(text) > -1;
 	            });
 	            var noteSelected = _this.state.noteSelected;
-	            var newNoteSelected = notesFiltered.findIndex(function (note) {
+	            var newNoteSelected = {};
+	            if (notesFiltered.findIndex(function (note) {
 	              return note === noteSelected;
-	            }) > 0 ? noteSelected : notesFiltered[0];
+	            }) > 0) {
+	              newNoteSelected = noteSelected;
+	            } else {
+	              newNoteSelected = notesFiltered[0];
+	            }
+	            if (notesFiltered.length == 0) {
+	              newNoteSelected = { id: undefined, text: '' };
+	            }
 	            _this.setState({
 	              notesFiltered: notesFiltered,
 	              noteSelected: newNoteSelected,
@@ -28867,7 +28875,10 @@
 	            });
 	          })();
 	        } else {
+	          var newNoteSelected = _this.state.notesList[0];
 	          _this.setState({
+	            noteSelected: newNoteSelected,
+	            notesFiltered: [],
 	            focusTextarea: true,
 	            loading: false
 	          });
@@ -28876,12 +28887,17 @@
 	    };
 
 	    _this.handleAddClick = function () {
-	      _this.createNote();
+	      var searchText = _this.state.searchText;
+
+	      _this.createNote(searchText);
 	    };
 
 	    _this.handleDeleteClick = function () {
-	      var id = _this.state.noteSelected.id;
-	      _this.deleteNote(id);
+	      var noteSelected = _this.state.noteSelected;
+
+	      if (noteSelected.id !== undefined) {
+	        _this.deleteNote(noteSelected.id);
+	      }
 	    };
 
 	    _this.shouldCancelAllRequest = function (reason) {
@@ -28934,9 +28950,9 @@
 	      });
 	    };
 
-	    _this.createNote = function () {
+	    _this.createNote = function (text) {
 	      _this.setState({ loading: true }, function () {
-	        var xhrPromise = _note2.default.createNote();
+	        var xhrPromise = _note2.default.createNote(text);
 	        _this.cancelRequests.push(xhrPromise.cancel);
 	        _this.shouldCancelAllRequest(_this.unmounted);
 	        xhrPromise.request.then(function (response) {
@@ -28948,6 +28964,14 @@
 	              notesList: newNotesList,
 	              noteSelected: newNotesList[0],
 	              loading: false
+	            }, function () {
+	              if (_this.state.searchText.length > 0) {
+	                _this.setState(function (prevState, props) {
+	                  return {
+	                    notesFiltered: [prevState.noteSelected].concat(prevState.notesFiltered)
+	                  };
+	                });
+	              }
 	            });
 	          }
 	        }).catch(function (error) {
@@ -28963,19 +28987,35 @@
 	          _this.cancelRequests.push(xhrPromise.cancel);
 	          _this.shouldCancelAllRequest(_this.unmounted);
 	          xhrPromise.request.then(function (response) {
+	            var newNotesFiltered = _this.state.notesFiltered;
 	            var newNotesList = [].concat(_this.state.notesList);
 	            var newNoteSelected = {};
 	            var note = newNotesList.find(function (note) {
 	              return note.id === id;
 	            });
 	            var index = newNotesList.indexOf(note);
-	            newNoteSelected = newNotesList[index + 1] ? newNotesList[index + 1] : newNotesList[0];
-	            newNotesList.splice(index, 1);
-	            if (newNotesList.length == 0) {
-	              newNoteSelected = { text: '' };
+	            var noteF = newNotesFiltered.find(function (note) {
+	              return note.id === id;
+	            });
+	            var indexF = newNotesFiltered.indexOf(note);
+	            if (_this.state.searchText.length > 0) {
+	              if (newNotesFiltered.length == 1) {
+	                newNoteSelected = { text: '' };
+	              } else {
+	                newNoteSelected = newNotesFiltered[indexF + 1] ? newNotesFiltered[indexF + 1] : newNotesFiltered[0];
+	              }
+	            } else {
+	              if (newNotesList.length == 0) {
+	                newNoteSelected = { text: '' };
+	              } else {
+	                newNoteSelected = newNotesList[index + 1] ? newNotesList[index + 1] : newNotesList[0];
+	              }
 	            }
+	            newNotesFiltered.splice(indexF, 1);
+	            newNotesList.splice(index, 1);
 	            _this.setState({
 	              notesList: newNotesList,
+	              notesFiltered: newNotesFiltered,
 	              noteSelected: newNoteSelected,
 	              loading: false
 	            });
@@ -29129,14 +29169,15 @@
 	    });
 	    return { request: request, cancel: cancel };
 	  },
-	  createNote: function createNote() {
+	  createNote: function createNote(text) {
+	    var newText = text !== undefined ? text : '';
 	    var CancelToken = _axios2.default.CancelToken;
 	    var cancel = void 0;
 	    var request = (0, _axios2.default)({
 	      method: 'post',
 	      url: BASE_URL + 'notes',
 	      responseType: 'json',
-	      data: { note: { text: '' } },
+	      data: { note: { text: newText } },
 	      cancelToken: new CancelToken(function (c) {
 	        cancel = c;
 	      })
@@ -30889,7 +30930,9 @@
 	  _createClass(NoteTextareaComponent, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.textarea.focus();
+	      if (this.props.focus) {
+	        this.textarea.focus();
+	      }
 	    }
 	  }, {
 	    key: 'componentDidUpdate',
