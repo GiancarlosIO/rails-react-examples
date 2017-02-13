@@ -28901,7 +28901,6 @@
 	              return note;
 	            });
 	            _this.setState({
-	              noteSelected: response.data,
 	              notesList: newNotesList,
 	              saveStatus: 'saved!'
 	            });
@@ -28936,12 +28935,12 @@
 
 	    _this.deleteNote = function (id) {
 	      _this.setState({ loading: true }, function () {
-	        var xhrPromise = _note2.default.deleteNote(id);
-	        _this.cancelRequests.push(xhrPromise.cancel);
-	        _this.shouldCancelAllRequest(_this.unmounted);
-	        xhrPromise.request.then(function (response) {
-	          var newNotesList = [].concat(_this.state.notesList);
-	          if (newNotesList.length > 0) {
+	        if (_this.state.notesList.length > 0) {
+	          var xhrPromise = _note2.default.deleteNote(id);
+	          _this.cancelRequests.push(xhrPromise.cancel);
+	          _this.shouldCancelAllRequest(_this.unmounted);
+	          xhrPromise.request.then(function (response) {
+	            var newNotesList = [].concat(_this.state.notesList);
 	            var newNoteSelected = {};
 	            var note = newNotesList.find(function (note) {
 	              return note.id === id;
@@ -28957,16 +28956,12 @@
 	              noteSelected: newNoteSelected,
 	              loading: false
 	            });
-	          } else {
-	            _this.setState({
-	              notesList: [],
-	              noteSelected: { text: '' },
-	              loading: false
-	            });
-	          }
-	        }).catch(function (error) {
-	          return console.log(error);
-	        });
+	          }).catch(function (error) {
+	            return console.log(error);
+	          });
+	        } else {
+	          _this.setState({ loading: false });
+	        }
 	      });
 	    };
 
@@ -30881,7 +30876,7 @@
 	          note = _props.note,
 	          focus = _props.focus;
 
-	      var isReadOnly = note.id === undefined ? true : false;
+	      var isReadOnly = note.id === undefined;
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'column--6 padding--rl-10 note__column-right note__textarea' },

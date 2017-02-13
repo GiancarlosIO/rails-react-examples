@@ -84,7 +84,6 @@ export default class NoteMainComponent extends React.Component {
               }
             );
             this.setState({
-              noteSelected: response.data,
               notesList: newNotesList,
               saveStatus: 'saved!'
             });
@@ -117,13 +116,13 @@ export default class NoteMainComponent extends React.Component {
   }
   deleteNote = (id) => {
     this.setState({loading: true}, () => {
-      let xhrPromise = NoteAPI.deleteNote(id);
-      this.cancelRequests.push(xhrPromise.cancel);
-      this.shouldCancelAllRequest(this.unmounted);
-      xhrPromise.request.then(
-        response => {
-          let newNotesList = [].concat(this.state.notesList);
-          if (newNotesList.length > 0) {
+      if (this.state.notesList.length > 0) {
+        let xhrPromise = NoteAPI.deleteNote(id);
+        this.cancelRequests.push(xhrPromise.cancel);
+        this.shouldCancelAllRequest(this.unmounted);
+        xhrPromise.request.then(
+          response => {
+            let newNotesList = [].concat(this.state.notesList);
             let newNoteSelected = {};
             let note = newNotesList.find( note => note.id === id );
             let index = newNotesList.indexOf(note);
@@ -137,15 +136,11 @@ export default class NoteMainComponent extends React.Component {
               noteSelected: newNoteSelected,
               loading: false
             });
-          } else {
-            this.setState({
-              notesList: [],
-              noteSelected: {text: ''},
-              loading: false
-            });
           }
-        }
-      ).catch( error => console.log(error) );
+        ).catch( error => console.log(error) );
+      } else {
+        this.setState({ loading: false });
+      }
     });
   }
 // ====== end custom call api functions =======
