@@ -1,0 +1,29 @@
+.input {
+  &__text {
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-size: 300;
+    letter-spacing: 1px;
+    word-spacing: 5px;
+    &:focus {
+      outline: none;
+      border: 1px solid #69dfe4;
+    }
+  }
+  &--icon {
+    width: 100%;
+    position: relative;
+    input {
+      width: 100%;
+      padding-right: 20px;
+    }
+    i {
+      position: absolute;
+      top: 3px;
+      right: 5px;
+      color: rgba(0,0,0,0.2);
+    }
+  }
+}

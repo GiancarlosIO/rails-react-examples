@@ -22,6 +22,11 @@
   padding: 10px;
   width: 100%;
   display: flex;
+  &-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   &--row {
     flex-flow: row;
     &--space-around {
@@ -43,5 +48,8 @@
       align-items: flex-start;
       justify-content: center;
     }
+  }
+  &-align--end {
+    align-self: flex-end;
   }
 }

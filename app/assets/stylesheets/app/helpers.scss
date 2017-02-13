@@ -21,6 +21,7 @@
   &--20 {
     padding: 10px 20px;
   }
+  &--rl-10 { padding: 0 10px; }
 }
 .hr {
   outline: none;
@@ -33,4 +34,16 @@
 }
 .full-width {
   width: 100%;
+}
+.position {
+  &-fixed {
+    position: fixed;
+  }
+}
+.border {
+  &--top-1 { border-top: 1px solid rgba(0,0,0,0.2);}
+}
+.text {
+  &-center { text-align: center;}
+  &-grey { color: #ccc}
 }
