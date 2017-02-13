@@ -28941,17 +28941,29 @@
 	        _this.shouldCancelAllRequest(_this.unmounted);
 	        xhrPromise.request.then(function (response) {
 	          var newNotesList = [].concat(_this.state.notesList);
-	          var note = newNotesList.find(function (note) {
-	            return note.id === id;
-	          });
-	          var index = newNotesList.indexOf(note);
-	          var newNoteSelected = newNotesList[index + 1];
-	          newNotesList.splice(index, 1);
-	          _this.setState({
-	            notesList: newNotesList,
-	            noteSelected: newNoteSelected,
-	            loading: false
-	          });
+	          if (newNotesList.length > 0) {
+	            var newNoteSelected = {};
+	            var note = newNotesList.find(function (note) {
+	              return note.id === id;
+	            });
+	            var index = newNotesList.indexOf(note);
+	            newNoteSelected = newNotesList[index + 1] ? newNotesList[index + 1] : newNotesList[0];
+	            newNotesList.splice(index, 1);
+	            if (newNotesList.length == 0) {
+	              newNoteSelected = { text: '' };
+	            }
+	            _this.setState({
+	              notesList: newNotesList,
+	              noteSelected: newNoteSelected,
+	              loading: false
+	            });
+	          } else {
+	            _this.setState({
+	              notesList: [],
+	              noteSelected: { text: '' },
+	              loading: false
+	            });
+	          }
 	        }).catch(function (error) {
 	          return console.log(error);
 	        });
@@ -30869,12 +30881,13 @@
 	          note = _props.note,
 	          focus = _props.focus;
 
+	      var isReadOnly = note.id === undefined ? true : false;
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'column--6 padding--rl-10 note__column-right note__textarea' },
 	        _react2.default.createElement('textarea', { value: note.text, onChange: this.onChange, ref: function ref(el) {
 	            return _this2.textarea = el;
-	          }, autoFocus: true })
+	          }, autoFocus: true, readOnly: isReadOnly })
 	      );
 	    }
 	  }]);

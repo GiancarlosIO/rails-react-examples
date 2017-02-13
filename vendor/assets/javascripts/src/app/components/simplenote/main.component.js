@@ -123,15 +123,27 @@ export default class NoteMainComponent extends React.Component {
       xhrPromise.request.then(
         response => {
           let newNotesList = [].concat(this.state.notesList);
-          let note = newNotesList.find( note => note.id === id );
-          let index = newNotesList.indexOf(note);
-          let newNoteSelected = newNotesList[index + 1];
-          newNotesList.splice(index, 1)
-          this.setState({
-            notesList: newNotesList,
-            noteSelected: newNoteSelected,
-            loading: false
-          });
+          if (newNotesList.length > 0) {
+            let newNoteSelected = {};
+            let note = newNotesList.find( note => note.id === id );
+            let index = newNotesList.indexOf(note);
+            newNoteSelected = newNotesList[index + 1] ? newNotesList[index + 1] : newNotesList[0] ;
+            newNotesList.splice(index, 1)
+            if (newNotesList.length == 0) {
+              newNoteSelected = {text: ''};
+            }
+            this.setState({
+              notesList: newNotesList,
+              noteSelected: newNoteSelected,
+              loading: false
+            });
+          } else {
+            this.setState({
+              notesList: [],
+              noteSelected: {text: ''},
+              loading: false
+            });
+          }
         }
       ).catch( error => console.log(error) );
     });
