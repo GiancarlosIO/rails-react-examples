@@ -112,7 +112,7 @@ export default class NoteMainComponent extends React.Component {
     });
   }
   handleChangeInputTag = (value) => {
-    let {noteSelected} = this.state;
+    let {noteSelected, tagsList} = this.state;
     noteSelected.tag = value;
     this.setState({
       noteSelected,
@@ -158,9 +158,21 @@ export default class NoteMainComponent extends React.Component {
       xhrPromise.request.then(
         response => {
           if (response.statusText === 'OK') {
-            this.setState({
-              saveStatus: 'saved!'
-            });
+            if (params.note.tag !== undefined) {
+              let {tagsList, noteSelected} = this.state;
+              let tag = tagsList.find( tag => tag.id == id )
+              if (tag) {
+                tagsList[tagsList.indexOf(tag)].tag = params.note.tag;
+              } else { tagsList.push({id: noteSelected.id, tag: params.note.tag }) }
+              this.setState({
+                tagsList,
+                saveStatus: 'saved'
+              });
+            } else {
+              this.setState({
+                saveStatus: 'saved!'
+              });
+            }
           }
         }
       ).catch( error => {

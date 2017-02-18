@@ -28949,7 +28949,9 @@
 	    };
 
 	    _this.handleChangeInputTag = function (value) {
-	      var noteSelected = _this.state.noteSelected;
+	      var _this$state3 = _this.state,
+	          noteSelected = _this$state3.noteSelected,
+	          tagsList = _this$state3.tagsList;
 
 	      noteSelected.tag = value;
 	      _this.setState({
@@ -28996,9 +28998,28 @@
 	        _this.shouldCancelAllRequest(_this.unmounted);
 	        xhrPromise.request.then(function (response) {
 	          if (response.statusText === 'OK') {
-	            _this.setState({
-	              saveStatus: 'saved!'
-	            });
+	            if (params.note.tag !== undefined) {
+	              var _this$state4 = _this.state,
+	                  tagsList = _this$state4.tagsList,
+	                  noteSelected = _this$state4.noteSelected;
+
+	              var tag = tagsList.find(function (tag) {
+	                return tag.id == id;
+	              });
+	              if (tag) {
+	                tagsList[tagsList.indexOf(tag)].tag = params.note.tag;
+	              } else {
+	                tagsList.push({ id: noteSelected.id, tag: params.note.tag });
+	              }
+	              _this.setState({
+	                tagsList: tagsList,
+	                saveStatus: 'saved'
+	              });
+	            } else {
+	              _this.setState({
+	                saveStatus: 'saved!'
+	              });
+	            }
 	          }
 	        }).catch(function (error) {
 	          console.log('updated failed', error);
