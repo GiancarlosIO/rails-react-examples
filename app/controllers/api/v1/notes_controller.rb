@@ -6,6 +6,7 @@ class Api::V1::NotesController < Api::V1::ApiController
 
   def index
     @notes = Note.all.order(created_at: :desc)
+    @tags = Note.select(:id, :tag)
   end
 
   def show
@@ -45,6 +46,6 @@ class Api::V1::NotesController < Api::V1::ApiController
   end
 
   def params_note
-    params.require(:note).permit(:text)
+    params.require(:note).permit(:text, :tag)
   end
 end
