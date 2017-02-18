@@ -20,6 +20,7 @@ export default class NoteMainComponent extends React.Component {
       saveStatus: '',
       searchText: '',
       notesFiltered: [],
+      tagsList: [],
       loading: true,
       focusTextarea: true
     }
@@ -93,6 +94,23 @@ export default class NoteMainComponent extends React.Component {
       this.deleteNote(noteSelected.id);
     }
   }
+  handleSelectTagChange = (tag) => {
+    console.log('handle select');
+    let {notesList, notesFiltered, noteSelected} = this.state;
+    let notes = notesList.filter((note) => note.tag === tag );
+    let selected = notes.find((note) => note.id == noteSelected.id);
+    let newNoteSelected = {};
+    if (notes.length === 0) {
+      newNoteSelected = notesList[0];
+    } else {
+      newNoteSelected = selected ? selected : notes[0];
+    };
+    this.setState({
+      noteSelected: newNoteSelected,
+      notesFiltered: notes,
+      searchText: tag.length > 0 ? `tag:${tag}` : ''
+    });
+  }
   // ====== end custom events =======
 
   // ====== custom call api functions =======
@@ -110,8 +128,10 @@ export default class NoteMainComponent extends React.Component {
     xhrPromise.request.then(
       response => {
         let notesList = response.data.notes;
+        let tagsList = response.data.tags.filter((note) => note.tag !== null);
         this.setState({
-          notesList: notesList,
+          notesList,
+          tagsList,
           noteSelected: notesList.length > 0 ? notesList[0] : {},
           loading: false
         });
@@ -219,7 +239,7 @@ export default class NoteMainComponent extends React.Component {
   }
 
   render() {
-    let {notesList, notesFiltered, noteSelected, saveStatus, searchText, loading, focusTextarea} = this.state;
+    let {notesList, notesFiltered, noteSelected, saveStatus, searchText, loading, focusTextarea, tagsList} = this.state;
     let notes = searchText.length > 0 ? notesFiltered : notesList;
     let notesItems = () => {
       if (loading) {
@@ -236,12 +256,12 @@ export default class NoteMainComponent extends React.Component {
     return (
       <div>
         <div className="row">
-          <NoteMenuComponent handleSearchChange={this.handleSearchChange} handleAddClick={this.handleAddClick}/>
+          <NoteMenuComponent handleSearchChange={this.handleSearchChange} searchText={searchText} handleAddClick={this.handleAddClick}/>
           <MenuComponent handleDeleteClick={this.handleDeleteClick}/>
         </div>
         <div className="row">
-          <SelectTagComponent />
-          <TagBarComponent saveStatus={saveStatus}/>
+          <SelectTagComponent tagsList={tagsList} handleSelectTagChange={this.handleSelectTagChange}/>
+          <TagBarComponent saveStatus={saveStatus} noteSelected={noteSelected} />
         </div>
         <div className="row">
           {notesItems()}

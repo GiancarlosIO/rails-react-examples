@@ -28922,6 +28922,32 @@
 	      }
 	    };
 
+	    _this.handleSelectTagChange = function (tag) {
+	      console.log('handle select');
+	      var _this$state2 = _this.state,
+	          notesList = _this$state2.notesList,
+	          notesFiltered = _this$state2.notesFiltered,
+	          noteSelected = _this$state2.noteSelected;
+
+	      var notes = notesList.filter(function (note) {
+	        return note.tag === tag;
+	      });
+	      var selected = notes.find(function (note) {
+	        return note.id == noteSelected.id;
+	      });
+	      var newNoteSelected = {};
+	      if (notes.length === 0) {
+	        newNoteSelected = notesList[0];
+	      } else {
+	        newNoteSelected = selected ? selected : notes[0];
+	      };
+	      _this.setState({
+	        noteSelected: newNoteSelected,
+	        notesFiltered: notes,
+	        searchText: tag.length > 0 ? 'tag:' + tag : ''
+	      });
+	    };
+
 	    _this.shouldCancelAllRequest = function (reason) {
 	      if (reason) {
 	        for (var i in _this.cancelRequests) {
@@ -28936,8 +28962,12 @@
 	      _this.shouldCancelAllRequest(_this.unmounted);
 	      xhrPromise.request.then(function (response) {
 	        var notesList = response.data.notes;
+	        var tagsList = response.data.tags.filter(function (note) {
+	          return note.tag !== null;
+	        });
 	        _this.setState({
 	          notesList: notesList,
+	          tagsList: tagsList,
 	          noteSelected: notesList.length > 0 ? notesList[0] : {},
 	          loading: false
 	        });
@@ -29049,6 +29079,7 @@
 	      saveStatus: '',
 	      searchText: '',
 	      notesFiltered: [],
+	      tagsList: [],
 	      loading: true,
 	      focusTextarea: true
 	    };
@@ -29087,7 +29118,8 @@
 	          saveStatus = _state.saveStatus,
 	          searchText = _state.searchText,
 	          loading = _state.loading,
-	          focusTextarea = _state.focusTextarea;
+	          focusTextarea = _state.focusTextarea,
+	          tagsList = _state.tagsList;
 
 	      var notes = searchText.length > 0 ? notesFiltered : notesList;
 	      var notesItems = function notesItems() {
@@ -29112,14 +29144,14 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
-	          _react2.default.createElement(_noteMenu2.default, { handleSearchChange: this.handleSearchChange, handleAddClick: this.handleAddClick }),
+	          _react2.default.createElement(_noteMenu2.default, { handleSearchChange: this.handleSearchChange, searchText: searchText, handleAddClick: this.handleAddClick }),
 	          _react2.default.createElement(_menu2.default, { handleDeleteClick: this.handleDeleteClick })
 	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
-	          _react2.default.createElement(_selectTag2.default, null),
-	          _react2.default.createElement(_tagBar2.default, { saveStatus: saveStatus })
+	          _react2.default.createElement(_selectTag2.default, { tagsList: tagsList, handleSelectTagChange: this.handleSelectTagChange }),
+	          _react2.default.createElement(_tagBar2.default, { saveStatus: saveStatus, noteSelected: noteSelected })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -31037,10 +31069,12 @@
 	  _createClass(NoteMenuComponent, [{
 	    key: 'render',
 	    value: function render() {
+	      var searchText = this.props.searchText;
+
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'column--4 row padding--rl-10 position-fixed note__column-left' },
-	        _react2.default.createElement(_noteSearch2.default, { handleChange: this.handleChange }),
+	        _react2.default.createElement(_noteSearch2.default, { handleChange: this.handleChange, searchText: searchText }),
 	        _react2.default.createElement(_noteAdd2.default, { handleClick: this.handleClick })
 	      );
 	    }
@@ -31166,13 +31200,15 @@
 	    value: function render() {
 	      var _this2 = this;
 
+	      var searchText = this.props.searchText;
+
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "column--8 flex-center" },
 	        _react2.default.createElement(
 	          "div",
 	          { className: "input--icon" },
-	          _react2.default.createElement("input", { className: "input__text", type: "text", placeholder: "note name...", onChange: this.onChange, ref: function ref(el) {
+	          _react2.default.createElement("input", { className: "input__text", type: "text", placeholder: "note name...", value: searchText, onChange: this.onChange, ref: function ref(el) {
 	              return _this2.inputSearch = el;
 	            } }),
 	          _react2.default.createElement("i", { className: "fa fa-search" })
@@ -31188,7 +31224,8 @@
 
 
 	NoteSearchComponent.propTypes = {
-	  handleChange: _react2.default.PropTypes.func.isRequired
+	  handleChange: _react2.default.PropTypes.func.isRequired,
+	  searchText: _react2.default.PropTypes.string
 	};
 
 /***/ },
@@ -31340,7 +31377,7 @@
 /* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31366,38 +31403,43 @@
 	  function SelectTagComponent(props) {
 	    _classCallCheck(this, SelectTagComponent);
 
-	    return _possibleConstructorReturn(this, (SelectTagComponent.__proto__ || Object.getPrototypeOf(SelectTagComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (SelectTagComponent.__proto__ || Object.getPrototypeOf(SelectTagComponent)).call(this, props));
+
+	    _this.onChange = function () {
+	      _this.props.handleSelectTagChange(_this.select.value);
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(SelectTagComponent, [{
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
+	      var tagsList = this.props.tagsList;
+
+	      var optionTags = tagsList.map(function (tag, index) {
+	        return _react2.default.createElement(
+	          'option',
+	          { key: tag.id, value: tag.tag },
+	          tag.tag
+	        );
+	      });
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "column--4 flex-center position-fixed note__column-left note__select" },
+	        'div',
+	        { className: 'column--4 flex-center position-fixed note__column-left note__select' },
 	        _react2.default.createElement(
-	          "select",
-	          null,
+	          'select',
+	          { onChange: this.onChange, ref: function ref(select) {
+	              return _this2.select = select;
+	            } },
 	          _react2.default.createElement(
-	            "option",
-	            null,
-	            "Tag 1"
+	            'option',
+	            { value: '' },
+	            '...'
 	          ),
-	          _react2.default.createElement(
-	            "option",
-	            null,
-	            "Tag 2"
-	          ),
-	          _react2.default.createElement(
-	            "option",
-	            null,
-	            "Tag 3"
-	          ),
-	          _react2.default.createElement(
-	            "option",
-	            null,
-	            "Tag 4"
-	          )
+	          optionTags
 	        )
 	      );
 	    }
@@ -31407,6 +31449,12 @@
 	}(_react2.default.Component);
 
 	exports.default = SelectTagComponent;
+
+
+	SelectTagComponent.propTypes = {
+	  tagsList: _react2.default.PropTypes.array,
+	  handleSelectTagChange: _react2.default.PropTypes.func.isRequired
+	};
 
 /***/ },
 /* 295 */
@@ -31452,12 +31500,14 @@
 	  _createClass(TagBarComponent, [{
 	    key: 'render',
 	    value: function render() {
-	      var saveStatus = this.props.saveStatus;
+	      var _props = this.props,
+	          saveStatus = _props.saveStatus,
+	          noteSelected = _props.noteSelected;
 
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'column--6 row note__column-right note__tag' },
-	        _react2.default.createElement(_inputTag2.default, null),
+	        _react2.default.createElement(_inputTag2.default, { noteSelected: noteSelected }),
 	        _react2.default.createElement(_saveStatus2.default, { saveStatus: saveStatus })
 	      );
 	    }
@@ -31470,14 +31520,15 @@
 
 
 	TagBarComponent.propTypes = {
-	  saveStatus: _react2.default.PropTypes.string.isRequired
+	  saveStatus: _react2.default.PropTypes.string.isRequired,
+	  noteSelected: _react2.default.PropTypes.object.isRequired
 	};
 
 /***/ },
 /* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31507,12 +31558,15 @@
 	  }
 
 	  _createClass(InputTagComponent, [{
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
+	      var noteSelected = this.props.noteSelected;
+
+	      var tag = noteSelected.tag == null ? '' : noteSelected.tag;
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "column--8" },
-	        _react2.default.createElement("input", { type: "text", placeholder: "tag", className: "input__text" })
+	        'div',
+	        { className: 'column--8' },
+	        _react2.default.createElement('input', { type: 'text', placeholder: 'tag', className: 'input__text', value: tag })
 	      );
 	    }
 	  }]);
@@ -31521,6 +31575,15 @@
 	}(_react2.default.Component);
 
 	exports.default = InputTagComponent;
+
+
+	InputTagComponent.defaultProps = {
+	  noteSelected: { id: undefined, tag: '' }
+	};
+
+	InputTagComponent.propTypes = {
+	  noteSelected: _react2.default.PropTypes.object.isRequired
+	};
 
 /***/ },
 /* 297 */

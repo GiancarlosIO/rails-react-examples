@@ -11,10 +11,11 @@ export default class NoteSearchComponent extends React.Component {
   }
 
   render() {
+    let {searchText} = this.props;
     return (
       <div className="column--8 flex-center">
         <div className="input--icon">
-          <input className="input__text" type="text" placeholder="note name..." onChange={this.onChange} ref={ el => this.inputSearch = el }/>
+          <input className="input__text" type="text" placeholder="note name..." value={searchText} onChange={this.onChange} ref={ el => this.inputSearch = el }/>
           <i className="fa fa-search"></i>
         </div>
       </div>
@@ -23,5 +24,6 @@ export default class NoteSearchComponent extends React.Component {
 }
 
 NoteSearchComponent.propTypes = {
-  handleChange: React.PropTypes.func.isRequired
+  handleChange: React.PropTypes.func.isRequired,
+  searchText: React.PropTypes.string
 }

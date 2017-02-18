@@ -9,10 +9,10 @@ export default class TagBarComponent extends React.Component {
   }
 
   render() {
-    let {saveStatus} = this.props;
+    let {saveStatus, noteSelected} = this.props;
     return (
       <div className="column--6 row note__column-right note__tag">
-        <InputTagComponent />
+        <InputTagComponent noteSelected={noteSelected}/>
         <SaveStatusComponent saveStatus={saveStatus}/>
       </div>
     )
@@ -20,5 +20,6 @@ export default class TagBarComponent extends React.Component {
 }
 
 TagBarComponent.propTypes = {
-  saveStatus: React.PropTypes.string.isRequired
+  saveStatus: React.PropTypes.string.isRequired,
+  noteSelected: React.PropTypes.object.isRequired
 }
