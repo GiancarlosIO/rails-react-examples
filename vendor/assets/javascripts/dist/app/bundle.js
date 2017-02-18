@@ -30959,9 +30959,7 @@
 	    value: function render() {
 	      var _this2 = this;
 
-	      var _props = this.props,
-	          note = _props.note,
-	          focus = _props.focus;
+	      var note = this.props.note;
 
 	      var isReadOnly = note.id === undefined;
 	      return _react2.default.createElement(

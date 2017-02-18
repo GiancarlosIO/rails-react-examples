@@ -27,7 +27,7 @@ export default class NoteTextareaComponent extends React.Component {
   }
 
   render() {
-    let {note, focus} = this.props;
+    let {note} = this.props;
     let isReadOnly = note.id === undefined;
     return (
       <div className="column--6 padding--rl-10 note__column-right note__textarea">

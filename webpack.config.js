@@ -9,6 +9,14 @@ module.exports = {
     path: path.resolve(__dirname, 'vendor/assets/javascripts/dist') + '/app',
     filename: 'bundle.js'
   },
+  /*plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin()
+  ],*/
   module: {
     loaders: [
       {
