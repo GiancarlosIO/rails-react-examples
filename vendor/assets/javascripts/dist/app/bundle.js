@@ -28860,6 +28860,8 @@
 	        };
 	      });
 	      var newNoteSelected = noteSelected;
+	      var shouldCancelUpdates = _this.cancelRequests.length > 0;
+	      _this.shouldCancelAllRequest(shouldCancelUpdates);
 	      _this.setState({
 	        notesList: newNotesList,
 	        noteSelected: newNoteSelected
@@ -28929,21 +28931,19 @@
 	    };
 
 	    _this.getNotesList = function () {
-	      setTimeout(function () {
-	        var xhrPromise = _note2.default.getNotes();
-	        _this.cancelRequests.push(xhrPromise.cancel);
-	        _this.shouldCancelAllRequest(_this.unmounted);
-	        xhrPromise.request.then(function (response) {
-	          var notesList = response.data.notes;
-	          _this.setState({
-	            notesList: notesList,
-	            noteSelected: notesList.length > 0 ? notesList[0] : {},
-	            loading: false
-	          });
-	        }).catch(function (error) {
-	          console.log('error to get notesList', error);
+	      var xhrPromise = _note2.default.getNotes();
+	      _this.cancelRequests.push(xhrPromise.cancel);
+	      _this.shouldCancelAllRequest(_this.unmounted);
+	      xhrPromise.request.then(function (response) {
+	        var notesList = response.data.notes;
+	        _this.setState({
+	          notesList: notesList,
+	          noteSelected: notesList.length > 0 ? notesList[0] : {},
+	          loading: false
 	        });
-	      }, 1000);
+	      }).catch(function (error) {
+	        console.log('error to get notesList', error);
+	      });
 	    };
 
 	    _this.updateNote = function (id, text) {

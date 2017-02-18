@@ -41,6 +41,8 @@ export default class NoteMainComponent extends React.Component {
 
     });
     let newNoteSelected = noteSelected;
+    let shouldCancelUpdates = this.cancelRequests.length > 0;
+    this.shouldCancelAllRequest(shouldCancelUpdates);
     this.setState({
       notesList: newNotesList,
       noteSelected: newNoteSelected
@@ -102,22 +104,20 @@ export default class NoteMainComponent extends React.Component {
     };
   }
   getNotesList = () => {
-    setTimeout(() => {
-      let xhrPromise = NoteAPI.getNotes();
-      this.cancelRequests.push(xhrPromise.cancel);
-      this.shouldCancelAllRequest(this.unmounted);
-      xhrPromise.request.then(
-        response => {
-          let notesList = response.data.notes;
-          this.setState({
-            notesList: notesList,
-            noteSelected: notesList.length > 0 ? notesList[0] : {},
-            loading: false
-          });
-        }
-      ).catch( error => { console.log('error to get notesList', error); }
-      );
-    }, 1000);
+    let xhrPromise = NoteAPI.getNotes();
+    this.cancelRequests.push(xhrPromise.cancel);
+    this.shouldCancelAllRequest(this.unmounted);
+    xhrPromise.request.then(
+      response => {
+        let notesList = response.data.notes;
+        this.setState({
+          notesList: notesList,
+          noteSelected: notesList.length > 0 ? notesList[0] : {},
+          loading: false
+        });
+      }
+    ).catch( error => { console.log('error to get notesList', error); }
+    );
   }
   updateNote = (id, text) => {
     this.setState({saveStatus: 'saving...'}, () => {
