@@ -48,7 +48,7 @@ export default class NoteMainComponent extends React.Component {
       notesList: newNotesList,
       noteSelected: newNoteSelected
     }, () => {
-      this.updateNote(this.state.noteSelected.id, text);
+      this.updateNote(this.state.noteSelected.id, {note: {text}});
     })
   }
   handleSearchChange = (text)  => {
@@ -111,6 +111,17 @@ export default class NoteMainComponent extends React.Component {
       searchText: tag.length > 0 ? `tag:${tag}` : ''
     });
   }
+  handleChangeInputTag = (value) => {
+    let {noteSelected} = this.state;
+    noteSelected.tag = value;
+    this.setState({
+      noteSelected,
+      focusTextarea: false
+    }, () => {
+      console.log('handleChangeInputTag', value);
+      this.updateNote(this.state.noteSelected.id, {note: {tag: value}});
+    });
+  }
   // ====== end custom events =======
 
   // ====== custom call api functions =======
@@ -139,9 +150,9 @@ export default class NoteMainComponent extends React.Component {
     ).catch( error => { console.log('error to get notesList', error); }
     );
   }
-  updateNote = (id, text) => {
+  updateNote = (id, params) => {
     this.setState({saveStatus: 'saving...'}, () => {
-      let xhrPromise = NoteAPI.updateNote(id, text);
+      let xhrPromise = NoteAPI.updateNote(id, params);
       this.cancelRequests.push(xhrPromise.cancel);
       this.shouldCancelAllRequest(this.unmounted);
       xhrPromise.request.then(
@@ -261,7 +272,7 @@ export default class NoteMainComponent extends React.Component {
         </div>
         <div className="row">
           <SelectTagComponent tagsList={tagsList} handleSelectTagChange={this.handleSelectTagChange}/>
-          <TagBarComponent saveStatus={saveStatus} noteSelected={noteSelected} />
+          <TagBarComponent saveStatus={saveStatus} noteSelected={noteSelected} handleChangeInputTag={this.handleChangeInputTag}/>
         </div>
         <div className="row">
           {notesItems()}

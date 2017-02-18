@@ -28866,7 +28866,7 @@
 	        notesList: newNotesList,
 	        noteSelected: newNoteSelected
 	      }, function () {
-	        _this.updateNote(_this.state.noteSelected.id, text);
+	        _this.updateNote(_this.state.noteSelected.id, { note: { text: text } });
 	      });
 	    };
 
@@ -28948,6 +28948,19 @@
 	      });
 	    };
 
+	    _this.handleChangeInputTag = function (value) {
+	      var noteSelected = _this.state.noteSelected;
+
+	      noteSelected.tag = value;
+	      _this.setState({
+	        noteSelected: noteSelected,
+	        focusTextarea: false
+	      }, function () {
+	        console.log('handleChangeInputTag', value);
+	        _this.updateNote(_this.state.noteSelected.id, { note: { tag: value } });
+	      });
+	    };
+
 	    _this.shouldCancelAllRequest = function (reason) {
 	      if (reason) {
 	        for (var i in _this.cancelRequests) {
@@ -28976,9 +28989,9 @@
 	      });
 	    };
 
-	    _this.updateNote = function (id, text) {
+	    _this.updateNote = function (id, params) {
 	      _this.setState({ saveStatus: 'saving...' }, function () {
-	        var xhrPromise = _note2.default.updateNote(id, text);
+	        var xhrPromise = _note2.default.updateNote(id, params);
 	        _this.cancelRequests.push(xhrPromise.cancel);
 	        _this.shouldCancelAllRequest(_this.unmounted);
 	        xhrPromise.request.then(function (response) {
@@ -29151,7 +29164,7 @@
 	          'div',
 	          { className: 'row' },
 	          _react2.default.createElement(_selectTag2.default, { tagsList: tagsList, handleSelectTagChange: this.handleSelectTagChange }),
-	          _react2.default.createElement(_tagBar2.default, { saveStatus: saveStatus, noteSelected: noteSelected })
+	          _react2.default.createElement(_tagBar2.default, { saveStatus: saveStatus, noteSelected: noteSelected, handleChangeInputTag: this.handleChangeInputTag })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -29200,14 +29213,14 @@
 	    });
 	    return { request: request, cancel: cancel };
 	  },
-	  updateNote: function updateNote(id, text) {
+	  updateNote: function updateNote(id, params) {
 	    var CancelToken = _axios2.default.CancelToken;
 	    var cancel = void 0;
 	    var request = (0, _axios2.default)({
 	      method: 'put',
 	      url: BASE_URL + 'notes/' + id,
 	      responseType: 'json',
-	      data: { note: { text: text } },
+	      data: params,
 	      cancelToken: new CancelToken(function (c) {
 	        cancel = c;
 	      })
@@ -31494,7 +31507,13 @@
 	  function TagBarComponent(props) {
 	    _classCallCheck(this, TagBarComponent);
 
-	    return _possibleConstructorReturn(this, (TagBarComponent.__proto__ || Object.getPrototypeOf(TagBarComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (TagBarComponent.__proto__ || Object.getPrototypeOf(TagBarComponent)).call(this, props));
+
+	    _this.handleOnChange = function (value) {
+	      _this.props.handleChangeInputTag(value);
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(TagBarComponent, [{
@@ -31507,7 +31526,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'column--6 row note__column-right note__tag' },
-	        _react2.default.createElement(_inputTag2.default, { noteSelected: noteSelected }),
+	        _react2.default.createElement(_inputTag2.default, { noteSelected: noteSelected, handleOnChange: this.handleOnChange }),
 	        _react2.default.createElement(_saveStatus2.default, { saveStatus: saveStatus })
 	      );
 	    }
@@ -31520,6 +31539,7 @@
 
 
 	TagBarComponent.propTypes = {
+	  handleChangeInputTag: _react2.default.PropTypes.func.isRequired,
 	  saveStatus: _react2.default.PropTypes.string.isRequired,
 	  noteSelected: _react2.default.PropTypes.object.isRequired
 	};
@@ -31554,19 +31574,36 @@
 	  function InputTagComponent(props) {
 	    _classCallCheck(this, InputTagComponent);
 
-	    return _possibleConstructorReturn(this, (InputTagComponent.__proto__ || Object.getPrototypeOf(InputTagComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (InputTagComponent.__proto__ || Object.getPrototypeOf(InputTagComponent)).call(this, props));
+
+	    _this.onChange = function () {
+	      _this.props.handleOnChange(_this.input.value);
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(InputTagComponent, [{
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      var noteSelected = this.props.noteSelected;
 
 	      var tag = noteSelected.tag == null ? '' : noteSelected.tag;
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'column--8' },
-	        _react2.default.createElement('input', { type: 'text', placeholder: 'tag', className: 'input__text', value: tag })
+	        _react2.default.createElement('input', {
+	          type: 'text',
+	          placeholder: 'tag',
+	          className: 'input__text',
+	          value: tag,
+	          onChange: this.onChange,
+	          ref: function ref(input) {
+	            return _this2.input = input;
+	          }
+	        })
 	      );
 	    }
 	  }]);
@@ -31582,6 +31619,7 @@
 	};
 
 	InputTagComponent.propTypes = {
+	  handleOnChange: _react2.default.PropTypes.func.isRequired,
 	  noteSelected: _react2.default.PropTypes.object.isRequired
 	};
 

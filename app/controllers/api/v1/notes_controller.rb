@@ -46,6 +46,6 @@ class Api::V1::NotesController < Api::V1::ApiController
   end
 
   def params_note
-    params.require(:note).permit(:text)
+    params.require(:note).permit(:text, :tag)
   end
 end
