@@ -28845,7 +28845,27 @@
 	    };
 
 	    _this.handleChangeTextarea = function (text) {
-	      _this.updateNote(_this.state.noteSelected.id, text);
+	      var _this$state = _this.state,
+	          noteSelected = _this$state.noteSelected,
+	          notesList = _this$state.notesList;
+
+	      noteSelected.text = text;
+	      var newNotesList = notesList.map(function (note) {
+	        if (note.id == noteSelected.id) {
+	          var newNote = note;
+	          newNote.text = text;
+	          return newNote;
+	        } else {
+	          return note;
+	        };
+	      });
+	      var newNoteSelected = noteSelected;
+	      _this.setState({
+	        notesList: newNotesList,
+	        noteSelected: newNoteSelected
+	      }, function () {
+	        _this.updateNote(_this.state.noteSelected.id, text);
+	      });
 	    };
 
 	    _this.handleSearchChange = function (text) {
@@ -28933,14 +28953,7 @@
 	        _this.shouldCancelAllRequest(_this.unmounted);
 	        xhrPromise.request.then(function (response) {
 	          if (response.statusText === 'OK') {
-	            var newNotesList = _this.state.notesList.map(function (note) {
-	              if (note.id == id) {
-	                note.text = text;
-	              };
-	              return note;
-	            });
 	            _this.setState({
-	              notesList: newNotesList,
 	              saveStatus: 'saved!'
 	            });
 	          }
@@ -29005,7 +29018,7 @@
 	                newNoteSelected = newNotesFiltered[indexF + 1] ? newNotesFiltered[indexF + 1] : newNotesFiltered[0];
 	              }
 	            } else {
-	              if (newNotesList.length == 0) {
+	              if (newNotesList.length == 1) {
 	                newNoteSelected = { text: '' };
 	              } else {
 	                newNoteSelected = newNotesList[index + 1] ? newNotesList[index + 1] : newNotesList[0];

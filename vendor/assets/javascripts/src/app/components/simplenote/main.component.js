@@ -30,7 +30,23 @@ export default class NoteMainComponent extends React.Component {
     this.setState({noteSelected: note, focusTextarea: true, saveStatus: ''});
   }
   handleChangeTextarea = (text) => {
-    this.updateNote(this.state.noteSelected.id, text);
+    let {noteSelected, notesList} = this.state;
+    noteSelected.text = text;
+    let newNotesList = notesList.map((note) => {
+      if (note.id == noteSelected.id) {
+        let newNote = note;
+        newNote.text = text;
+        return newNote;
+      } else { return note };
+
+    });
+    let newNoteSelected = noteSelected;
+    this.setState({
+      notesList: newNotesList,
+      noteSelected: newNoteSelected
+    }, () => {
+      this.updateNote(this.state.noteSelected.id, text);
+    })
   }
   handleSearchChange = (text)  => {
     this.setState({searchText: text, focusTextarea: false, loading: true}, () => {
@@ -111,14 +127,7 @@ export default class NoteMainComponent extends React.Component {
       xhrPromise.request.then(
         response => {
           if (response.statusText === 'OK') {
-            let newNotesList = this.state.notesList.map(
-              (note) => {
-                if (note.id == id) { note.text = text; };
-                return note
-              }
-            );
             this.setState({
-              notesList: newNotesList,
               saveStatus: 'saved!'
             });
           }
@@ -178,7 +187,7 @@ export default class NoteMainComponent extends React.Component {
                 newNoteSelected = newNotesFiltered[indexF + 1] ? newNotesFiltered[indexF + 1] : newNotesFiltered[0];
               }
             } else {
-              if (newNotesList.length == 0) {
+              if (newNotesList.length == 1) {
                 newNoteSelected = {text: ''};
               } else {
                 newNoteSelected = newNotesList[index + 1] ? newNotesList[index + 1] : newNotesList[0] ;
