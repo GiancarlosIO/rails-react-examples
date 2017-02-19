@@ -90,12 +90,14 @@ AppDispatcher.register((payload) => {
       ).catch( error => console.log(error) )
       break;
     case AppConstants.EDIT_CONTACT:
+      console.log('Editing contact');
       // Set contact in store
       AppStore.setContactToEdit(action.contact);
       // Emit a change
       AppStore.emit(CHANGE_EVENT);
       break;
     case AppConstants.UPDATE_CONTACT:
+      console.log('Updating contact');
       // Update in API
       CONTACT_API.updateContact(action.contact_id, action.contact).request.then(
         (response) => {
