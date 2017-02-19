@@ -9,13 +9,20 @@ export default class AddForm extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    let contact = {
-      name: this.inputName.value.trim(),
-      phone: this.inputPhone.value.trim(),
-      email: this.inputEmail.value.trim()
+    let name = this.inputName.value.trim(),
+        phone_number = this.inputPhone.value.trim(),
+        email = this.inputEmail.value.trim();
+    if ( name.length > 0 && phone_number.length > 0 && email.length > 0 ) {
+      let contact = {
+        name,
+        phone_number,
+        email
+      }
+      AppActions.saveContact(contact);
+      this.inputName.value = '';
+      this.inputPhone.value = '';
+      this.inputEmail.value = '';
     }
-
-    AppActions.saveContact(contact);
   }
 
   render() {

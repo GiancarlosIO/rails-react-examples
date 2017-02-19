@@ -6,7 +6,13 @@ var AppActions = {
     AppDispatcher.handleViewAction({
       actionType: AppConstants.SAVE_CONTACT,
       contact: contact
-    })
+    });
+  },
+  receiveContacts: (contacts) => {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.RECEIVE_CONTACTS,
+      contacts: contacts
+    });
   }
 }
 

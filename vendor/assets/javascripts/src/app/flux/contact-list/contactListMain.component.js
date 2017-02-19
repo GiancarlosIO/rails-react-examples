@@ -1,6 +1,15 @@
 import React from 'react';
 import AppActions from './actions/app.action';
 import AppStore from './stores/app.store';
+import CONTACT_API from './utils/api/contactList.api';
+
+// Get the contacts list
+CONTACT_API.getContactList().request.then(
+  (response) => {
+    AppActions.receiveContacts(response.data);
+  },
+  (error) => { console.log(error) }
+).catch( error => console.log(error) )
 
 import AddForm from './components/addForm.component';
 

@@ -31737,6 +31737,10 @@
 
 	var _app4 = _interopRequireDefault(_app3);
 
+	var _contactList = __webpack_require__(306);
+
+	var _contactList2 = _interopRequireDefault(_contactList);
+
 	var _addForm = __webpack_require__(307);
 
 	var _addForm2 = _interopRequireDefault(_addForm);
@@ -31748,6 +31752,15 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// Get the contacts list
+	_contactList2.default.getContactList().request.then(function (response) {
+	  _app2.default.receiveContacts(response.data);
+	}, function (error) {
+	  console.log(error);
+	}).catch(function (error) {
+	  return console.log(error);
+	});
 
 	function getAppState() {
 	  return {
@@ -31834,6 +31847,12 @@
 	    _app2.default.handleViewAction({
 	      actionType: _app4.default.SAVE_CONTACT,
 	      contact: contact
+	    });
+	  },
+	  receiveContacts: function receiveContacts(contacts) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.RECEIVE_CONTACTS,
+	      contacts: contacts
 	    });
 	  }
 	};
@@ -32133,7 +32152,8 @@
 	  value: true
 	});
 	var APP_CONSTANTS = {
-	  SAVE_CONTACT: 'SAVE_CONTACT'
+	  SAVE_CONTACT: 'SAVE_CONTACT',
+	  RECEIVE_CONTACTS: 'RECEIVE_CONTACTS'
 	};
 
 	exports.default = APP_CONSTANTS;
@@ -32179,6 +32199,9 @@
 	  getContacts: function getContacts() {
 	    return _contacts;
 	  },
+	  setContacts: function setContacts(contacts) {
+	    _contacts = contacts;
+	  },
 	  emitChange: function emitChange() {
 	    this.emit(CHANGE_EVENT);
 	  },
@@ -32195,9 +32218,22 @@
 	  switch (action.actionType) {
 	    case _app4.default.SAVE_CONTACT:
 	      console.log('saving contact...');
-	      // Store save
-	      AppStore.saveContact(action.contact);
-
+	      // Save in API
+	      _contactList2.default.createContact(action.contact).request.then(function (response) {
+	        // Store save
+	        AppStore.saveContact(action.contact);
+	        // Emit a change
+	        AppStore.emit(CHANGE_EVENT);
+	      }, function (error) {
+	        console.log(error);
+	      }).catch(function (error) {
+	        return console.log(error);
+	      });
+	      break;
+	    case _app4.default.RECEIVE_CONTACTS:
+	      console.log('receiving contacts');
+	      // Store the contacts
+	      AppStore.setContacts(action.contacts);
 	      // Emit a change
 	      AppStore.emit(CHANGE_EVENT);
 	      break;
@@ -32517,15 +32553,54 @@
 
 /***/ },
 /* 306 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _app = __webpack_require__(299);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _axios = __webpack_require__(260);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var BASE_URL = "/api/v1/contacts";
+
 	var CONTACT_API = {
-	  getContactsList: function getContactsList() {},
+	  createContact: function createContact(contact) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'post',
+	      url: BASE_URL,
+	      responseType: 'json',
+	      data: { contact: contact },
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
+	  getContactList: function getContactList() {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'get',
+	      url: BASE_URL,
+	      responseType: 'json',
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
 	  getContact: function getContact() {}
 	};
 
@@ -32569,13 +32644,20 @@
 
 	    _this.onSubmit = function (e) {
 	      e.preventDefault();
-	      var contact = {
-	        name: _this.inputName.value.trim(),
-	        phone: _this.inputPhone.value.trim(),
-	        email: _this.inputEmail.value.trim()
-	      };
-
-	      _app2.default.saveContact(contact);
+	      var name = _this.inputName.value.trim(),
+	          phone_number = _this.inputPhone.value.trim(),
+	          email = _this.inputEmail.value.trim();
+	      if (name.length > 0 && phone_number.length > 0 && email.length > 0) {
+	        var contact = {
+	          name: name,
+	          phone_number: phone_number,
+	          email: email
+	        };
+	        _app2.default.saveContact(contact);
+	        _this.inputName.value = '';
+	        _this.inputPhone.value = '';
+	        _this.inputEmail.value = '';
+	      }
 	    };
 
 	    return _this;
