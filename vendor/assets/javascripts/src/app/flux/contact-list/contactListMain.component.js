@@ -39,7 +39,6 @@ export default class ContactListMainComponent extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     let {contacts, contactToEdit} = this.state;
     let form = contactToEdit.id === undefined ? (<AddForm />) : (<EditForm contactToEdit={contactToEdit}/>)
     return (
