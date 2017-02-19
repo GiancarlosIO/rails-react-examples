@@ -19,7 +19,7 @@ export default class NoteMenuComponent extends React.Component {
   render() {
     let {searchText} = this.props;
     return (
-      <div className="column--4 row padding--rl-10 position-fixed note__column-left">
+      <div className="column--4 row margin-auto padding--rl-10 position-fixed note__column-left">
         <NoteSearchComponent handleChange={this.handleChange} searchText={searchText}/>
         <NoteAddComponent handleClick={this.handleClick}/>
       </div>

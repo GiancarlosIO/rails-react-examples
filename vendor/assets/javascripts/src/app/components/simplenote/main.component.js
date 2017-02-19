@@ -266,10 +266,10 @@ export default class NoteMainComponent extends React.Component {
     let notes = searchText.length > 0 ? notesFiltered : notesList;
     let notesItems = () => {
       if (loading) {
-        return (<div className="row">Loading</div>);
+        return (<div className="row margin-auto">Loading</div>);
       } else {
         return (
-          <div className="row">
+          <div className="row margin-auto">
             <NoteListComponent notesList={notes} noteSelected={noteSelected} selectNote={this.selectNote}/>
             <NoteTextareaComponent note={noteSelected} handleChangeTextarea={this.handleChangeTextarea} focus={focusTextarea}/>
           </div>
@@ -278,15 +278,15 @@ export default class NoteMainComponent extends React.Component {
     }
     return (
       <div>
-        <div className="row">
+        <div className="row margin-auto">
           <NoteMenuComponent handleSearchChange={this.handleSearchChange} searchText={searchText} handleAddClick={this.handleAddClick}/>
           <MenuComponent handleDeleteClick={this.handleDeleteClick}/>
         </div>
-        <div className="row">
+        <div className="row margin-auto">
           <SelectTagComponent tagsList={tagsList} handleSelectTagChange={this.handleSelectTagChange}/>
           <TagBarComponent saveStatus={saveStatus} noteSelected={noteSelected} handleChangeInputTag={this.handleChangeInputTag}/>
         </div>
-        <div className="row">
+        <div className="row margin-auto">
           {notesItems()}
         </div>
       </div>

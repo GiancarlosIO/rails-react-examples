@@ -13,7 +13,7 @@ export default class MovieList extends React.Component {
       return ( <Movie key={movie.imdbID} movie={movie} />)
     });
     return (
-      <div className="row movies">
+      <div className="row movies margin-auto">
         <div className="column--10 movies__container">
           {movieList}
         </div>

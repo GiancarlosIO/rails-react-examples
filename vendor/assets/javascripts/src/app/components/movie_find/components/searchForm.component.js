@@ -17,7 +17,7 @@ export default class SearchForm extends React.Component {
 
   render() {
     return (
-      <div className="row">
+      <div className="row margin-auto">
         <div className="column--10">
           <h4 className="text--center">Write the title to search for a Movie</h4>
           <input onChange={this.onChange} className="form__input full-width" type="text" ref="title" placeholder="Ring" />

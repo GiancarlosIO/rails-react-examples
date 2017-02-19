@@ -9,7 +9,7 @@ export default class InfoComponent extends React.Component {
     let {tempData: data} = this.props;
     let iconWeatherURL = `http://openweathermap.org/img/w/${data.weather[0].icon}.png`
     return (
-      <div className="row">
+      <div className="row margin-auto">
         <div className="weather__message">
           <div className="weather__message__header">
             <h4> {data.name} - {data.sys.country}</h4>

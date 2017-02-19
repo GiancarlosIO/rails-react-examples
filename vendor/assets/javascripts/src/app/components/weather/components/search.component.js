@@ -16,7 +16,7 @@ export default class SearchComponent extends React.Component {
 
   render() {
     return (
-      <div className="row weather__form">
+      <div className="row margin-auto weather__form">
         <div className="weather__form__header">
           <h4>Search the weather information of your city!</h4>
         </div>

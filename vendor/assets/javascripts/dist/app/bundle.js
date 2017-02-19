@@ -91,6 +91,10 @@
 
 	var _main10 = _interopRequireDefault(_main9);
 
+	var _contactListMain = __webpack_require__(298);
+
+	var _contactListMain2 = _interopRequireDefault(_contactListMain);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	$(document).on('ready', function () {
@@ -105,7 +109,8 @@
 	      _react2.default.createElement(_reactRouter.Route, { path: '/movies', component: _main6.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/movies/:movie_id', component: _movieWrapper2.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/weather', component: _main8.default }),
-	      _react2.default.createElement(_reactRouter.Route, { path: '/simplenote', component: _main10.default })
+	      _react2.default.createElement(_reactRouter.Route, { path: '/simplenote', component: _main10.default }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/contact-list', component: _contactListMain2.default })
 	    )
 	  ), document.getElementById('app-wrapper'));
 	});
@@ -26569,6 +26574,15 @@
 	          { to: '/simplenote', activeClassName: 'link__active' },
 	          'Simplenote (copy)'
 	        )
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/contact-list', activeClassName: 'link__active' },
+	          'Contact List'
+	        )
 	      )
 	    )
 	  );
@@ -26823,7 +26837,7 @@
 	          { className: 'panel__body' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'row' },
+	            { className: 'row margin-auto' },
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'column--3' },
@@ -27872,7 +27886,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row' },
+	        { className: 'row margin-auto' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'column--10' },
@@ -27939,7 +27953,7 @@
 	      });
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row movies' },
+	        { className: 'row movies margin-auto' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'column--10 movies__container' },
@@ -28512,7 +28526,7 @@
 	      };
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row' },
+	        { className: 'row margin-auto' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'column--300 weather' },
@@ -28604,7 +28618,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row weather__form' },
+	        { className: 'row margin-auto weather__form' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'weather__form__header' },
@@ -28674,7 +28688,7 @@
 	      var iconWeatherURL = "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png";
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "row" },
+	        { className: "row margin-auto" },
 	        _react2.default.createElement(
 	          "div",
 	          { className: "weather__message" },
@@ -29160,13 +29174,13 @@
 	        if (loading) {
 	          return _react2.default.createElement(
 	            'div',
-	            { className: 'row' },
+	            { className: 'row margin-auto' },
 	            'Loading'
 	          );
 	        } else {
 	          return _react2.default.createElement(
 	            'div',
-	            { className: 'row' },
+	            { className: 'row margin-auto' },
 	            _react2.default.createElement(_noteList2.default, { notesList: notes, noteSelected: noteSelected, selectNote: _this2.selectNote }),
 	            _react2.default.createElement(_noteTextarea2.default, { note: noteSelected, handleChangeTextarea: _this2.handleChangeTextarea, focus: focusTextarea })
 	          );
@@ -29177,19 +29191,19 @@
 	        null,
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'row' },
+	          { className: 'row margin-auto' },
 	          _react2.default.createElement(_noteMenu2.default, { handleSearchChange: this.handleSearchChange, searchText: searchText, handleAddClick: this.handleAddClick }),
 	          _react2.default.createElement(_menu2.default, { handleDeleteClick: this.handleDeleteClick })
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'row' },
+	          { className: 'row margin-auto' },
 	          _react2.default.createElement(_selectTag2.default, { tagsList: tagsList, handleSelectTagChange: this.handleSelectTagChange }),
 	          _react2.default.createElement(_tagBar2.default, { saveStatus: saveStatus, noteSelected: noteSelected, handleChangeInputTag: this.handleChangeInputTag })
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'row' },
+	          { className: 'row margin-auto' },
 	          notesItems()
 	        )
 	      );
@@ -30828,7 +30842,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'column--6 row flex--row--start padding--rl-10 note__column-right' },
+	        { className: 'column--6 row margin-auto flex--row--start padding--rl-10 note__column-right' },
 	        _react2.default.createElement(_noteInfo2.default, null),
 	        _react2.default.createElement(_noteDelete2.default, { handleClick: this.handleClick })
 	      );
@@ -31107,7 +31121,7 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'column--4 row padding--rl-10 position-fixed note__column-left' },
+	        { className: 'column--4 row margin-auto padding--rl-10 position-fixed note__column-left' },
 	        _react2.default.createElement(_noteSearch2.default, { handleChange: this.handleChange, searchText: searchText }),
 	        _react2.default.createElement(_noteAdd2.default, { handleClick: this.handleClick })
 	      );
@@ -31546,7 +31560,7 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'column--6 row note__column-right note__tag' },
+	        { className: 'column--6 row margin-auto note__column-right note__tag' },
 	        _react2.default.createElement(_inputTag2.default, { noteSelected: noteSelected, handleOnChange: this.handleOnChange }),
 	        _react2.default.createElement(_saveStatus2.default, { saveStatus: saveStatus })
 	      );
@@ -31698,6 +31712,59 @@
 	}(_react2.default.Component);
 
 	exports.default = SaveStatusComponent;
+
+/***/ },
+/* 298 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ContactListMainComponent = function (_React$Component) {
+	  _inherits(ContactListMainComponent, _React$Component);
+
+	  function ContactListMainComponent(props) {
+	    _classCallCheck(this, ContactListMainComponent);
+
+	    return _possibleConstructorReturn(this, (ContactListMainComponent.__proto__ || Object.getPrototypeOf(ContactListMainComponent)).call(this, props));
+	  }
+
+	  _createClass(ContactListMainComponent, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h1',
+	          null,
+	          'ContactListMainComponent'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return ContactListMainComponent;
+	}(_react2.default.Component);
+
+	exports.default = ContactListMainComponent;
 
 /***/ }
 /******/ ]);

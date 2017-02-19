@@ -9,6 +9,7 @@ import MovieMainComponent from './components/movie_find/components/main.componen
 import MovieWrapperComponent from './components/movie_find/components/movieWrapper.component';
 import WeatherMainComponent from './components/weather/main.component';
 import NoteMainComponent from './components/simplenote/main.component';
+import ContactListMainComponent from './flux/contact-list/contactListMain.component';
 
 $(document).on('ready', () => {
   ReactDOM.render(
@@ -20,6 +21,7 @@ $(document).on('ready', () => {
         <Route path="/movies/:movie_id" component={MovieWrapperComponent}></Route>
         <Route path="/weather" component={WeatherMainComponent}></Route>
         <Route path="/simplenote" component={NoteMainComponent}></Route>
+        <Route path="/contact-list" component={ContactListMainComponent}></Route>
       </Route>
     </Router>,
   document.getElementById('app-wrapper'))

@@ -15,7 +15,7 @@ export default class TagBarComponent extends React.Component {
   render() {
     let {saveStatus, noteSelected} = this.props;
     return (
-      <div className="column--6 row note__column-right note__tag">
+      <div className="column--6 row margin-auto note__column-right note__tag">
         <InputTagComponent noteSelected={noteSelected} handleOnChange={this.handleOnChange}/>
         <SaveStatusComponent saveStatus={saveStatus}/>
       </div>
