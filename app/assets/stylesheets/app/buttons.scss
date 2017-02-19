@@ -8,6 +8,11 @@
     outline: none;
     text-decoration: none;
   }
+  &--min {
+    font-size: 14px;
+    padding: 5px 15px;
+    border-radius: 3px;
+  }
   &--medium {
     color: 14px;
     padding: 10px 15px;
@@ -24,6 +29,15 @@
   }
   &--emerald {
     background-color: rgb(46, 204, 113);
+    color: #fff;
+    transition: all 0.3s ease;
+    &:hover {
+      color: white;
+      box-shadow: 0px 4px 10px rgba(black, 0.5);
+    }
+  }
+  &--grey {
+    background-color: #95a5a6;
     color: #fff;
     transition: all 0.3s ease;
     &:hover {

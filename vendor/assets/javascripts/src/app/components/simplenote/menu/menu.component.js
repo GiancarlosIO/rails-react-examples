@@ -14,7 +14,7 @@ export default class MenuComponent extends React.Component {
 
   render() {
     return (
-      <div className="column--6 row flex--row--start padding--rl-10 note__column-right">
+      <div className="column--6 row margin-auto flex--row--start padding--rl-10 note__column-right">
         <NoteInfoComponent />
         <NoteDeleteComponent handleClick={this.handleClick}/>
       </div>

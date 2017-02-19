@@ -15,7 +15,7 @@ export default class Profile extends React.Component {
           {name}
         </div>
         <div className="panel__body">
-          <div className="row">
+          <div className="row margin-auto">
             <div className="column--3">
               <img src={avatar_url} />
             </div>

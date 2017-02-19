@@ -9,6 +9,7 @@ const NavComponent = () =>
       <li><Link to="/movies" activeClassName="link__active">MovieFind App</Link></li>
       <li><Link to="/weather" activeClassName="link__active">Weather App</Link></li>
       <li><Link to="/simplenote" activeClassName="link__active">Simplenote (copy)</Link></li>
+      <li><Link to="/contact-list" activeClassName="link__active">Contact List(FLUX)</Link></li>
     </ul>
   </nav>
 export default NavComponent;

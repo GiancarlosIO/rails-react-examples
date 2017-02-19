@@ -47,3 +47,7 @@
   &-center { text-align: center;}
   &-grey { color: #ccc}
 }
+.margin {
+  &-auto { margin: auto !important;}
+  &-left-15 { margin-left: 10px; }
+}

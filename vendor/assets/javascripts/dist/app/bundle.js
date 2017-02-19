@@ -91,6 +91,10 @@
 
 	var _main10 = _interopRequireDefault(_main9);
 
+	var _contactListMain = __webpack_require__(298);
+
+	var _contactListMain2 = _interopRequireDefault(_contactListMain);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	$(document).on('ready', function () {
@@ -105,7 +109,8 @@
 	      _react2.default.createElement(_reactRouter.Route, { path: '/movies', component: _main6.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/movies/:movie_id', component: _movieWrapper2.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/weather', component: _main8.default }),
-	      _react2.default.createElement(_reactRouter.Route, { path: '/simplenote', component: _main10.default })
+	      _react2.default.createElement(_reactRouter.Route, { path: '/simplenote', component: _main10.default }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/contact-list', component: _contactListMain2.default })
 	    )
 	  ), document.getElementById('app-wrapper'));
 	});
@@ -26569,6 +26574,15 @@
 	          { to: '/simplenote', activeClassName: 'link__active' },
 	          'Simplenote (copy)'
 	        )
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/contact-list', activeClassName: 'link__active' },
+	          'Contact List(FLUX)'
+	        )
 	      )
 	    )
 	  );
@@ -26823,7 +26837,7 @@
 	          { className: 'panel__body' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'row' },
+	            { className: 'row margin-auto' },
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'column--3' },
@@ -27872,7 +27886,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row' },
+	        { className: 'row margin-auto' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'column--10' },
@@ -27939,7 +27953,7 @@
 	      });
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row movies' },
+	        { className: 'row movies margin-auto' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'column--10 movies__container' },
@@ -28512,7 +28526,7 @@
 	      };
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row' },
+	        { className: 'row margin-auto' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'column--300 weather' },
@@ -28604,7 +28618,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row weather__form' },
+	        { className: 'row margin-auto weather__form' },
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'weather__form__header' },
@@ -28674,7 +28688,7 @@
 	      var iconWeatherURL = "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png";
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "row" },
+	        { className: "row margin-auto" },
 	        _react2.default.createElement(
 	          "div",
 	          { className: "weather__message" },
@@ -29160,13 +29174,13 @@
 	        if (loading) {
 	          return _react2.default.createElement(
 	            'div',
-	            { className: 'row' },
+	            { className: 'row margin-auto' },
 	            'Loading'
 	          );
 	        } else {
 	          return _react2.default.createElement(
 	            'div',
-	            { className: 'row' },
+	            { className: 'row margin-auto' },
 	            _react2.default.createElement(_noteList2.default, { notesList: notes, noteSelected: noteSelected, selectNote: _this2.selectNote }),
 	            _react2.default.createElement(_noteTextarea2.default, { note: noteSelected, handleChangeTextarea: _this2.handleChangeTextarea, focus: focusTextarea })
 	          );
@@ -29177,19 +29191,19 @@
 	        null,
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'row' },
+	          { className: 'row margin-auto' },
 	          _react2.default.createElement(_noteMenu2.default, { handleSearchChange: this.handleSearchChange, searchText: searchText, handleAddClick: this.handleAddClick }),
 	          _react2.default.createElement(_menu2.default, { handleDeleteClick: this.handleDeleteClick })
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'row' },
+	          { className: 'row margin-auto' },
 	          _react2.default.createElement(_selectTag2.default, { tagsList: tagsList, handleSelectTagChange: this.handleSelectTagChange }),
 	          _react2.default.createElement(_tagBar2.default, { saveStatus: saveStatus, noteSelected: noteSelected, handleChangeInputTag: this.handleChangeInputTag })
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'row' },
+	          { className: 'row margin-auto' },
 	          notesItems()
 	        )
 	      );
@@ -30828,7 +30842,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'column--6 row flex--row--start padding--rl-10 note__column-right' },
+	        { className: 'column--6 row margin-auto flex--row--start padding--rl-10 note__column-right' },
 	        _react2.default.createElement(_noteInfo2.default, null),
 	        _react2.default.createElement(_noteDelete2.default, { handleClick: this.handleClick })
 	      );
@@ -31107,7 +31121,7 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'column--4 row padding--rl-10 position-fixed note__column-left' },
+	        { className: 'column--4 row margin-auto padding--rl-10 position-fixed note__column-left' },
 	        _react2.default.createElement(_noteSearch2.default, { handleChange: this.handleChange, searchText: searchText }),
 	        _react2.default.createElement(_noteAdd2.default, { handleClick: this.handleClick })
 	      );
@@ -31546,7 +31560,7 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'column--6 row note__column-right note__tag' },
+	        { className: 'column--6 row margin-auto note__column-right note__tag' },
 	        _react2.default.createElement(_inputTag2.default, { noteSelected: noteSelected, handleOnChange: this.handleOnChange }),
 	        _react2.default.createElement(_saveStatus2.default, { saveStatus: saveStatus })
 	      );
@@ -31698,6 +31712,1577 @@
 	}(_react2.default.Component);
 
 	exports.default = SaveStatusComponent;
+
+/***/ },
+/* 298 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(299);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(304);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	var _contactList = __webpack_require__(306);
+
+	var _contactList2 = _interopRequireDefault(_contactList);
+
+	var _addForm = __webpack_require__(307);
+
+	var _addForm2 = _interopRequireDefault(_addForm);
+
+	var _contactList3 = __webpack_require__(308);
+
+	var _contactList4 = _interopRequireDefault(_contactList3);
+
+	var _editForm = __webpack_require__(310);
+
+	var _editForm2 = _interopRequireDefault(_editForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// ===== Get the contacts list ======
+	_contactList2.default.getContactList().request.then(function (response) {
+	  _app2.default.receiveContacts(response.data.contacts);
+	}, function (error) {
+	  console.log(error);
+	}).catch(function (error) {
+	  return console.log(error);
+	});
+	// ===== End Get the contacts list ======
+
+
+	function getAppState() {
+	  return {
+	    contacts: _app4.default.getContacts(),
+	    contactToEdit: _app4.default.getContactToEdit()
+	  };
+	}
+
+	var ContactListMainComponent = function (_React$Component) {
+	  _inherits(ContactListMainComponent, _React$Component);
+
+	  function ContactListMainComponent(props) {
+	    _classCallCheck(this, ContactListMainComponent);
+
+	    var _this = _possibleConstructorReturn(this, (ContactListMainComponent.__proto__ || Object.getPrototypeOf(ContactListMainComponent)).call(this, props));
+
+	    _this._onChange = function () {
+	      _this.setState(getAppState());
+	    };
+
+	    _this.state = getAppState();
+	    return _this;
+	  }
+
+	  _createClass(ContactListMainComponent, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      _app4.default.addChangeListener(this._onChange);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      _app4.default.removeChangeListener(this._onChange);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      console.log(this.state);
+	      var _state = this.state,
+	          contacts = _state.contacts,
+	          contactToEdit = _state.contactToEdit;
+
+	      var form = contactToEdit.id === undefined ? _react2.default.createElement(_addForm2.default, null) : _react2.default.createElement(_editForm2.default, { contactToEdit: contactToEdit });
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row center-xs' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-xs-12' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            form,
+	            _react2.default.createElement(_contactList4.default, { contacts: contacts })
+	          )
+	        )
+	      );
+	    }
+
+	    // update view state when change is recived
+
+	  }]);
+
+	  return ContactListMainComponent;
+	}(_react2.default.Component);
+
+	exports.default = ContactListMainComponent;
+
+/***/ },
+/* 299 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _app = __webpack_require__(300);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(303);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AppActions = {
+	  saveContact: function saveContact(contact) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.SAVE_CONTACT,
+	      contact: contact
+	    });
+	  },
+	  receiveContacts: function receiveContacts(contacts) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.RECEIVE_CONTACTS,
+	      contacts: contacts
+	    });
+	  },
+	  deleteContact: function deleteContact(id) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.DELETE_CONTACT,
+	      contact_id: id
+	    });
+	  },
+	  editContact: function editContact(contact) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.EDIT_CONTACT,
+	      contact: contact
+	    });
+	  },
+	  updateContact: function updateContact(id, contact) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.UPDATE_CONTACT,
+	      contact_id: id,
+	      contact: contact
+	    });
+	  },
+	  cancelUpdateContact: function cancelUpdateContact() {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.CANCEL_UPDATE_CONTACT
+	    });
+	  }
+	};
+
+	exports.default = AppActions;
+
+/***/ },
+/* 300 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _flux = __webpack_require__(301);
+
+	var _objectAssign = __webpack_require__(5);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AppDispatcher = (0, _objectAssign2.default)(new _flux.Dispatcher(), {
+	  handleViewAction: function handleViewAction(action) {
+	    var payload = {
+	      source: 'VIEW_ACTION',
+	      action: action
+	    };
+	    this.dispatch(payload);
+	  }
+	});
+
+	exports.default = AppDispatcher;
+
+/***/ },
+/* 301 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	module.exports.Dispatcher = __webpack_require__(302);
+
+
+/***/ },
+/* 302 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule Dispatcher
+	 * 
+	 * @preventMunge
+	 */
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var invariant = __webpack_require__(9);
+
+	var _prefix = 'ID_';
+
+	/**
+	 * Dispatcher is used to broadcast payloads to registered callbacks. This is
+	 * different from generic pub-sub systems in two ways:
+	 *
+	 *   1) Callbacks are not subscribed to particular events. Every payload is
+	 *      dispatched to every registered callback.
+	 *   2) Callbacks can be deferred in whole or part until other callbacks have
+	 *      been executed.
+	 *
+	 * For example, consider this hypothetical flight destination form, which
+	 * selects a default city when a country is selected:
+	 *
+	 *   var flightDispatcher = new Dispatcher();
+	 *
+	 *   // Keeps track of which country is selected
+	 *   var CountryStore = {country: null};
+	 *
+	 *   // Keeps track of which city is selected
+	 *   var CityStore = {city: null};
+	 *
+	 *   // Keeps track of the base flight price of the selected city
+	 *   var FlightPriceStore = {price: null}
+	 *
+	 * When a user changes the selected city, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'city-update',
+	 *     selectedCity: 'paris'
+	 *   });
+	 *
+	 * This payload is digested by `CityStore`:
+	 *
+	 *   flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'city-update') {
+	 *       CityStore.city = payload.selectedCity;
+	 *     }
+	 *   });
+	 *
+	 * When the user selects a country, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'country-update',
+	 *     selectedCountry: 'australia'
+	 *   });
+	 *
+	 * This payload is digested by both stores:
+	 *
+	 *   CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       CountryStore.country = payload.selectedCountry;
+	 *     }
+	 *   });
+	 *
+	 * When the callback to update `CountryStore` is registered, we save a reference
+	 * to the returned token. Using this token with `waitFor()`, we can guarantee
+	 * that `CountryStore` is updated before the callback that updates `CityStore`
+	 * needs to query its data.
+	 *
+	 *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       // `CountryStore.country` may not be updated.
+	 *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
+	 *       // `CountryStore.country` is now guaranteed to be updated.
+	 *
+	 *       // Select the default city for the new country
+	 *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
+	 *     }
+	 *   });
+	 *
+	 * The usage of `waitFor()` can be chained, for example:
+	 *
+	 *   FlightPriceStore.dispatchToken =
+	 *     flightDispatcher.register(function(payload) {
+	 *       switch (payload.actionType) {
+	 *         case 'country-update':
+	 *         case 'city-update':
+	 *           flightDispatcher.waitFor([CityStore.dispatchToken]);
+	 *           FlightPriceStore.price =
+	 *             getFlightPriceStore(CountryStore.country, CityStore.city);
+	 *           break;
+	 *     }
+	 *   });
+	 *
+	 * The `country-update` payload will be guaranteed to invoke the stores'
+	 * registered callbacks in order: `CountryStore`, `CityStore`, then
+	 * `FlightPriceStore`.
+	 */
+
+	var Dispatcher = (function () {
+	  function Dispatcher() {
+	    _classCallCheck(this, Dispatcher);
+
+	    this._callbacks = {};
+	    this._isDispatching = false;
+	    this._isHandled = {};
+	    this._isPending = {};
+	    this._lastID = 1;
+	  }
+
+	  /**
+	   * Registers a callback to be invoked with every dispatched payload. Returns
+	   * a token that can be used with `waitFor()`.
+	   */
+
+	  Dispatcher.prototype.register = function register(callback) {
+	    var id = _prefix + this._lastID++;
+	    this._callbacks[id] = callback;
+	    return id;
+	  };
+
+	  /**
+	   * Removes a callback based on its token.
+	   */
+
+	  Dispatcher.prototype.unregister = function unregister(id) {
+	    !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	    delete this._callbacks[id];
+	  };
+
+	  /**
+	   * Waits for the callbacks specified to be invoked before continuing execution
+	   * of the current callback. This method should only be used by a callback in
+	   * response to a dispatched payload.
+	   */
+
+	  Dispatcher.prototype.waitFor = function waitFor(ids) {
+	    !this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Must be invoked while dispatching.') : invariant(false) : undefined;
+	    for (var ii = 0; ii < ids.length; ii++) {
+	      var id = ids[ii];
+	      if (this._isPending[id]) {
+	        !this._isHandled[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id) : invariant(false) : undefined;
+	        continue;
+	      }
+	      !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	      this._invokeCallback(id);
+	    }
+	  };
+
+	  /**
+	   * Dispatches a payload to all registered callbacks.
+	   */
+
+	  Dispatcher.prototype.dispatch = function dispatch(payload) {
+	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.') : invariant(false) : undefined;
+	    this._startDispatching(payload);
+	    try {
+	      for (var id in this._callbacks) {
+	        if (this._isPending[id]) {
+	          continue;
+	        }
+	        this._invokeCallback(id);
+	      }
+	    } finally {
+	      this._stopDispatching();
+	    }
+	  };
+
+	  /**
+	   * Is this Dispatcher currently dispatching.
+	   */
+
+	  Dispatcher.prototype.isDispatching = function isDispatching() {
+	    return this._isDispatching;
+	  };
+
+	  /**
+	   * Call the callback stored with the given id. Also do some internal
+	   * bookkeeping.
+	   *
+	   * @internal
+	   */
+
+	  Dispatcher.prototype._invokeCallback = function _invokeCallback(id) {
+	    this._isPending[id] = true;
+	    this._callbacks[id](this._pendingPayload);
+	    this._isHandled[id] = true;
+	  };
+
+	  /**
+	   * Set up bookkeeping needed when dispatching.
+	   *
+	   * @internal
+	   */
+
+	  Dispatcher.prototype._startDispatching = function _startDispatching(payload) {
+	    for (var id in this._callbacks) {
+	      this._isPending[id] = false;
+	      this._isHandled[id] = false;
+	    }
+	    this._pendingPayload = payload;
+	    this._isDispatching = true;
+	  };
+
+	  /**
+	   * Clear bookkeeping used for dispatching.
+	   *
+	   * @internal
+	   */
+
+	  Dispatcher.prototype._stopDispatching = function _stopDispatching() {
+	    delete this._pendingPayload;
+	    this._isDispatching = false;
+	  };
+
+	  return Dispatcher;
+	})();
+
+	module.exports = Dispatcher;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 303 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var APP_CONSTANTS = {
+	  SAVE_CONTACT: 'SAVE_CONTACT',
+	  RECEIVE_CONTACTS: 'RECEIVE_CONTACTS',
+	  DELETE_CONTACT: 'DELETE_CONTACT',
+	  EDIT_CONTACT: 'EDIT_CONTACT',
+	  UPDATE_CONTACT: 'UPDATE_CONTACT',
+	  CANCEL_UPDATE_CONTACT: 'CANCEL_UPDATE_CONTACT'
+	};
+
+	exports.default = APP_CONSTANTS;
+
+/***/ },
+/* 304 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _app = __webpack_require__(300);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(303);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	var _events = __webpack_require__(305);
+
+	var _objectAssign = __webpack_require__(5);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	var _contactList = __webpack_require__(306);
+
+	var _contactList2 = _interopRequireDefault(_contactList);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CHANGE_EVENT = 'change';
+
+	var _contacts = [];
+	var _contactToEdit = {};
+
+	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
+	  getContacts: function getContacts() {
+	    return _contacts;
+	  },
+	  getContactToEdit: function getContactToEdit() {
+	    return _contactToEdit;
+	  },
+	  saveContact: function saveContact(contact) {
+	    var newContacts = [contact].concat(_contacts);
+	    _contacts = newContacts;
+	  },
+	  setContacts: function setContacts(contacts) {
+	    _contacts = contacts;
+	  },
+	  deleteContact: function deleteContact(contact_id) {
+	    var index = _contacts.findIndex(function (x) {
+	      return x.id == contact_id;
+	    });
+	    if (contact_id === _contactToEdit.id) {
+	      _contactToEdit = {};
+	    }
+	    _contacts.splice(index, 1);
+	  },
+	  setContactToEdit: function setContactToEdit(contact) {
+	    _contactToEdit = contact;
+	  },
+	  updateContact: function updateContact(contact) {
+	    var index = _contacts.findIndex(function (x) {
+	      return x.id == contact.id;
+	    });
+	    _contacts[index].name = contact.name;
+	    _contacts[index].phone_number = contact.phone_number;
+	    _contacts[index].email = contact.email;
+	  },
+	  cancelUpdateContact: function cancelUpdateContact() {
+	    _contactToEdit = {};
+	  },
+	  emitChange: function emitChange() {
+	    this.emit(CHANGE_EVENT);
+	  },
+	  addChangeListener: function addChangeListener(callback) {
+	    this.on(CHANGE_EVENT, callback);
+	  },
+	  removeChangeListener: function removeChangeListener(callback) {
+	    this.removeListener(CHANGE_EVENT, callback);
+	  }
+	});
+
+	_app2.default.register(function (payload) {
+	  var action = payload.action;
+	  switch (action.actionType) {
+	    case _app4.default.SAVE_CONTACT:
+	      console.log('saving contact...');
+	      // Save in API
+	      _contactList2.default.createContact(action.contact).request.then(function (response) {
+	        // Store save
+	        AppStore.saveContact(response.data);
+	        // Emit a change
+	        AppStore.emit(CHANGE_EVENT);
+	      }, function (error) {
+	        console.log(error);
+	      }).catch(function (error) {
+	        return console.log(error);
+	      });
+	      break;
+	    case _app4.default.RECEIVE_CONTACTS:
+	      console.log('receiving contacts');
+	      // Store the contacts
+	      AppStore.setContacts(action.contacts);
+	      // Emit a change
+	      AppStore.emit(CHANGE_EVENT);
+	      break;
+	    case _app4.default.DELETE_CONTACT:
+	      console.log('removing contact');
+	      // Delete in API
+	      _contactList2.default.deleteContact(action.contact_id).request.then(function (response) {
+	        // Delete in Store
+	        AppStore.deleteContact(action.contact_id);
+	        // Emit a change
+	        AppStore.emit(CHANGE_EVENT);
+	      }, function (error) {
+	        console.log(error);
+	      }).catch(function (error) {
+	        return console.log(error);
+	      });
+	      break;
+	    case _app4.default.EDIT_CONTACT:
+	      // Set contact in store
+	      AppStore.setContactToEdit(action.contact);
+	      // Emit a change
+	      AppStore.emit(CHANGE_EVENT);
+	      break;
+	    case _app4.default.UPDATE_CONTACT:
+	      // Update in API
+	      _contactList2.default.updateContact(action.contact_id, action.contact).request.then(function (response) {
+	        // Save in Store
+	        AppStore.updateContact(response.data);
+	        // Emit a change
+	        AppStore.emit(CHANGE_EVENT);
+	      }, function (error) {
+	        console.log(error);
+	      }).catch(function (error) {
+	        return console.log(error);
+	      });
+	      break;
+	    case _app4.default.CANCEL_UPDATE_CONTACT:
+	      // Edit store
+	      AppStore.cancelUpdateContact();
+	      // Emit a change
+	      AppStore.emit(CHANGE_EVENT);
+	      break;
+	  }
+	  return true;
+	});
+
+	exports.default = AppStore;
+
+/***/ },
+/* 305 */
+/***/ function(module, exports) {
+
+	// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	function EventEmitter() {
+	  this._events = this._events || {};
+	  this._maxListeners = this._maxListeners || undefined;
+	}
+	module.exports = EventEmitter;
+
+	// Backwards-compat with node 0.10.x
+	EventEmitter.EventEmitter = EventEmitter;
+
+	EventEmitter.prototype._events = undefined;
+	EventEmitter.prototype._maxListeners = undefined;
+
+	// By default EventEmitters will print a warning if more than 10 listeners are
+	// added to it. This is a useful default which helps finding memory leaks.
+	EventEmitter.defaultMaxListeners = 10;
+
+	// Obviously not all Emitters should be limited to 10. This function allows
+	// that to be increased. Set to zero for unlimited.
+	EventEmitter.prototype.setMaxListeners = function(n) {
+	  if (!isNumber(n) || n < 0 || isNaN(n))
+	    throw TypeError('n must be a positive number');
+	  this._maxListeners = n;
+	  return this;
+	};
+
+	EventEmitter.prototype.emit = function(type) {
+	  var er, handler, len, args, i, listeners;
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // If there is no 'error' event listener then throw.
+	  if (type === 'error') {
+	    if (!this._events.error ||
+	        (isObject(this._events.error) && !this._events.error.length)) {
+	      er = arguments[1];
+	      if (er instanceof Error) {
+	        throw er; // Unhandled 'error' event
+	      } else {
+	        // At least give some kind of context to the user
+	        var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
+	        err.context = er;
+	        throw err;
+	      }
+	    }
+	  }
+
+	  handler = this._events[type];
+
+	  if (isUndefined(handler))
+	    return false;
+
+	  if (isFunction(handler)) {
+	    switch (arguments.length) {
+	      // fast cases
+	      case 1:
+	        handler.call(this);
+	        break;
+	      case 2:
+	        handler.call(this, arguments[1]);
+	        break;
+	      case 3:
+	        handler.call(this, arguments[1], arguments[2]);
+	        break;
+	      // slower
+	      default:
+	        args = Array.prototype.slice.call(arguments, 1);
+	        handler.apply(this, args);
+	    }
+	  } else if (isObject(handler)) {
+	    args = Array.prototype.slice.call(arguments, 1);
+	    listeners = handler.slice();
+	    len = listeners.length;
+	    for (i = 0; i < len; i++)
+	      listeners[i].apply(this, args);
+	  }
+
+	  return true;
+	};
+
+	EventEmitter.prototype.addListener = function(type, listener) {
+	  var m;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // To avoid recursion in the case that type === "newListener"! Before
+	  // adding it to the listeners, first emit "newListener".
+	  if (this._events.newListener)
+	    this.emit('newListener', type,
+	              isFunction(listener.listener) ?
+	              listener.listener : listener);
+
+	  if (!this._events[type])
+	    // Optimize the case of one listener. Don't need the extra array object.
+	    this._events[type] = listener;
+	  else if (isObject(this._events[type]))
+	    // If we've already got an array, just append.
+	    this._events[type].push(listener);
+	  else
+	    // Adding the second element, need to change to array.
+	    this._events[type] = [this._events[type], listener];
+
+	  // Check for listener leak
+	  if (isObject(this._events[type]) && !this._events[type].warned) {
+	    if (!isUndefined(this._maxListeners)) {
+	      m = this._maxListeners;
+	    } else {
+	      m = EventEmitter.defaultMaxListeners;
+	    }
+
+	    if (m && m > 0 && this._events[type].length > m) {
+	      this._events[type].warned = true;
+	      console.error('(node) warning: possible EventEmitter memory ' +
+	                    'leak detected. %d listeners added. ' +
+	                    'Use emitter.setMaxListeners() to increase limit.',
+	                    this._events[type].length);
+	      if (typeof console.trace === 'function') {
+	        // not supported in IE 10
+	        console.trace();
+	      }
+	    }
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+	EventEmitter.prototype.once = function(type, listener) {
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  var fired = false;
+
+	  function g() {
+	    this.removeListener(type, g);
+
+	    if (!fired) {
+	      fired = true;
+	      listener.apply(this, arguments);
+	    }
+	  }
+
+	  g.listener = listener;
+	  this.on(type, g);
+
+	  return this;
+	};
+
+	// emits a 'removeListener' event iff the listener was removed
+	EventEmitter.prototype.removeListener = function(type, listener) {
+	  var list, position, length, i;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events || !this._events[type])
+	    return this;
+
+	  list = this._events[type];
+	  length = list.length;
+	  position = -1;
+
+	  if (list === listener ||
+	      (isFunction(list.listener) && list.listener === listener)) {
+	    delete this._events[type];
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+
+	  } else if (isObject(list)) {
+	    for (i = length; i-- > 0;) {
+	      if (list[i] === listener ||
+	          (list[i].listener && list[i].listener === listener)) {
+	        position = i;
+	        break;
+	      }
+	    }
+
+	    if (position < 0)
+	      return this;
+
+	    if (list.length === 1) {
+	      list.length = 0;
+	      delete this._events[type];
+	    } else {
+	      list.splice(position, 1);
+	    }
+
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.removeAllListeners = function(type) {
+	  var key, listeners;
+
+	  if (!this._events)
+	    return this;
+
+	  // not listening for removeListener, no need to emit
+	  if (!this._events.removeListener) {
+	    if (arguments.length === 0)
+	      this._events = {};
+	    else if (this._events[type])
+	      delete this._events[type];
+	    return this;
+	  }
+
+	  // emit removeListener for all listeners on all events
+	  if (arguments.length === 0) {
+	    for (key in this._events) {
+	      if (key === 'removeListener') continue;
+	      this.removeAllListeners(key);
+	    }
+	    this.removeAllListeners('removeListener');
+	    this._events = {};
+	    return this;
+	  }
+
+	  listeners = this._events[type];
+
+	  if (isFunction(listeners)) {
+	    this.removeListener(type, listeners);
+	  } else if (listeners) {
+	    // LIFO order
+	    while (listeners.length)
+	      this.removeListener(type, listeners[listeners.length - 1]);
+	  }
+	  delete this._events[type];
+
+	  return this;
+	};
+
+	EventEmitter.prototype.listeners = function(type) {
+	  var ret;
+	  if (!this._events || !this._events[type])
+	    ret = [];
+	  else if (isFunction(this._events[type]))
+	    ret = [this._events[type]];
+	  else
+	    ret = this._events[type].slice();
+	  return ret;
+	};
+
+	EventEmitter.prototype.listenerCount = function(type) {
+	  if (this._events) {
+	    var evlistener = this._events[type];
+
+	    if (isFunction(evlistener))
+	      return 1;
+	    else if (evlistener)
+	      return evlistener.length;
+	  }
+	  return 0;
+	};
+
+	EventEmitter.listenerCount = function(emitter, type) {
+	  return emitter.listenerCount(type);
+	};
+
+	function isFunction(arg) {
+	  return typeof arg === 'function';
+	}
+
+	function isNumber(arg) {
+	  return typeof arg === 'number';
+	}
+
+	function isObject(arg) {
+	  return typeof arg === 'object' && arg !== null;
+	}
+
+	function isUndefined(arg) {
+	  return arg === void 0;
+	}
+
+
+/***/ },
+/* 306 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _app = __webpack_require__(299);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _axios = __webpack_require__(260);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var BASE_URL = "/api/v1/contacts";
+
+	var CONTACT_API = {
+	  createContact: function createContact(contact) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'post',
+	      url: BASE_URL,
+	      responseType: 'json',
+	      data: { contact: contact },
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
+	  getContactList: function getContactList() {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'get',
+	      url: BASE_URL,
+	      responseType: 'json',
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
+	  deleteContact: function deleteContact(id) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'delete',
+	      url: BASE_URL + '/' + id,
+	      responseType: 'json',
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
+	  updateContact: function updateContact(id, contact) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'put',
+	      url: BASE_URL + '/' + id,
+	      responseType: 'json',
+	      data: { contact: contact },
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  }
+	};
+
+	exports.default = CONTACT_API;
+
+/***/ },
+/* 307 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(299);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AddForm = function (_React$Component) {
+	  _inherits(AddForm, _React$Component);
+
+	  function AddForm(props) {
+	    _classCallCheck(this, AddForm);
+
+	    var _this = _possibleConstructorReturn(this, (AddForm.__proto__ || Object.getPrototypeOf(AddForm)).call(this, props));
+
+	    _this.onSubmit = function (e) {
+	      e.preventDefault();
+	      var name = _this.inputName.value,
+	          phone_number = _this.inputPhone.value,
+	          email = _this.inputEmail.value;
+	      if (name.length > 0 && phone_number.length > 0 && email.length > 0) {
+	        var contact = {
+	          name: name,
+	          phone_number: phone_number,
+	          email: email
+	        };
+	        _app2.default.saveContact(contact);
+	        _this.inputName.value = '';
+	        _this.inputPhone.value = '';
+	        _this.inputEmail.value = '';
+	      }
+	    };
+
+	    return _this;
+	  }
+
+	  _createClass(AddForm, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row center-xs' },
+	        _react2.default.createElement(
+	          'h3',
+	          { style: { width: "100%" } },
+	          'Add contact'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { className: 'col-xs-12 form', onSubmit: this.onSubmit },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              ' Name '
+	            ),
+	            _react2.default.createElement('input', { className: 'form__input', type: 'text', ref: function ref(input) {
+	                return _this2.inputName = input;
+	              }, placeholder: 'Add name...' })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              'Phone'
+	            ),
+	            _react2.default.createElement('input', { className: 'form__input', type: 'text', ref: function ref(input) {
+	                return _this2.inputPhone = input;
+	              }, placeholder: 'Add phone...' })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              'E-mail'
+	            ),
+	            _react2.default.createElement('input', { className: 'form__input', type: 'text', ref: function ref(input) {
+	                return _this2.inputEmail = input;
+	              }, placeholder: 'Add email...' })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'button',
+	              { type: 'submit', className: 'button button--medium button--blue' },
+	              'Create contact'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return AddForm;
+	}(_react2.default.Component);
+
+	exports.default = AddForm;
+
+/***/ },
+/* 308 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _contact = __webpack_require__(309);
+
+	var _contact2 = _interopRequireDefault(_contact);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ContactList = function (_React$Component) {
+	  _inherits(ContactList, _React$Component);
+
+	  function ContactList(props) {
+	    _classCallCheck(this, ContactList);
+
+	    return _possibleConstructorReturn(this, (ContactList.__proto__ || Object.getPrototypeOf(ContactList)).call(this, props));
+	  }
+
+	  _createClass(ContactList, [{
+	    key: 'render',
+	    value: function render() {
+	      var contacts = this.props.contacts;
+
+	      var contactList = contacts.map(function (contact) {
+	        return _react2.default.createElement(_contact2.default, { key: contact.id, contact: contact });
+	      });
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row center-xs' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-lg-12 col-md-12 col-sm-12 col-xs-12' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'table',
+	              { className: 'full-width' },
+	              _react2.default.createElement(
+	                'thead',
+	                null,
+	                _react2.default.createElement(
+	                  'tr',
+	                  null,
+	                  _react2.default.createElement(
+	                    'th',
+	                    null,
+	                    'Name'
+	                  ),
+	                  _react2.default.createElement(
+	                    'th',
+	                    null,
+	                    'Phone'
+	                  ),
+	                  _react2.default.createElement(
+	                    'th',
+	                    null,
+	                    'Email'
+	                  ),
+	                  _react2.default.createElement(
+	                    'th',
+	                    { colSpan: '2' },
+	                    'Actions'
+	                  )
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'tbody',
+	                null,
+	                contactList
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return ContactList;
+	}(_react2.default.Component);
+
+	exports.default = ContactList;
+
+
+	ContactList.propTypes = {
+	  contacts: _react2.default.PropTypes.array.isRequired
+	};
+
+/***/ },
+/* 309 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(299);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _objectAssign = __webpack_require__(5);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Contact = function (_React$Component) {
+	  _inherits(Contact, _React$Component);
+
+	  function Contact(props) {
+	    _classCallCheck(this, Contact);
+
+	    var _this = _possibleConstructorReturn(this, (Contact.__proto__ || Object.getPrototypeOf(Contact)).call(this, props));
+
+	    _this.handleEdit = function () {
+	      var contact = (0, _objectAssign2.default)({}, _this.props.contact);
+	      _app2.default.editContact(contact);
+	    };
+
+	    _this.handleDelete = function () {
+	      var contact = _this.props.contact;
+
+	      _app2.default.deleteContact(contact.id);
+	    };
+
+	    return _this;
+	  }
+
+	  _createClass(Contact, [{
+	    key: 'render',
+	    value: function render() {
+	      var contact = this.props.contact;
+
+	      return _react2.default.createElement(
+	        'tr',
+	        null,
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          contact.name
+	        ),
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          contact.phone_number
+	        ),
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          contact.email
+	        ),
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          _react2.default.createElement(
+	            'button',
+	            {
+	              onClick: this.handleEdit,
+	              className: 'button button--min button--grey' },
+	            'Edit'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          _react2.default.createElement(
+	            'button',
+	            {
+	              onClick: this.handleDelete,
+	              className: 'button button--min button--grey' },
+	            'Delete'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Contact;
+	}(_react2.default.Component);
+
+	exports.default = Contact;
+
+
+	Contact.propTypes = {
+	  contact: _react2.default.PropTypes.object.isRequired
+	};
+
+/***/ },
+/* 310 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(299);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EditForm = function (_React$Component) {
+	  _inherits(EditForm, _React$Component);
+
+	  function EditForm(props) {
+	    _classCallCheck(this, EditForm);
+
+	    var _this = _possibleConstructorReturn(this, (EditForm.__proto__ || Object.getPrototypeOf(EditForm)).call(this, props));
+
+	    _this.handleCancelUpdate = function () {
+	      _app2.default.cancelUpdateContact();
+	    };
+
+	    _this.onSubmit = function (e) {
+	      e.preventDefault();
+	      var contactToEdit = _this.props.contactToEdit;
+	      var name = _this.inputName.value,
+	          phone_number = _this.inputPhone.value,
+	          email = _this.inputEmail.value;
+	      if (name.length > 0 && phone_number.length > 0 && email.length > 0) {
+	        var contact = {
+	          name: name,
+	          phone_number: phone_number,
+	          email: email
+	        };
+	        _app2.default.updateContact(contactToEdit.id, contact);
+	      }
+	    };
+
+	    _this.onChange = function (name) {
+	      switch (name) {
+	        case 'name':
+	          if (_this.inputName.value.length > 0) {
+	            var newContact = _this.state.contactToEdit;
+	            newContact.name = _this.inputName.value.trim();
+	            _this.setState({ contactToEdit: newContact });
+	          }
+	          break;
+	        case 'phone':
+	          if (_this.inputPhone.value.length > 0) {
+	            var _newContact = _this.state.contactToEdit;
+	            _newContact.phone_number = _this.inputPhone.value;
+	            _this.setState({ contactToEdit: _newContact });
+	          }
+	          break;
+	        case 'email':
+	          if (_this.inputEmail.value.length > 0) {
+	            var _newContact2 = _this.state.contactToEdit;
+	            _newContact2.email = _this.inputEmail.value;
+	            _this.setState({ contactToEdit: _newContact2 });
+	          }
+	          break;
+	      }
+	    };
+
+	    _this.state = {
+	      contactToEdit: _this.props.contactToEdit
+	    };
+	    return _this;
+	  }
+
+	  _createClass(EditForm, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      this.setState({ contactToEdit: nextProps.contactToEdit });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var contactToEdit = this.state.contactToEdit;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row center-xs' },
+	        _react2.default.createElement(
+	          'h3',
+	          { className: 'full-width' },
+	          'Edit Contact'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { className: 'col-xs-12 form',
+	            onSubmit: this.onSubmit },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              ' Name '
+	            ),
+	            _react2.default.createElement('input', { className: 'form__input',
+	              type: 'text',
+	              ref: function ref(input) {
+	                return _this2.inputName = input;
+	              },
+	              onChange: this.onChange.bind(this, 'name'),
+	              value: contactToEdit.name })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              ' Phone '
+	            ),
+	            _react2.default.createElement('input', { className: 'form__input',
+	              type: 'text',
+	              ref: function ref(input) {
+	                return _this2.inputPhone = input;
+	              },
+	              onChange: this.onChange.bind(this, 'phone'),
+	              value: contactToEdit.phone_number })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              ' Email '
+	            ),
+	            _react2.default.createElement('input', { className: 'form__input',
+	              type: 'text',
+	              ref: function ref(input) {
+	                return _this2.inputEmail = input;
+	              },
+	              onChange: this.onChange.bind(this, 'email'),
+	              value: contactToEdit.email })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'button',
+	              { type: 'submit',
+	                className: 'button button--medium button--blue' },
+	              'Update contact'
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              {
+	                onClick: this.handleCancelUpdate,
+	                className: 'margin-left-15 button button--medium button--emerald' },
+	              'Cancel'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return EditForm;
+	}(_react2.default.Component);
+
+	exports.default = EditForm;
+
+
+	EditForm.propTypes = {
+	  contactToEdit: _react2.default.PropTypes.object.isRequired
+	};
 
 /***/ }
 /******/ ]);

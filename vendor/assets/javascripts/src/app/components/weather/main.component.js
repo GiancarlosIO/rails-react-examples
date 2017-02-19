@@ -82,7 +82,7 @@ export default class WeatherMainComponent extends React.Component {
       }
     }
     return (
-      <div className="row">
+      <div className="row margin-auto">
         <div className="column--300 weather">
           <SearchComponent handleChange={this.handleChange}/>
           {renderWithStatus()}
