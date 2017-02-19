@@ -9,9 +9,9 @@ export default class AddForm extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    let name = this.inputName.value.trim(),
-        phone_number = this.inputPhone.value.trim(),
-        email = this.inputEmail.value.trim();
+    let name = this.inputName.value,
+        phone_number = this.inputPhone.value,
+        email = this.inputEmail.value;
     if ( name.length > 0 && phone_number.length > 0 && email.length > 0 ) {
       let contact = {
         name,
@@ -35,7 +35,7 @@ export default class AddForm extends React.Component {
             <input className="form__input" type="text" ref={(input) => this.inputName = input} placeholder="Add name..."/>
           </div>
           <div className="box">
-            <label>Phone Number</label>
+            <label>Phone</label>
             <input className="form__input" type="text" ref={(input) => this.inputPhone = input} placeholder="Add phone..."/>
           </div>
           <div className="box">
@@ -43,7 +43,7 @@ export default class AddForm extends React.Component {
             <input className="form__input" type="text" ref={(input) => this.inputEmail = input} placeholder="Add email..."/>
           </div>
           <div className="box">
-            <button type="submit" className="button button--medium button--blue">Submit</button>
+            <button type="submit" className="button button--medium button--blue">Create contact</button>
           </div>
         </form>
       </div>

@@ -7,21 +7,40 @@ import CONTACT_API from '../utils/api/contactList.api';
 var CHANGE_EVENT = 'change';
 
 var _contacts = [];
+var _contactToEdit = {};
 
 var AppStore = objectAssign({}, EventEmitter.prototype, {
+  getContacts: function() {
+    return _contacts;
+  },
+  getContactToEdit: function() {
+    return _contactToEdit;
+  },
   saveContact: function(contact) {
     let newContacts = [contact].concat(_contacts);
     _contacts = newContacts;
-  },
-  getContacts: function() {
-    return _contacts;
   },
   setContacts: function(contacts) {
     _contacts = contacts;
   },
   deleteContact: function(contact_id) {
     let index = _contacts.findIndex( x => x.id == contact_id );
+    if ( contact_id === _contactToEdit.id ) {
+      _contactToEdit = {};
+    }
     _contacts.splice(index, 1);
+  },
+  setContactToEdit: function(contact) {
+    _contactToEdit = contact;
+  },
+  updateContact: function(contact) {
+    let index = _contacts.findIndex( x => x.id == contact.id );
+    _contacts[index].name = contact.name;
+    _contacts[index].phone_number = contact.phone_number;
+    _contacts[index].email = contact.email;
+  },
+  cancelUpdateContact: function() {
+    _contactToEdit = {};
   },
   emitChange: function() {
     this.emit(CHANGE_EVENT);
@@ -43,7 +62,7 @@ AppDispatcher.register((payload) => {
       CONTACT_API.createContact(action.contact).request.then(
         (response) => {
           // Store save
-          AppStore.saveContact(action.contact);
+          AppStore.saveContact(response.data);
           // Emit a change
           AppStore.emit(CHANGE_EVENT);
         },
@@ -69,6 +88,30 @@ AppDispatcher.register((payload) => {
         },
         (error) => { console.log(error) }
       ).catch( error => console.log(error) )
+      break;
+    case AppConstants.EDIT_CONTACT:
+      // Set contact in store
+      AppStore.setContactToEdit(action.contact);
+      // Emit a change
+      AppStore.emit(CHANGE_EVENT);
+      break;
+    case AppConstants.UPDATE_CONTACT:
+      // Update in API
+      CONTACT_API.updateContact(action.contact_id, action.contact).request.then(
+        (response) => {
+          // Save in Store
+          AppStore.updateContact(response.data)
+          // Emit a change
+          AppStore.emit(CHANGE_EVENT);
+        },
+        (error) => { console.log(error); }
+      ).catch( error => console.log(error) )
+      break;
+    case AppConstants.CANCEL_UPDATE_CONTACT:
+      // Edit store
+      AppStore.cancelUpdateContact();
+      // Emit a change
+      AppStore.emit(CHANGE_EVENT);
       break;
   }
   return true;

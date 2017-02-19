@@ -1,5 +1,6 @@
 import React from 'react';
 import AppActions from '../actions/app.action';
+import objectAssign from 'object-assign';
 
 export default class Contact extends React.Component {
   constructor(props) {
@@ -7,7 +8,8 @@ export default class Contact extends React.Component {
   }
 
   handleEdit = () => {
-    let {contact} = this.props;
+    let contact = objectAssign({}, this.props.contact);
+    AppActions.editContact(contact);
   }
 
   handleDelete = () => {

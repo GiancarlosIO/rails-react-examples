@@ -31749,6 +31749,10 @@
 
 	var _contactList4 = _interopRequireDefault(_contactList3);
 
+	var _editForm = __webpack_require__(310);
+
+	var _editForm2 = _interopRequireDefault(_editForm);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -31770,7 +31774,8 @@
 
 	function getAppState() {
 	  return {
-	    contacts: _app4.default.getContacts()
+	    contacts: _app4.default.getContacts(),
+	    contactToEdit: _app4.default.getContactToEdit()
 	  };
 	}
 
@@ -31803,9 +31808,12 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.log(this.state.contacts);
-	      var contacts = this.state.contacts;
+	      console.log(this.state);
+	      var _state = this.state,
+	          contacts = _state.contacts,
+	          contactToEdit = _state.contactToEdit;
 
+	      var form = contactToEdit.id === undefined ? _react2.default.createElement(_addForm2.default, null) : _react2.default.createElement(_editForm2.default, { contactToEdit: contactToEdit });
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'row center-xs' },
@@ -31815,7 +31823,7 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'box' },
-	            _react2.default.createElement(_addForm2.default, null),
+	            form,
 	            _react2.default.createElement(_contactList4.default, { contacts: contacts })
 	          )
 	        )
@@ -31868,6 +31876,24 @@
 	    _app2.default.handleViewAction({
 	      actionType: _app4.default.DELETE_CONTACT,
 	      contact_id: id
+	    });
+	  },
+	  editContact: function editContact(contact) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.EDIT_CONTACT,
+	      contact: contact
+	    });
+	  },
+	  updateContact: function updateContact(id, contact) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.UPDATE_CONTACT,
+	      contact_id: id,
+	      contact: contact
+	    });
+	  },
+	  cancelUpdateContact: function cancelUpdateContact() {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.CANCEL_UPDATE_CONTACT
 	    });
 	  }
 	};
@@ -32169,7 +32195,10 @@
 	var APP_CONSTANTS = {
 	  SAVE_CONTACT: 'SAVE_CONTACT',
 	  RECEIVE_CONTACTS: 'RECEIVE_CONTACTS',
-	  DELETE_CONTACT: 'DELETE_CONTACT'
+	  DELETE_CONTACT: 'DELETE_CONTACT',
+	  EDIT_CONTACT: 'EDIT_CONTACT',
+	  UPDATE_CONTACT: 'UPDATE_CONTACT',
+	  CANCEL_UPDATE_CONTACT: 'CANCEL_UPDATE_CONTACT'
 	};
 
 	exports.default = APP_CONSTANTS;
@@ -32207,14 +32236,18 @@
 	var CHANGE_EVENT = 'change';
 
 	var _contacts = [];
+	var _contactToEdit = {};
 
 	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
+	  getContacts: function getContacts() {
+	    return _contacts;
+	  },
+	  getContactToEdit: function getContactToEdit() {
+	    return _contactToEdit;
+	  },
 	  saveContact: function saveContact(contact) {
 	    var newContacts = [contact].concat(_contacts);
 	    _contacts = newContacts;
-	  },
-	  getContacts: function getContacts() {
-	    return _contacts;
 	  },
 	  setContacts: function setContacts(contacts) {
 	    _contacts = contacts;
@@ -32223,7 +32256,24 @@
 	    var index = _contacts.findIndex(function (x) {
 	      return x.id == contact_id;
 	    });
+	    if (contact_id === _contactToEdit.id) {
+	      _contactToEdit = {};
+	    }
 	    _contacts.splice(index, 1);
+	  },
+	  setContactToEdit: function setContactToEdit(contact) {
+	    _contactToEdit = contact;
+	  },
+	  updateContact: function updateContact(contact) {
+	    var index = _contacts.findIndex(function (x) {
+	      return x.id == contact.id;
+	    });
+	    _contacts[index].name = contact.name;
+	    _contacts[index].phone_number = contact.phone_number;
+	    _contacts[index].email = contact.email;
+	  },
+	  cancelUpdateContact: function cancelUpdateContact() {
+	    _contactToEdit = {};
 	  },
 	  emitChange: function emitChange() {
 	    this.emit(CHANGE_EVENT);
@@ -32244,7 +32294,7 @@
 	      // Save in API
 	      _contactList2.default.createContact(action.contact).request.then(function (response) {
 	        // Store save
-	        AppStore.saveContact(action.contact);
+	        AppStore.saveContact(response.data);
 	        // Emit a change
 	        AppStore.emit(CHANGE_EVENT);
 	      }, function (error) {
@@ -32273,6 +32323,31 @@
 	      }).catch(function (error) {
 	        return console.log(error);
 	      });
+	      break;
+	    case _app4.default.EDIT_CONTACT:
+	      // Set contact in store
+	      AppStore.setContactToEdit(action.contact);
+	      // Emit a change
+	      AppStore.emit(CHANGE_EVENT);
+	      break;
+	    case _app4.default.UPDATE_CONTACT:
+	      // Update in API
+	      _contactList2.default.updateContact(action.contact_id, action.contact).request.then(function (response) {
+	        // Save in Store
+	        AppStore.updateContact(response.data);
+	        // Emit a change
+	        AppStore.emit(CHANGE_EVENT);
+	      }, function (error) {
+	        console.log(error);
+	      }).catch(function (error) {
+	        return console.log(error);
+	      });
+	      break;
+	    case _app4.default.CANCEL_UPDATE_CONTACT:
+	      // Edit store
+	      AppStore.cancelUpdateContact();
+	      // Emit a change
+	      AppStore.emit(CHANGE_EVENT);
 	      break;
 	  }
 	  return true;
@@ -32651,7 +32726,20 @@
 	    });
 	    return { request: request, cancel: cancel };
 	  },
-	  getContact: function getContact() {}
+	  updateContact: function updateContact(id, contact) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'put',
+	      url: BASE_URL + '/' + id,
+	      responseType: 'json',
+	      data: { contact: contact },
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  }
 	};
 
 	exports.default = CONTACT_API;
@@ -32694,9 +32782,9 @@
 
 	    _this.onSubmit = function (e) {
 	      e.preventDefault();
-	      var name = _this.inputName.value.trim(),
-	          phone_number = _this.inputPhone.value.trim(),
-	          email = _this.inputEmail.value.trim();
+	      var name = _this.inputName.value,
+	          phone_number = _this.inputPhone.value,
+	          email = _this.inputEmail.value;
 	      if (name.length > 0 && phone_number.length > 0 && email.length > 0) {
 	        var contact = {
 	          name: name,
@@ -32747,7 +32835,7 @@
 	            _react2.default.createElement(
 	              'label',
 	              null,
-	              'Phone Number'
+	              'Phone'
 	            ),
 	            _react2.default.createElement('input', { className: 'form__input', type: 'text', ref: function ref(input) {
 	                return _this2.inputPhone = input;
@@ -32771,7 +32859,7 @@
 	            _react2.default.createElement(
 	              'button',
 	              { type: 'submit', className: 'button button--medium button--blue' },
-	              'Submit'
+	              'Create contact'
 	            )
 	          )
 	        )
@@ -32911,6 +32999,10 @@
 
 	var _app2 = _interopRequireDefault(_app);
 
+	var _objectAssign = __webpack_require__(5);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -32928,7 +33020,8 @@
 	    var _this = _possibleConstructorReturn(this, (Contact.__proto__ || Object.getPrototypeOf(Contact)).call(this, props));
 
 	    _this.handleEdit = function () {
-	      var contact = _this.props.contact;
+	      var contact = (0, _objectAssign2.default)({}, _this.props.contact);
+	      _app2.default.editContact(contact);
 	    };
 
 	    _this.handleDelete = function () {
@@ -32997,6 +33090,198 @@
 
 	Contact.propTypes = {
 	  contact: _react2.default.PropTypes.object.isRequired
+	};
+
+/***/ },
+/* 310 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(299);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EditForm = function (_React$Component) {
+	  _inherits(EditForm, _React$Component);
+
+	  function EditForm(props) {
+	    _classCallCheck(this, EditForm);
+
+	    var _this = _possibleConstructorReturn(this, (EditForm.__proto__ || Object.getPrototypeOf(EditForm)).call(this, props));
+
+	    _this.handleCancelUpdate = function () {
+	      _app2.default.cancelUpdateContact();
+	    };
+
+	    _this.onSubmit = function (e) {
+	      e.preventDefault();
+	      var contactToEdit = _this.props.contactToEdit;
+	      var name = _this.inputName.value,
+	          phone_number = _this.inputPhone.value,
+	          email = _this.inputEmail.value;
+	      if (name.length > 0 && phone_number.length > 0 && email.length > 0) {
+	        var contact = {
+	          name: name,
+	          phone_number: phone_number,
+	          email: email
+	        };
+	        _app2.default.updateContact(contactToEdit.id, contact);
+	      }
+	    };
+
+	    _this.onChange = function (name) {
+	      switch (name) {
+	        case 'name':
+	          if (_this.inputName.value.length > 0) {
+	            var newContact = _this.state.contactToEdit;
+	            newContact.name = _this.inputName.value.trim();
+	            _this.setState({ contactToEdit: newContact });
+	          }
+	          break;
+	        case 'phone':
+	          if (_this.inputPhone.value.length > 0) {
+	            var _newContact = _this.state.contactToEdit;
+	            _newContact.phone_number = _this.inputPhone.value;
+	            _this.setState({ contactToEdit: _newContact });
+	          }
+	          break;
+	        case 'email':
+	          if (_this.inputEmail.value.length > 0) {
+	            var _newContact2 = _this.state.contactToEdit;
+	            _newContact2.email = _this.inputEmail.value;
+	            _this.setState({ contactToEdit: _newContact2 });
+	          }
+	          break;
+	      }
+	    };
+
+	    _this.state = {
+	      contactToEdit: _this.props.contactToEdit
+	    };
+	    return _this;
+	  }
+
+	  _createClass(EditForm, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      this.setState({ contactToEdit: nextProps.contactToEdit });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var contactToEdit = this.state.contactToEdit;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row center-xs' },
+	        _react2.default.createElement(
+	          'h3',
+	          { className: 'full-width' },
+	          'Edit Contact'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { className: 'col-xs-12 form',
+	            onSubmit: this.onSubmit },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              ' Name '
+	            ),
+	            _react2.default.createElement('input', { className: 'form__input',
+	              type: 'text',
+	              ref: function ref(input) {
+	                return _this2.inputName = input;
+	              },
+	              onChange: this.onChange.bind(this, 'name'),
+	              value: contactToEdit.name })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              ' Phone '
+	            ),
+	            _react2.default.createElement('input', { className: 'form__input',
+	              type: 'text',
+	              ref: function ref(input) {
+	                return _this2.inputPhone = input;
+	              },
+	              onChange: this.onChange.bind(this, 'phone'),
+	              value: contactToEdit.phone_number })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              ' Email '
+	            ),
+	            _react2.default.createElement('input', { className: 'form__input',
+	              type: 'text',
+	              ref: function ref(input) {
+	                return _this2.inputEmail = input;
+	              },
+	              onChange: this.onChange.bind(this, 'email'),
+	              value: contactToEdit.email })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'button',
+	              { type: 'submit',
+	                className: 'button button--medium button--blue' },
+	              'Update contact'
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              {
+	                onClick: this.handleCancelUpdate,
+	                className: 'margin-left-15 button button--medium button--emerald' },
+	              'Cancel'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return EditForm;
+	}(_react2.default.Component);
+
+	exports.default = EditForm;
+
+
+	EditForm.propTypes = {
+	  contactToEdit: _react2.default.PropTypes.object.isRequired
 	};
 
 /***/ }

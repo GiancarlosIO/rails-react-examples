@@ -5,6 +5,7 @@ import CONTACT_API from './utils/api/contactList.api';
 
 import AddForm from './components/addForm.component';
 import ContactList from './components/contactList.component';
+import EditForm from './components/editForm.component';
 
 // ===== Get the contacts list ======
 CONTACT_API.getContactList().request.then(
@@ -18,7 +19,8 @@ CONTACT_API.getContactList().request.then(
 
 function getAppState() {
   return {
-    contacts: AppStore.getContacts()
+    contacts: AppStore.getContacts(),
+    contactToEdit: AppStore.getContactToEdit()
   }
 }
 
@@ -37,13 +39,14 @@ export default class ContactListMainComponent extends React.Component {
   }
 
   render() {
-    console.log(this.state.contacts);
-    let {contacts} = this.state;
+    console.log(this.state);
+    let {contacts, contactToEdit} = this.state;
+    let form = contactToEdit.id === undefined ? (<AddForm />) : (<EditForm contactToEdit={contactToEdit}/>)
     return (
       <div className="row center-xs">
         <div className="col-xs-12">
           <div className="box">
-            <AddForm />
+            {form}
             <ContactList contacts={contacts}/>
           </div>
         </div>

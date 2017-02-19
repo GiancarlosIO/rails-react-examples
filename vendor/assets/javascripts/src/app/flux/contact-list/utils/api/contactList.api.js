@@ -38,8 +38,17 @@ const CONTACT_API = {
     });
     return { request, cancel }
   },
-  getContact: () => {
-
+  updateContact: (id, contact) => {
+    let CancelToken = axios.CancelToken;
+    let cancel;
+    let request = axios({
+      method: 'put',
+      url: `${BASE_URL}/${id}`,
+      responseType: 'json',
+      data: {contact},
+      cancelToken: new CancelToken( c => cancel = c )
+    });
+    return { request, cancel };
   }
 }
 
