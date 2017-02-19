@@ -1,8 +1,13 @@
 import AppDispatcher from '../dispatcher/app.dispatcher';
-import AppContants from '../constants/app.constants';
+import AppConstants from '../constants/app.constants';
 
 var AppActions = {
-
+  saveContact: (contact) => {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.SAVE_CONTACT,
+      contact: contact
+    })
+  }
 }
 
 export default AppActions;

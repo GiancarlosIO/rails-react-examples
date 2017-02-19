@@ -1,8 +1,8 @@
 import {Dispatcher} from 'flux';
-import assign from 'object-assign';
+import objectAssign from 'object-assign';
 
-var AppDispatcher = assign(new Dispatcher(), {
-  handleViewAction: (action) => {
+var AppDispatcher = objectAssign(new Dispatcher(), {
+  handleViewAction: function(action) {
     let payload = {
       source: 'VIEW_ACTION',
       action: action

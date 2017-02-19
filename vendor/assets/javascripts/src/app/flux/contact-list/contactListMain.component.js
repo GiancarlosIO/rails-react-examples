@@ -1,11 +1,12 @@
 import React from 'react';
-import CONTACT_API from './utils/api/contactList.api';
 import AppActions from './actions/app.action';
 import AppStore from './stores/app.store';
 
+import AddForm from './components/addForm.component';
+
 function getAppState() {
   return {
-    
+    contacts: AppStore.getContacts()
   }
 }
 
@@ -24,9 +25,14 @@ export default class ContactListMainComponent extends React.Component {
   }
 
   render() {
+    console.log(this.state.contacts);
     return (
-      <div>
-        <h1>ContactListMainComponent</h1>
+      <div className="row center-xs">
+        <div className="col-xs-12">
+          <div className="box">
+            <AddForm />
+          </div>
+        </div>
       </div>
     )
   }

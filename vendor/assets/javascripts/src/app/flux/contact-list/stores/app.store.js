@@ -1,14 +1,20 @@
 import AppDispatcher from '../dispatcher/app.dispatcher';
 import AppConstants from '../constants/app.constants';
-var EventEmitter = require('events').EventEmitter;
+import {EventEmitter} from 'events';
 import objectAssign from 'object-assign';
 import CONTACT_API from '../utils/api/contactList.api';
 
 var CHANGE_EVENT = 'change';
 
-var _items = [];
+var _contacts = [];
 
 var AppStore = objectAssign({}, EventEmitter.prototype, {
+  saveContact: function(contact) {
+    _contacts.push(contact);
+  },
+  getContacts: function() {
+    return _contacts;
+  },
   emitChange: function() {
     this.emit(CHANGE_EVENT);
   },
@@ -23,7 +29,14 @@ var AppStore = objectAssign({}, EventEmitter.prototype, {
 AppDispatcher.register((payload) => {
   let action = payload.action;
   switch (action.actionType) {
+    case AppConstants.SAVE_CONTACT:
+      console.log('saving contact...');
+      // Store save
+      AppStore.saveContact(action.contact);
 
+      // Emit a change
+      AppStore.emit(CHANGE_EVENT);
+      break;
   }
   return true;
 });
