@@ -31745,6 +31745,10 @@
 
 	var _addForm2 = _interopRequireDefault(_addForm);
 
+	var _contactList3 = __webpack_require__(308);
+
+	var _contactList4 = _interopRequireDefault(_contactList3);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -31753,14 +31757,16 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	// Get the contacts list
+	// ===== Get the contacts list ======
 	_contactList2.default.getContactList().request.then(function (response) {
-	  _app2.default.receiveContacts(response.data);
+	  _app2.default.receiveContacts(response.data.contacts);
 	}, function (error) {
 	  console.log(error);
 	}).catch(function (error) {
 	  return console.log(error);
 	});
+	// ===== End Get the contacts list ======
+
 
 	function getAppState() {
 	  return {
@@ -31798,6 +31804,8 @@
 	    key: 'render',
 	    value: function render() {
 	      console.log(this.state.contacts);
+	      var contacts = this.state.contacts;
+
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'row center-xs' },
@@ -31807,7 +31815,8 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'box' },
-	            _react2.default.createElement(_addForm2.default, null)
+	            _react2.default.createElement(_addForm2.default, null),
+	            _react2.default.createElement(_contactList4.default, { contacts: contacts })
 	          )
 	        )
 	      );
@@ -31853,6 +31862,12 @@
 	    _app2.default.handleViewAction({
 	      actionType: _app4.default.RECEIVE_CONTACTS,
 	      contacts: contacts
+	    });
+	  },
+	  deleteContact: function deleteContact(id) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.DELETE_CONTACT,
+	      contact_id: id
 	    });
 	  }
 	};
@@ -32153,7 +32168,8 @@
 	});
 	var APP_CONSTANTS = {
 	  SAVE_CONTACT: 'SAVE_CONTACT',
-	  RECEIVE_CONTACTS: 'RECEIVE_CONTACTS'
+	  RECEIVE_CONTACTS: 'RECEIVE_CONTACTS',
+	  DELETE_CONTACT: 'DELETE_CONTACT'
 	};
 
 	exports.default = APP_CONSTANTS;
@@ -32194,13 +32210,20 @@
 
 	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
 	  saveContact: function saveContact(contact) {
-	    _contacts.push(contact);
+	    var newContacts = [contact].concat(_contacts);
+	    _contacts = newContacts;
 	  },
 	  getContacts: function getContacts() {
 	    return _contacts;
 	  },
 	  setContacts: function setContacts(contacts) {
 	    _contacts = contacts;
+	  },
+	  deleteContact: function deleteContact(contact_id) {
+	    var index = _contacts.findIndex(function (x) {
+	      return x.id == contact_id;
+	    });
+	    _contacts.splice(index, 1);
 	  },
 	  emitChange: function emitChange() {
 	    this.emit(CHANGE_EVENT);
@@ -32236,6 +32259,20 @@
 	      AppStore.setContacts(action.contacts);
 	      // Emit a change
 	      AppStore.emit(CHANGE_EVENT);
+	      break;
+	    case _app4.default.DELETE_CONTACT:
+	      console.log('removing contact');
+	      // Delete in API
+	      _contactList2.default.deleteContact(action.contact_id).request.then(function (response) {
+	        // Delete in Store
+	        AppStore.deleteContact(action.contact_id);
+	        // Emit a change
+	        AppStore.emit(CHANGE_EVENT);
+	      }, function (error) {
+	        console.log(error);
+	      }).catch(function (error) {
+	        return console.log(error);
+	      });
 	      break;
 	  }
 	  return true;
@@ -32601,6 +32638,19 @@
 	    });
 	    return { request: request, cancel: cancel };
 	  },
+	  deleteContact: function deleteContact(id) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'delete',
+	      url: BASE_URL + '/' + id,
+	      responseType: 'json',
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
 	  getContact: function getContact() {}
 	};
 
@@ -32733,6 +32783,221 @@
 	}(_react2.default.Component);
 
 	exports.default = AddForm;
+
+/***/ },
+/* 308 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _contact = __webpack_require__(309);
+
+	var _contact2 = _interopRequireDefault(_contact);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ContactList = function (_React$Component) {
+	  _inherits(ContactList, _React$Component);
+
+	  function ContactList(props) {
+	    _classCallCheck(this, ContactList);
+
+	    return _possibleConstructorReturn(this, (ContactList.__proto__ || Object.getPrototypeOf(ContactList)).call(this, props));
+	  }
+
+	  _createClass(ContactList, [{
+	    key: 'render',
+	    value: function render() {
+	      var contacts = this.props.contacts;
+
+	      var contactList = contacts.map(function (contact) {
+	        return _react2.default.createElement(_contact2.default, { key: contact.id, contact: contact });
+	      });
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row center-xs' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-lg-12 col-md-12 col-sm-12 col-xs-12' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(
+	              'table',
+	              { className: 'full-width' },
+	              _react2.default.createElement(
+	                'thead',
+	                null,
+	                _react2.default.createElement(
+	                  'tr',
+	                  null,
+	                  _react2.default.createElement(
+	                    'th',
+	                    null,
+	                    'Name'
+	                  ),
+	                  _react2.default.createElement(
+	                    'th',
+	                    null,
+	                    'Phone'
+	                  ),
+	                  _react2.default.createElement(
+	                    'th',
+	                    null,
+	                    'Email'
+	                  ),
+	                  _react2.default.createElement(
+	                    'th',
+	                    { colSpan: '2' },
+	                    'Actions'
+	                  )
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'tbody',
+	                null,
+	                contactList
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return ContactList;
+	}(_react2.default.Component);
+
+	exports.default = ContactList;
+
+
+	ContactList.propTypes = {
+	  contacts: _react2.default.PropTypes.array.isRequired
+	};
+
+/***/ },
+/* 309 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(299);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Contact = function (_React$Component) {
+	  _inherits(Contact, _React$Component);
+
+	  function Contact(props) {
+	    _classCallCheck(this, Contact);
+
+	    var _this = _possibleConstructorReturn(this, (Contact.__proto__ || Object.getPrototypeOf(Contact)).call(this, props));
+
+	    _this.handleEdit = function () {
+	      var contact = _this.props.contact;
+	    };
+
+	    _this.handleDelete = function () {
+	      var contact = _this.props.contact;
+
+	      _app2.default.deleteContact(contact.id);
+	    };
+
+	    return _this;
+	  }
+
+	  _createClass(Contact, [{
+	    key: 'render',
+	    value: function render() {
+	      var contact = this.props.contact;
+
+	      return _react2.default.createElement(
+	        'tr',
+	        null,
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          contact.name
+	        ),
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          contact.phone_number
+	        ),
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          contact.email
+	        ),
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          _react2.default.createElement(
+	            'button',
+	            {
+	              onClick: this.handleEdit,
+	              className: 'button button--min button--grey' },
+	            'Edit'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          _react2.default.createElement(
+	            'button',
+	            {
+	              onClick: this.handleDelete,
+	              className: 'button button--min button--grey' },
+	            'Delete'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Contact;
+	}(_react2.default.Component);
+
+	exports.default = Contact;
+
+
+	Contact.propTypes = {
+	  contact: _react2.default.PropTypes.object.isRequired
+	};
 
 /***/ }
 /******/ ]);

@@ -1,6 +1,33 @@
 div, ul, table, form, input {
   box-sizing: border-box;
 }
+table {
+  background-color: #fff;
+  padding: 15px 0;
+  thead {
+    background-color: rgba(0,0,0,0.3);
+    tr {
+      th {
+        padding: 10px 0;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 300;
+        font-family: sans-serif;
+        text-align: center;
+      }
+    }
+  }
+  tbody {
+    tr {
+      height: 50px;
+      font-size: 14px;
+      font-weight: 300;
+      font-family: sans-serif;
+      text-align: center;
+      border-bottom: 1px solid rgba(0,0,0,0.2);
+    }
+  }
+}
 img {
   width: 100%;
   height: auto;
