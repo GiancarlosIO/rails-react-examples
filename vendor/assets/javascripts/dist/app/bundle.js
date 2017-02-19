@@ -31737,7 +31737,7 @@
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _app3 = __webpack_require__(303);
+	var _app3 = __webpack_require__(305);
 
 	var _app4 = _interopRequireDefault(_app3);
 
@@ -31832,7 +31832,7 @@
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _app3 = __webpack_require__(302);
+	var _app3 = __webpack_require__(304);
 
 	var _app4 = _interopRequireDefault(_app3);
 
@@ -31852,7 +31852,7 @@
 	  value: true
 	});
 
-	var _flux = __webpack_require__(304);
+	var _flux = __webpack_require__(302);
 
 	var _objectAssign = __webpack_require__(5);
 
@@ -31874,75 +31874,6 @@
 
 /***/ },
 /* 302 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var APP_CONSTANTS = {};
-
-	exports.default = APP_CONSTANTS;
-
-/***/ },
-/* 303 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _app = __webpack_require__(301);
-
-	var _app2 = _interopRequireDefault(_app);
-
-	var _app3 = __webpack_require__(302);
-
-	var _app4 = _interopRequireDefault(_app3);
-
-	var _events = __webpack_require__(306);
-
-	var _events2 = _interopRequireDefault(_events);
-
-	var _objectAssign = __webpack_require__(5);
-
-	var _objectAssign2 = _interopRequireDefault(_objectAssign);
-
-	var _contactList = __webpack_require__(299);
-
-	var _contactList2 = _interopRequireDefault(_contactList);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var CHANGE_EVENT = 'change';
-
-	var _items = [];
-
-	var AppStore = (0, _objectAssign2.default)({}, _events2.default.prototype, {
-	  emitChange: function emitChange() {
-	    undefined.emit(CHANGE_EVENT);
-	  },
-	  addChangeListener: function addChangeListener() {
-	    undefined.on(CHANGE_EVENT, callback);
-	  },
-	  removeChangeListener: function removeChangeListener() {
-	    undefined.removeListener(CHANGE_EVENT, callback);
-	  }
-	});
-
-	_app2.default.register(function (payload) {
-	  var action = payload.action;
-	  switch (action.actionType) {}
-	  return true;
-	});
-
-	exports.default = AppStore;
-
-/***/ },
-/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31954,11 +31885,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 
-	module.exports.Dispatcher = __webpack_require__(305);
+	module.exports.Dispatcher = __webpack_require__(303);
 
 
 /***/ },
-/* 305 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -32193,6 +32124,74 @@
 
 	module.exports = Dispatcher;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 304 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var APP_CONSTANTS = {};
+
+	exports.default = APP_CONSTANTS;
+
+/***/ },
+/* 305 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _app = __webpack_require__(301);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(304);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	var _objectAssign = __webpack_require__(5);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	var _contactList = __webpack_require__(299);
+
+	var _contactList2 = _interopRequireDefault(_contactList);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var EventEmitter = __webpack_require__(306).EventEmitter;
+
+
+	var CHANGE_EVENT = 'change';
+
+	var _items = [];
+
+	var AppStore = (0, _objectAssign2.default)({}, EventEmitter.prototype, {
+	  emitChange: function emitChange() {
+	    this.emit(CHANGE_EVENT);
+	  },
+	  addChangeListener: function addChangeListener(callback) {
+	    this.on(CHANGE_EVENT, callback);
+	  },
+	  removeChangeListener: function removeChangeListener(callback) {
+	    this.removeListener(CHANGE_EVENT, callback);
+	  }
+	});
+
+	_app2.default.register(function (payload) {
+	  var action = payload.action;
+	  switch (action.actionType) {}
+	  return true;
+	});
+
+	exports.default = AppStore;
 
 /***/ },
 /* 306 */

@@ -1,21 +1,21 @@
 import AppDispatcher from '../dispatcher/app.dispatcher';
 import AppConstants from '../constants/app.constants';
-import EventEmitter from 'events';
-import assign from 'object-assign';
+var EventEmitter = require('events').EventEmitter;
+import objectAssign from 'object-assign';
 import CONTACT_API from '../utils/api/contactList.api';
 
 var CHANGE_EVENT = 'change';
 
 var _items = [];
 
-var AppStore = assign({}, EventEmitter.prototype, {
-  emitChange: () => {
+var AppStore = objectAssign({}, EventEmitter.prototype, {
+  emitChange: function() {
     this.emit(CHANGE_EVENT);
   },
-  addChangeListener: () => {
+  addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
-  removeChangeListener: () => {
+  removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   }
 });
