@@ -16,7 +16,6 @@ CONTACT_API.getContactList().request.then(
 ).catch( error => console.log(error) )
 // ===== End Get the contacts list ======
 
-
 function getAppState() {
   return {
     contacts: AppStore.getContacts(),

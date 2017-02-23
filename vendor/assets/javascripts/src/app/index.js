@@ -10,6 +10,7 @@ import MovieWrapperComponent from './components/movie_find/components/movieWrapp
 import WeatherMainComponent from './components/weather/main.component';
 import NoteMainComponent from './components/simplenote/main.component';
 import ContactListMainComponent from './flux/contact-list/contactListMain.component';
+import StickyPadMainComponent from './flux/stickypad/stickypadMain.component';
 
 $(document).on('ready', () => {
   ReactDOM.render(
@@ -22,6 +23,7 @@ $(document).on('ready', () => {
         <Route path="/weather" component={WeatherMainComponent}></Route>
         <Route path="/simplenote" component={NoteMainComponent}></Route>
         <Route path="/contact-list" component={ContactListMainComponent}></Route>
+        <Route path="/sticky-pads" component={StickyPadMainComponent}></Route>
       </Route>
     </Router>,
   document.getElementById('app-wrapper'))

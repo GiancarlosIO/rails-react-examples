@@ -95,6 +95,10 @@
 
 	var _contactListMain2 = _interopRequireDefault(_contactListMain);
 
+	var _stickypadMain = __webpack_require__(311);
+
+	var _stickypadMain2 = _interopRequireDefault(_stickypadMain);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	$(document).on('ready', function () {
@@ -110,7 +114,8 @@
 	      _react2.default.createElement(_reactRouter.Route, { path: '/movies/:movie_id', component: _movieWrapper2.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/weather', component: _main8.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/simplenote', component: _main10.default }),
-	      _react2.default.createElement(_reactRouter.Route, { path: '/contact-list', component: _contactListMain2.default })
+	      _react2.default.createElement(_reactRouter.Route, { path: '/contact-list', component: _contactListMain2.default }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/sticky-pads', component: _stickypadMain2.default })
 	    )
 	  ), document.getElementById('app-wrapper'));
 	});
@@ -26583,6 +26588,15 @@
 	          { to: '/contact-list', activeClassName: 'link__active' },
 	          'Contact List(FLUX)'
 	        )
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/sticky-pads', activeClassName: 'link__active' },
+	          'Sticky Pads(FLUX)'
+	        )
 	      )
 	    )
 	  );
@@ -31771,7 +31785,6 @@
 	});
 	// ===== End Get the contacts list ======
 
-
 	function getAppState() {
 	  return {
 	    contacts: _app4.default.getContacts(),
@@ -31808,7 +31821,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.log(this.state);
 	      var _state = this.state,
 	          contacts = _state.contacts,
 	          contactToEdit = _state.contactToEdit;
@@ -32325,12 +32337,14 @@
 	      });
 	      break;
 	    case _app4.default.EDIT_CONTACT:
+	      console.log('Editing contact');
 	      // Set contact in store
 	      AppStore.setContactToEdit(action.contact);
 	      // Emit a change
 	      AppStore.emit(CHANGE_EVENT);
 	      break;
 	    case _app4.default.UPDATE_CONTACT:
+	      console.log('Updating contact');
 	      // Update in API
 	      _contactList2.default.updateContact(action.contact_id, action.contact).request.then(function (response) {
 	        // Save in Store
@@ -33283,6 +33297,84 @@
 	EditForm.propTypes = {
 	  contactToEdit: _react2.default.PropTypes.object.isRequired
 	};
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// === function callback to get the state ==== //
+	function getAppState() {
+	  return {};
+	} // === function callback to get the state ==== //
+
+	var StickyPadMainComponent = function (_React$Component) {
+	  _inherits(StickyPadMainComponent, _React$Component);
+
+	  function StickyPadMainComponent(props) {
+	    _classCallCheck(this, StickyPadMainComponent);
+
+	    var _this = _possibleConstructorReturn(this, (StickyPadMainComponent.__proto__ || Object.getPrototypeOf(StickyPadMainComponent)).call(this, props));
+
+	    _this._onChange = function () {
+	      _this.setState(getAppState);
+	    };
+
+	    return _this;
+	  }
+
+	  _createClass(StickyPadMainComponent, [{
+	    key: "componentDidMount",
+	    value: function componentDidMount() {
+	      //AppStore.addChangeListener(this._onChange);
+	    }
+	  }, {
+	    key: "componentWillUnmount",
+	    value: function componentWillUnmount() {
+	      //AppStore.removeChangeListener(this._change);
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "row" },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "col-xs-12 col-lg-5" },
+	          _react2.default.createElement(
+	            "h1",
+	            null,
+	            "Stickypad component"
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return StickyPadMainComponent;
+	}(_react2.default.Component);
+
+	exports.default = StickyPadMainComponent;
 
 /***/ }
 /******/ ]);
