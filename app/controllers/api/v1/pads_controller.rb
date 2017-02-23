@@ -45,7 +45,7 @@ class Api::V1::PadsController < Api::V1::ApiController
     end
   end
 
-  def params_contact
+  def params_pad
     params.require(:pad).permit(:text)
   end
 end

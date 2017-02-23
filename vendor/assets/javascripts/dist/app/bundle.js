@@ -33318,17 +33318,21 @@
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _app3 = __webpack_require__(313);
+	var _app3 = __webpack_require__(315);
 
 	var _app4 = _interopRequireDefault(_app3);
 
-	var _api = __webpack_require__(317);
+	var _api = __webpack_require__(316);
 
 	var _api2 = _interopRequireDefault(_api);
 
-	var _addNoteForm = __webpack_require__(316);
+	var _addNoteForm = __webpack_require__(317);
 
 	var _addNoteForm2 = _interopRequireDefault(_addNoteForm);
+
+	var _noteList = __webpack_require__(318);
+
+	var _noteList2 = _interopRequireDefault(_noteList);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33337,6 +33341,16 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// ===== Get the stickypads list ===== //
+	_api2.default.getNotes().request.then(function (response) {
+	  _app2.default.receiveNotes(response.data.pads);
+	}, function (error) {
+	  console.log(error);
+	}).catch(function (error) {
+	  return console.log(error);
+	});
+	// ===== end of Get the stickypads list ===== //
 
 	// === function callback to get the state ==== //
 	function getAppState() {
@@ -33357,6 +33371,9 @@
 	      _this.setState(getAppState);
 	    };
 
+	    _this.state = {
+	      notes: []
+	    };
 	    return _this;
 	  }
 
@@ -33368,12 +33385,14 @@
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
-	      _app4.default.removeChangeListener(this._change);
+	      _app4.default.removeChangeListener(this._onChange);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      console.log(this.state);
+	      var notes = this.state.notes;
+
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'row' },
@@ -33388,17 +33407,7 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'box' },
-	            'Note List',
-	            _react2.default.createElement(
-	              'p',
-	              null,
-	              'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-	            ),
-	            _react2.default.createElement(
-	              'p',
-	              null,
-	              'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-	            )
+	            _react2.default.createElement(_noteList2.default, { notes: notes })
 	          )
 	        )
 	      );
@@ -33420,17 +33429,23 @@
 	  value: true
 	});
 
-	var _app = __webpack_require__(314);
+	var _app = __webpack_require__(313);
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _app3 = __webpack_require__(315);
+	var _app3 = __webpack_require__(314);
 
 	var _app4 = _interopRequireDefault(_app3);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var AppActions = {
+	  receiveNotes: function receiveNotes(notes) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.RECEIVE_NOTES,
+	      notes: notes
+	    });
+	  },
 	  addNote: function addNote(note) {
 	    _app2.default.handleViewAction({
 	      actionType: _app4.default.ADD_NOTE,
@@ -33443,79 +33458,6 @@
 
 /***/ },
 /* 313 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _app = __webpack_require__(314);
-
-	var _app2 = _interopRequireDefault(_app);
-
-	var _app3 = __webpack_require__(315);
-
-	var _app4 = _interopRequireDefault(_app3);
-
-	var _api = __webpack_require__(317);
-
-	var _api2 = _interopRequireDefault(_api);
-
-	var _events = __webpack_require__(305);
-
-	var _objectAssign = __webpack_require__(5);
-
-	var _objectAssign2 = _interopRequireDefault(_objectAssign);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var CHANGE_EVENT = 'change';
-
-	var _notes = [];
-
-	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
-	  addNote: function addNote(note) {
-	    _notes.push(note);
-	  },
-
-	  getNotes: function getNotes() {
-	    return _notes;
-	  },
-
-	  emitChange: function emitChange() {
-	    this.emit(CHANGE_EVENT);
-	  },
-	  addChangeListener: function addChangeListener(callback) {
-	    this.on(CHANGE_EVENT, callback);
-	  },
-	  removeChangeListener: function removeChangeListener(callback) {
-	    this.removeChangeListener(CHANGE_EVENT, callback);
-	  }
-	});
-
-	_app2.default.register(function (payload) {
-	  var action = payload.action;
-	  switch (action.actionType) {
-	    case _app4.default.ADD_NOTE:
-	      console.log('Adding note');
-	      // Save store
-	      AppStore.addNote(action.note);
-
-	      // Save api
-	      _api2.default.addNote(note);
-	      // Emit a change
-	      AppStore.emitChange();
-	      break;
-	  };
-	  return true;
-	});
-
-	exports.default = AppStore;
-
-/***/ },
-/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33545,7 +33487,7 @@
 	exports.default = AppDispatcher;
 
 /***/ },
-/* 315 */
+/* 314 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33554,13 +33496,156 @@
 	  value: true
 	});
 	var APP_CONSTANTS = {
+	  RECEIVE_NOTES: 'RECEIVE_NOTES',
 	  ADD_NOTE: 'ADD_NOTE'
 	};
 
 	exports.default = APP_CONSTANTS;
 
 /***/ },
+/* 315 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _app = __webpack_require__(313);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(314);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	var _api = __webpack_require__(316);
+
+	var _api2 = _interopRequireDefault(_api);
+
+	var _events = __webpack_require__(305);
+
+	var _objectAssign = __webpack_require__(5);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CHANGE_EVENT = 'change';
+
+	var _notes = [];
+
+	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
+	  setNotes: function setNotes(notes) {
+	    _notes = notes;
+	  },
+	  addNote: function addNote(note) {
+	    _notes = [note].concat(_notes);
+	  },
+
+	  getNotes: function getNotes() {
+	    return _notes;
+	  },
+
+	  emitChange: function emitChange() {
+	    this.emit(CHANGE_EVENT);
+	  },
+	  addChangeListener: function addChangeListener(callback) {
+	    this.on(CHANGE_EVENT, callback);
+	  },
+	  removeChangeListener: function removeChangeListener(callback) {
+	    this.removeListener(CHANGE_EVENT, callback);
+	  }
+	});
+
+	_app2.default.register(function (payload) {
+	  var action = payload.action;
+	  switch (action.actionType) {
+	    case _app4.default.ADD_NOTE:
+	      console.log('Adding note');
+
+	      // Save store
+	      AppStore.addNote(action.note);
+
+	      // Save api
+	      _api2.default.addNote(action.note).request.then(function (response) {
+	        console.log('Added successfully to db');
+	      }, function (error) {
+	        console.log(error);
+	      }).catch(function (error) {
+	        return console.log(error);
+	      });
+
+	      // Emit a change
+	      AppStore.emitChange();
+	      break;
+	    case _app4.default.RECEIVE_NOTES:
+	      console.log('Receiving Notes');
+	      // Save to Store
+	      AppStore.setNotes(action.notes);
+
+	      // Emit a change
+	      AppStore.emitChange();
+	      break;
+	  };
+	  return true;
+	});
+
+	exports.default = AppStore;
+
+/***/ },
 /* 316 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _axios = __webpack_require__(260);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var BASE_URL = "/api/v1/pads";
+
+	var API_NOTES = {
+	  getNotes: function getNotes() {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'get',
+	      url: BASE_URL,
+	      responseType: 'json',
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
+	  addNote: function addNote(note) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'post',
+	      url: BASE_URL,
+	      responseType: 'json',
+	      data: { pad: { text: note.text } },
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  }
+	};
+
+	exports.default = API_NOTES;
+
+/***/ },
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33579,7 +33664,7 @@
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _app3 = __webpack_require__(313);
+	var _app3 = __webpack_require__(315);
 
 	var _app4 = _interopRequireDefault(_app3);
 
@@ -33601,10 +33686,11 @@
 
 	    _this.onSubmit = function (e) {
 	      e.preventDefault();
-	      var note = {
-	        text: _this.inputText.value
-	      };
-	      _app2.default.addNote(note);
+	      var text = _this.inputText.value;
+	      if (text.length > 0) {
+	        _app2.default.addNote({ text: text });
+	        _this.inputText.value = '';
+	      }
 	    };
 
 	    return _this;
@@ -33657,7 +33743,74 @@
 	exports.default = AddNoteForm;
 
 /***/ },
-/* 317 */
+/* 318 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(312);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _note = __webpack_require__(319);
+
+	var _note2 = _interopRequireDefault(_note);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var NoteList = function (_React$Component) {
+	  _inherits(NoteList, _React$Component);
+
+	  function NoteList(props) {
+	    _classCallCheck(this, NoteList);
+
+	    return _possibleConstructorReturn(this, (NoteList.__proto__ || Object.getPrototypeOf(NoteList)).call(this, props));
+	  }
+
+	  _createClass(NoteList, [{
+	    key: 'render',
+	    value: function render() {
+	      var notes = this.props.notes;
+
+	      var notesList = notes.map(function (note, index) {
+	        return _react2.default.createElement(_note2.default, { key: index, note: note });
+	      });
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        notesList
+	      );
+	    }
+	  }]);
+
+	  return NoteList;
+	}(_react2.default.Component);
+
+	exports.default = NoteList;
+
+
+	NoteList.propTypes = {
+	  notes: _react2.default.PropTypes.array.isRequired
+	};
+
+/***/ },
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -33666,19 +33819,55 @@
 	  value: true
 	});
 
-	var _axios = __webpack_require__(260);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _axios2 = _interopRequireDefault(_axios);
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var BASE_URL = "/api/v1/notes";
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var API_NOTES = {
-	  addNote: function addNote() {}
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Note = function (_React$Component) {
+	  _inherits(Note, _React$Component);
+
+	  function Note(props) {
+	    _classCallCheck(this, Note);
+
+	    return _possibleConstructorReturn(this, (Note.__proto__ || Object.getPrototypeOf(Note)).call(this, props));
+	  }
+
+	  _createClass(Note, [{
+	    key: "render",
+	    value: function render() {
+	      var note = this.props.note;
+
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "sticky-pad" },
+	        _react2.default.createElement(
+	          "p",
+	          null,
+	          note.text
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Note;
+	}(_react2.default.Component);
+
+	exports.default = Note;
+
+
+	Note.propTypes = {
+	  note: _react2.default.PropTypes.object.isRequired
 	};
-
-	exports.default = API_NOTES;
 
 /***/ }
 /******/ ]);

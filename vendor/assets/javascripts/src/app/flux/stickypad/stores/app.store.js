@@ -9,8 +9,11 @@ const CHANGE_EVENT = 'change';
 var _notes = [];
 
 var AppStore = objectAssign({}, EventEmitter.prototype, {
+  setNotes: function(notes) {
+    _notes = notes;
+  },
   addNote: function(note) {
-    _notes.push(note);
+    _notes = [note].concat(_notes);
   },
 
   getNotes: function() {
@@ -24,7 +27,7 @@ var AppStore = objectAssign({}, EventEmitter.prototype, {
     this.on(CHANGE_EVENT, callback)
   },
   removeChangeListener: function(callback) {
-    this.removeChangeListener(CHANGE_EVENT, callback);
+    this.removeListener(CHANGE_EVENT, callback);
   }
 });
 
@@ -33,11 +36,26 @@ AppDispatcher.register((payload) => {
   switch (action.actionType) {
     case AppConstants.ADD_NOTE:
       console.log('Adding note');
+
       // Save store
       AppStore.addNote(action.note);
 
       // Save api
-      ApiNotes.addNote(note);
+      ApiNotes.addNote(action.note).request.then(
+        (response) => {
+          console.log('Added successfully to db');
+        },
+        (error) => { console.log(error) }
+      ).catch( error => console.log(error) );
+
+      // Emit a change
+      AppStore.emitChange();
+      break;
+    case AppConstants.RECEIVE_NOTES:
+      console.log('Receiving Notes');
+      // Save to Store
+      AppStore.setNotes(action.notes);
+
       // Emit a change
       AppStore.emitChange();
       break;

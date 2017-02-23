@@ -4,6 +4,16 @@ import AppStore from './stores/app.store';
 import ApiNotes from './utils/api/api.notes';
 
 import AddNoteForm from './components/addNoteForm.component';
+import NoteList from './components/noteList.component';
+
+// ===== Get the stickypads list ===== //
+ApiNotes.getNotes().request.then(
+  (response) => {
+    AppActions.receiveNotes(response.data.pads);
+  },
+  (error) => { console.log(error); }
+).catch( error => console.log(error));
+// ===== end of Get the stickypads list ===== //
 
 // === function callback to get the state ==== //
 function getAppState() {
@@ -15,6 +25,9 @@ function getAppState() {
 export default class StickyPadMainComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      notes: []
+    }
   }
 
   componentDidMount() {
@@ -22,11 +35,12 @@ export default class StickyPadMainComponent extends React.Component {
   }
 
   componentWillUnmount() {
-    AppStore.removeChangeListener(this._change);
+    AppStore.removeChangeListener(this._onChange);
   }
 
   render() {
     console.log(this.state);
+    let {notes} = this.state;
     return (
       <div className="row">
         <div className="col-xs-12  col-sm-3  col-md-2 col-lg-2">
@@ -34,9 +48,7 @@ export default class StickyPadMainComponent extends React.Component {
         </div>
         <div className="col-xs-12 col-sm-9 col-md-10 col-lg-10">
           <div className="box">
-            Note List
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <NoteList notes={notes}/>
           </div>
         </div>
       </div>

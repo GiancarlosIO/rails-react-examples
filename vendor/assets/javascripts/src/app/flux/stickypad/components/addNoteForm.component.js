@@ -9,10 +9,11 @@ export default class AddNoteForm extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    let note = {
-      text: this.inputText.value
+    let text = this.inputText.value;
+    if (text.length > 0) {
+      AppActions.addNote({text});
+      this.inputText.value = '';
     }
-    AppActions.addNote(note);
   }
 
   render() {
