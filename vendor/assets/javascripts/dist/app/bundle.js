@@ -33318,9 +33318,17 @@
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _app3 = __webpack_require__(315);
+	var _app3 = __webpack_require__(313);
 
 	var _app4 = _interopRequireDefault(_app3);
+
+	var _api = __webpack_require__(317);
+
+	var _api2 = _interopRequireDefault(_api);
+
+	var _addNoteForm = __webpack_require__(316);
+
+	var _addNoteForm2 = _interopRequireDefault(_addNoteForm);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33332,7 +33340,9 @@
 
 	// === function callback to get the state ==== //
 	function getAppState() {
-	  return {};
+	  return {
+	    notes: _app4.default.getNotes()
+	  };
 	} // === function callback to get the state ==== //
 
 	var StickyPadMainComponent = function (_React$Component) {
@@ -33363,16 +33373,32 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      console.log(this.state);
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'row' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-xs-12 col-lg-5' },
+	          { className: 'col-xs-12  col-sm-3  col-md-2 col-lg-2' },
+	          _react2.default.createElement(_addNoteForm2.default, null)
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-xs-12 col-sm-9 col-md-10 col-lg-10' },
 	          _react2.default.createElement(
-	            'h1',
-	            null,
-	            'Stickypad component'
+	            'div',
+	            { className: 'box' },
+	            'Note List',
+	            _react2.default.createElement(
+	              'p',
+	              null,
+	              'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+	            ),
+	            _react2.default.createElement(
+	              'p',
+	              null,
+	              'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+	            )
 	          )
 	        )
 	      );
@@ -33394,22 +33420,102 @@
 	  value: true
 	});
 
-	var _app = __webpack_require__(313);
+	var _app = __webpack_require__(314);
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _app3 = __webpack_require__(314);
+	var _app3 = __webpack_require__(315);
 
 	var _app4 = _interopRequireDefault(_app3);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var AppActions = {};
+	var AppActions = {
+	  addNote: function addNote(note) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.ADD_NOTE,
+	      note: note
+	    });
+	  }
+	};
 
 	exports.default = AppActions;
 
 /***/ },
 /* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _app = __webpack_require__(314);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(315);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	var _api = __webpack_require__(317);
+
+	var _api2 = _interopRequireDefault(_api);
+
+	var _events = __webpack_require__(305);
+
+	var _objectAssign = __webpack_require__(5);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CHANGE_EVENT = 'change';
+
+	var _notes = [];
+
+	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
+	  addNote: function addNote(note) {
+	    _notes.push(note);
+	  },
+
+	  getNotes: function getNotes() {
+	    return _notes;
+	  },
+
+	  emitChange: function emitChange() {
+	    this.emit(CHANGE_EVENT);
+	  },
+	  addChangeListener: function addChangeListener(callback) {
+	    this.on(CHANGE_EVENT, callback);
+	  },
+	  removeChangeListener: function removeChangeListener(callback) {
+	    this.removeChangeListener(CHANGE_EVENT, callback);
+	  }
+	});
+
+	_app2.default.register(function (payload) {
+	  var action = payload.action;
+	  switch (action.actionType) {
+	    case _app4.default.ADD_NOTE:
+	      console.log('Adding note');
+	      // Save store
+	      AppStore.addNote(action.note);
+
+	      // Save api
+	      _api2.default.addNote(note);
+	      // Emit a change
+	      AppStore.emitChange();
+	      break;
+	  };
+	  return true;
+	});
+
+	exports.default = AppStore;
+
+/***/ },
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33439,20 +33545,22 @@
 	exports.default = AppDispatcher;
 
 /***/ },
-/* 314 */
+/* 315 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var APP_CONSTANTS = {};
+	var APP_CONSTANTS = {
+	  ADD_NOTE: 'ADD_NOTE'
+	};
 
 	exports.default = APP_CONSTANTS;
 
 /***/ },
-/* 315 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33461,46 +33569,116 @@
 	  value: true
 	});
 
-	var _app = __webpack_require__(313);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(312);
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _app3 = __webpack_require__(314);
+	var _app3 = __webpack_require__(313);
 
 	var _app4 = _interopRequireDefault(_app3);
 
-	var _events = __webpack_require__(305);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _objectAssign = __webpack_require__(5);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AddNoteForm = function (_React$Component) {
+	  _inherits(AddNoteForm, _React$Component);
+
+	  function AddNoteForm(props) {
+	    _classCallCheck(this, AddNoteForm);
+
+	    var _this = _possibleConstructorReturn(this, (AddNoteForm.__proto__ || Object.getPrototypeOf(AddNoteForm)).call(this, props));
+
+	    _this.onSubmit = function (e) {
+	      e.preventDefault();
+	      var note = {
+	        text: _this.inputText.value
+	      };
+	      _app2.default.addNote(note);
+	    };
+
+	    return _this;
+	  }
+
+	  _createClass(AddNoteForm, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h4',
+	          { className: 'text-center text-grey' },
+	          'Add a note'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { onSubmit: this.onSubmit },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'row center-xs' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-xs-12 padding-none margin-bottom-15' },
+	              _react2.default.createElement('textarea', { className: 'form__input margin--right-none no-resize height--200', ref: function ref(el) {
+	                  return _this2.inputText = el;
+	                }, placeholder: 'Note' })
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-xs-12 padding-none' },
+	              _react2.default.createElement(
+	                'button',
+	                { className: 'button button--medium button--emerald', type: 'submit' },
+	                'Add note'
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return AddNoteForm;
+	}(_react2.default.Component);
+
+	exports.default = AddNoteForm;
+
+/***/ },
+/* 317 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _axios = __webpack_require__(260);
+
+	var _axios2 = _interopRequireDefault(_axios);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var CHANGE_EVENT = 'change';
+	var BASE_URL = "/api/v1/notes";
 
-	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
-	  emitChange: function emitChange() {
-	    this.emit(CHANGE_EVENT);
-	  },
-	  addChangeListener: function addChangeListener(callback) {
-	    this.on(CHANGE_EVENT, callback);
-	  },
-	  removeChangeListener: function removeChangeListener(callback) {
-	    this.removeChangeListener(CHANGE_EVENT, callback);
-	  }
-	});
+	var API_NOTES = {
+	  addNote: function addNote() {}
+	};
 
-	_app2.default.register(function (payload) {
-	  var action = payload.action;
-	  switch (action.actionType) {
-	    case '':
-	      break;
-	  };
-	  return true;
-	});
-
-	exports.default = AppStore;
+	exports.default = API_NOTES;
 
 /***/ }
 /******/ ]);

@@ -23,6 +23,11 @@
   flex-wrap: wrap;
 }
 
+.box-row {
+  padding: 1rem;
+  position: relative;
+}
+
 .row.reverse {
   -ms-flex-direction: row-reverse;
   -webkit-box-orient: horizontal;
