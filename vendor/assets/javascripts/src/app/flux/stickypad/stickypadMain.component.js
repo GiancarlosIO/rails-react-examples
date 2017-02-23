@@ -6,15 +6,6 @@ import ApiNotes from './utils/api/api.notes';
 import AddNoteForm from './components/addNoteForm.component';
 import NoteList from './components/noteList.component';
 
-// ===== Get the stickypads list ===== //
-ApiNotes.getNotes().request.then(
-  (response) => {
-    AppActions.receiveNotes(response.data.pads);
-  },
-  (error) => { console.log(error); }
-).catch( error => console.log(error));
-// ===== end of Get the stickypads list ===== //
-
 // === function callback to get the state ==== //
 function getAppState() {
   return {
@@ -31,6 +22,14 @@ export default class StickyPadMainComponent extends React.Component {
   }
 
   componentDidMount() {
+    // ===== Get the stickypads list ===== //
+    ApiNotes.getNotes().request.then(
+      (response) => {
+        AppActions.receiveNotes(response.data.pads);
+      },
+      (error) => { console.log(error); }
+    ).catch( error => console.log(error));
+    // ===== end of Get the stickypads list ===== //
     AppStore.addChangeListener(this._onChange);
   }
 

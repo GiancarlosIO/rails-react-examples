@@ -26,15 +26,17 @@
       z-index: 999999;
     }
     p {
+      overflow: auto;
       padding: 15px;
       padding-top: 0;
       box-sizing: border-box;
       font-size: 12px;
+      font-weight: bold;
+      line-height: 18px;
       color: rgba(0,0,0,0.5);
       width: 160px;
       height: 105px;
       word-wrap: break-word;
-      overflow: hidden;
     }
   }
 }

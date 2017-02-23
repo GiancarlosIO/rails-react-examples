@@ -31775,16 +31775,6 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	// ===== Get the contacts list ======
-	_contactList2.default.getContactList().request.then(function (response) {
-	  _app2.default.receiveContacts(response.data.contacts);
-	}, function (error) {
-	  console.log(error);
-	}).catch(function (error) {
-	  return console.log(error);
-	});
-	// ===== End Get the contacts list ======
-
 	function getAppState() {
 	  return {
 	    contacts: _app4.default.getContacts(),
@@ -31811,6 +31801,15 @@
 	  _createClass(ContactListMainComponent, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      // ===== Get the contacts list ======
+	      _contactList2.default.getContactList().request.then(function (response) {
+	        _app2.default.receiveContacts(response.data.contacts);
+	      }, function (error) {
+	        console.log(error);
+	      }).catch(function (error) {
+	        return console.log(error);
+	      });
+	      // ===== End Get the contacts list ======
 	      _app4.default.addChangeListener(this._onChange);
 	    }
 	  }, {
@@ -33342,16 +33341,6 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	// ===== Get the stickypads list ===== //
-	_api2.default.getNotes().request.then(function (response) {
-	  _app2.default.receiveNotes(response.data.pads);
-	}, function (error) {
-	  console.log(error);
-	}).catch(function (error) {
-	  return console.log(error);
-	});
-	// ===== end of Get the stickypads list ===== //
-
 	// === function callback to get the state ==== //
 	function getAppState() {
 	  return {
@@ -33380,6 +33369,15 @@
 	  _createClass(StickyPadMainComponent, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      // ===== Get the stickypads list ===== //
+	      _api2.default.getNotes().request.then(function (response) {
+	        _app2.default.receiveNotes(response.data.pads);
+	      }, function (error) {
+	        console.log(error);
+	      }).catch(function (error) {
+	        return console.log(error);
+	      });
+	      // ===== end of Get the stickypads list ===== //
 	      _app4.default.addChangeListener(this._onChange);
 	    }
 	  }, {
