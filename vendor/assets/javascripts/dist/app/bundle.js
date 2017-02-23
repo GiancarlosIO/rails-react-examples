@@ -33302,7 +33302,7 @@
 /* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -33313,6 +33313,14 @@
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(312);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(315);
+
+	var _app4 = _interopRequireDefault(_app3);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33343,28 +33351,28 @@
 	  }
 
 	  _createClass(StickyPadMainComponent, [{
-	    key: "componentDidMount",
+	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      //AppStore.addChangeListener(this._onChange);
+	      _app4.default.addChangeListener(this._onChange);
 	    }
 	  }, {
-	    key: "componentWillUnmount",
+	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
-	      //AppStore.removeChangeListener(this._change);
+	      _app4.default.removeChangeListener(this._change);
 	    }
 	  }, {
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "row" },
+	        'div',
+	        { className: 'row' },
 	        _react2.default.createElement(
-	          "div",
-	          { className: "col-xs-12 col-lg-5" },
+	          'div',
+	          { className: 'col-xs-12 col-lg-5' },
 	          _react2.default.createElement(
-	            "h1",
+	            'h1',
 	            null,
-	            "Stickypad component"
+	            'Stickypad component'
 	          )
 	        )
 	      );
@@ -33375,6 +33383,124 @@
 	}(_react2.default.Component);
 
 	exports.default = StickyPadMainComponent;
+
+/***/ },
+/* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _app = __webpack_require__(313);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(314);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AppActions = {};
+
+	exports.default = AppActions;
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _flux = __webpack_require__(301);
+
+	var _objectAssign = __webpack_require__(5);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AppDispatcher = (0, _objectAssign2.default)(new _flux.Dispatcher(), {
+	  handleViewAction: function handleViewAction(action) {
+	    var payload = {
+	      source: 'VIEW_ACTION',
+	      action: action
+	    };
+	    this.dispatch(payload);
+	  }
+	});
+
+	exports.default = AppDispatcher;
+
+/***/ },
+/* 314 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var APP_CONSTANTS = {};
+
+	exports.default = APP_CONSTANTS;
+
+/***/ },
+/* 315 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _app = __webpack_require__(313);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(314);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	var _events = __webpack_require__(305);
+
+	var _objectAssign = __webpack_require__(5);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CHANGE_EVENT = 'change';
+
+	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
+	  emitChange: function emitChange() {
+	    this.emit(CHANGE_EVENT);
+	  },
+	  addChangeListener: function addChangeListener(callback) {
+	    this.on(CHANGE_EVENT, callback);
+	  },
+	  removeChangeListener: function removeChangeListener(callback) {
+	    this.removeChangeListener(CHANGE_EVENT, callback);
+	  }
+	});
+
+	_app2.default.register(function (payload) {
+	  var action = payload.action;
+	  switch (action.actionType) {
+	    case '':
+	      break;
+	  };
+	  return true;
+	});
+
+	exports.default = AppStore;
 
 /***/ }
 /******/ ]);
