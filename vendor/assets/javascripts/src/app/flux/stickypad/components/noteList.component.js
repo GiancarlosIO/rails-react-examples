@@ -16,7 +16,7 @@ export default class NoteList extends React.Component {
       )
     });
     return (
-      <div>
+      <div className="sticky-pad__container">
         {notesList}
       </div>
     )

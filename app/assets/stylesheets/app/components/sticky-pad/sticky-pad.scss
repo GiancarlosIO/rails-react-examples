@@ -1,0 +1,40 @@
+.sticky-pad {
+  &__container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;;
+    align-items: center;
+    padding-top: 25px;
+  }
+  &__note {
+    background-image: image-url('note.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: transparent;
+    width: 180px;
+    height: 180px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-top: 25px;
+    overflow: hidden;
+    transform: rotate(-26deg);
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      transform: rotate(0deg);
+      z-index: 999999;
+    }
+    p {
+      padding: 15px;
+      padding-top: 0;
+      box-sizing: border-box;
+      font-size: 12px;
+      color: rgba(0,0,0,0.5);
+      width: 160px;
+      height: 105px;
+      word-wrap: break-word;
+      overflow: hidden;
+    }
+  }
+}

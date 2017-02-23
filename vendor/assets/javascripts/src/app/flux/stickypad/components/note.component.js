@@ -8,7 +8,7 @@ export default class Note extends React.Component {
   render() {
     let {note} = this.props
     return (
-      <div className="sticky-pad">
+      <div className="sticky-pad__note">
         <p>
           {note.text}
         </p>

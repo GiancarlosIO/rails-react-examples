@@ -33793,7 +33793,7 @@
 	      });
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'sticky-pad__container' },
 	        notesList
 	      );
 	    }
@@ -33849,7 +33849,7 @@
 
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "sticky-pad" },
+	        { className: "sticky-pad__note" },
 	        _react2.default.createElement(
 	          "p",
 	          null,
