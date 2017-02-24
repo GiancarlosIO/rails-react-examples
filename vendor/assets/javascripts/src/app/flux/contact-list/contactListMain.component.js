@@ -7,16 +7,6 @@ import AddForm from './components/addForm.component';
 import ContactList from './components/contactList.component';
 import EditForm from './components/editForm.component';
 
-// ===== Get the contacts list ======
-CONTACT_API.getContactList().request.then(
-  (response) => {
-    AppActions.receiveContacts(response.data.contacts);
-  },
-  (error) => { console.log(error) }
-).catch( error => console.log(error) )
-// ===== End Get the contacts list ======
-
-
 function getAppState() {
   return {
     contacts: AppStore.getContacts(),
@@ -31,6 +21,14 @@ export default class ContactListMainComponent extends React.Component {
   }
 
   componentDidMount() {
+    // ===== Get the contacts list ======
+    CONTACT_API.getContactList().request.then(
+      (response) => {
+        AppActions.receiveContacts(response.data.contacts);
+      },
+      (error) => { console.log(error) }
+    ).catch( error => console.log(error) )
+    // ===== End Get the contacts list ======
     AppStore.addChangeListener(this._onChange);
   }
 

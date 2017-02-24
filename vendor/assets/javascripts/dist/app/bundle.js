@@ -95,6 +95,10 @@
 
 	var _contactListMain2 = _interopRequireDefault(_contactListMain);
 
+	var _stickypadMain = __webpack_require__(311);
+
+	var _stickypadMain2 = _interopRequireDefault(_stickypadMain);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	$(document).on('ready', function () {
@@ -110,7 +114,8 @@
 	      _react2.default.createElement(_reactRouter.Route, { path: '/movies/:movie_id', component: _movieWrapper2.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/weather', component: _main8.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/simplenote', component: _main10.default }),
-	      _react2.default.createElement(_reactRouter.Route, { path: '/contact-list', component: _contactListMain2.default })
+	      _react2.default.createElement(_reactRouter.Route, { path: '/contact-list', component: _contactListMain2.default }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/sticky-pads', component: _stickypadMain2.default })
 	    )
 	  ), document.getElementById('app-wrapper'));
 	});
@@ -26583,6 +26588,15 @@
 	          { to: '/contact-list', activeClassName: 'link__active' },
 	          'Contact List(FLUX)'
 	        )
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/sticky-pads', activeClassName: 'link__active' },
+	          'Sticky Pads(FLUX)'
+	        )
 	      )
 	    )
 	  );
@@ -31761,17 +31775,6 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	// ===== Get the contacts list ======
-	_contactList2.default.getContactList().request.then(function (response) {
-	  _app2.default.receiveContacts(response.data.contacts);
-	}, function (error) {
-	  console.log(error);
-	}).catch(function (error) {
-	  return console.log(error);
-	});
-	// ===== End Get the contacts list ======
-
-
 	function getAppState() {
 	  return {
 	    contacts: _app4.default.getContacts(),
@@ -31798,6 +31801,15 @@
 	  _createClass(ContactListMainComponent, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      // ===== Get the contacts list ======
+	      _contactList2.default.getContactList().request.then(function (response) {
+	        _app2.default.receiveContacts(response.data.contacts);
+	      }, function (error) {
+	        console.log(error);
+	      }).catch(function (error) {
+	        return console.log(error);
+	      });
+	      // ===== End Get the contacts list ======
 	      _app4.default.addChangeListener(this._onChange);
 	    }
 	  }, {
@@ -31808,7 +31820,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      console.log(this.state);
 	      var _state = this.state,
 	          contacts = _state.contacts,
 	          contactToEdit = _state.contactToEdit;
@@ -32325,12 +32336,14 @@
 	      });
 	      break;
 	    case _app4.default.EDIT_CONTACT:
+	      console.log('Editing contact');
 	      // Set contact in store
 	      AppStore.setContactToEdit(action.contact);
 	      // Emit a change
 	      AppStore.emit(CHANGE_EVENT);
 	      break;
 	    case _app4.default.UPDATE_CONTACT:
+	      console.log('Updating contact');
 	      // Update in API
 	      _contactList2.default.updateContact(action.contact_id, action.contact).request.then(function (response) {
 	        // Save in Store
@@ -33282,6 +33295,627 @@
 
 	EditForm.propTypes = {
 	  contactToEdit: _react2.default.PropTypes.object.isRequired
+	};
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(312);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(315);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	var _api = __webpack_require__(316);
+
+	var _api2 = _interopRequireDefault(_api);
+
+	var _addNoteForm = __webpack_require__(317);
+
+	var _addNoteForm2 = _interopRequireDefault(_addNoteForm);
+
+	var _noteList = __webpack_require__(318);
+
+	var _noteList2 = _interopRequireDefault(_noteList);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// === function callback to get the state ==== //
+	function getAppState() {
+	  return {
+	    notes: _app4.default.getNotes()
+	  };
+	} // === function callback to get the state ==== //
+
+	var StickyPadMainComponent = function (_React$Component) {
+	  _inherits(StickyPadMainComponent, _React$Component);
+
+	  function StickyPadMainComponent(props) {
+	    _classCallCheck(this, StickyPadMainComponent);
+
+	    var _this = _possibleConstructorReturn(this, (StickyPadMainComponent.__proto__ || Object.getPrototypeOf(StickyPadMainComponent)).call(this, props));
+
+	    _this._onChange = function () {
+	      _this.setState(getAppState);
+	    };
+
+	    _this.state = {
+	      notes: []
+	    };
+	    return _this;
+	  }
+
+	  _createClass(StickyPadMainComponent, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      // ===== Get the stickypads list ===== //
+	      _api2.default.getNotes().request.then(function (response) {
+	        _app2.default.receiveNotes(response.data.pads);
+	      }, function (error) {
+	        console.log(error);
+	      }).catch(function (error) {
+	        return console.log(error);
+	      });
+	      // ===== end of Get the stickypads list ===== //
+	      _app4.default.addChangeListener(this._onChange);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      _app4.default.removeChangeListener(this._onChange);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      console.log(this.state);
+	      var notes = this.state.notes;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-xs-12  col-sm-3  col-md-2 col-lg-2' },
+	          _react2.default.createElement(_addNoteForm2.default, null)
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-xs-12 col-sm-9 col-md-10 col-lg-10' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'box' },
+	            _react2.default.createElement(_noteList2.default, { notes: notes })
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return StickyPadMainComponent;
+	}(_react2.default.Component);
+
+	exports.default = StickyPadMainComponent;
+
+/***/ },
+/* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _app = __webpack_require__(313);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(314);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AppActions = {
+	  receiveNotes: function receiveNotes(notes) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.RECEIVE_NOTES,
+	      notes: notes
+	    });
+	  },
+	  addNote: function addNote(note) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.ADD_NOTE,
+	      note: note
+	    });
+	  },
+	  removeNote: function removeNote(note_id) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.REMOVE_NOTE,
+	      note_id: note_id
+	    });
+	  }
+	};
+
+	exports.default = AppActions;
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _flux = __webpack_require__(301);
+
+	var _objectAssign = __webpack_require__(5);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AppDispatcher = (0, _objectAssign2.default)(new _flux.Dispatcher(), {
+	  handleViewAction: function handleViewAction(action) {
+	    var payload = {
+	      source: 'VIEW_ACTION',
+	      action: action
+	    };
+	    this.dispatch(payload);
+	  }
+	});
+
+	exports.default = AppDispatcher;
+
+/***/ },
+/* 314 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var APP_CONSTANTS = {
+	  RECEIVE_NOTES: 'RECEIVE_NOTES',
+	  ADD_NOTE: 'ADD_NOTE',
+	  REMOVE_NOTE: 'REMOVE_NOTE'
+	};
+
+	exports.default = APP_CONSTANTS;
+
+/***/ },
+/* 315 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _app = __webpack_require__(313);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(314);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	var _api = __webpack_require__(316);
+
+	var _api2 = _interopRequireDefault(_api);
+
+	var _events = __webpack_require__(305);
+
+	var _objectAssign = __webpack_require__(5);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CHANGE_EVENT = 'change';
+
+	var _notes = [];
+
+	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
+	  setNotes: function setNotes(notes) {
+	    _notes = notes;
+	  },
+	  addNote: function addNote(note) {
+	    _notes = [note].concat(_notes);
+	  },
+
+	  getNotes: function getNotes() {
+	    return _notes;
+	  },
+	  removeNote: function removeNote(note_id) {
+	    var index = _notes.findIndex(function (x) {
+	      return x.id === note_id;
+	    });
+	    _notes.splice(index, 1);
+	  },
+	  emitChange: function emitChange() {
+	    this.emit(CHANGE_EVENT);
+	  },
+	  addChangeListener: function addChangeListener(callback) {
+	    this.on(CHANGE_EVENT, callback);
+	  },
+	  removeChangeListener: function removeChangeListener(callback) {
+	    this.removeListener(CHANGE_EVENT, callback);
+	  }
+	});
+
+	_app2.default.register(function (payload) {
+	  var action = payload.action;
+	  switch (action.actionType) {
+	    case _app4.default.ADD_NOTE:
+	      console.log('Adding note');
+
+	      // Save store
+	      AppStore.addNote(action.note);
+
+	      // Save api
+	      _api2.default.addNote(action.note).request.then(function (response) {
+	        console.log('Added successfully to db');
+	      }, function (error) {
+	        console.log(error);
+	      }).catch(function (error) {
+	        return console.log(error);
+	      });
+
+	      // Emit a change
+	      AppStore.emitChange();
+	      break;
+	    case _app4.default.RECEIVE_NOTES:
+	      console.log('Receiving Notes');
+	      // Save to Store
+	      AppStore.setNotes(action.notes);
+
+	      // Emit a change
+	      AppStore.emitChange();
+	      break;
+	    case _app4.default.REMOVE_NOTE:
+	      console.log('Removing notes');
+	      // Delete in store
+	      AppStore.removeNote(action.note_id);
+	      // Delete in API
+	      _api2.default.removeNote(action.note_id).request.then(function (response) {
+	        console.log(response.data.message);
+	      }, function (error) {
+	        console.log('error, to delete', error);
+	      }).catch(function (error) {
+	        return console.log('error server', error);
+	      });
+	      // Emit a change
+	      AppStore.emitChange();
+	      break;
+	  };
+	  return true;
+	});
+
+	exports.default = AppStore;
+
+/***/ },
+/* 316 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _axios = __webpack_require__(260);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var BASE_URL = "/api/v1/pads";
+
+	var API_NOTES = {
+	  getNotes: function getNotes() {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'get',
+	      url: BASE_URL,
+	      responseType: 'json',
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
+	  addNote: function addNote(note) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'post',
+	      url: BASE_URL,
+	      responseType: 'json',
+	      data: { pad: { text: note.text } },
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
+	  removeNote: function removeNote(note_id) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'delete',
+	      url: BASE_URL + '/' + note_id,
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  }
+	};
+
+	exports.default = API_NOTES;
+
+/***/ },
+/* 317 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(312);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(315);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AddNoteForm = function (_React$Component) {
+	  _inherits(AddNoteForm, _React$Component);
+
+	  function AddNoteForm(props) {
+	    _classCallCheck(this, AddNoteForm);
+
+	    var _this = _possibleConstructorReturn(this, (AddNoteForm.__proto__ || Object.getPrototypeOf(AddNoteForm)).call(this, props));
+
+	    _this.onSubmit = function (e) {
+	      e.preventDefault();
+	      var text = _this.inputText.value;
+	      if (text.length > 0) {
+	        _app2.default.addNote({ text: text });
+	        _this.inputText.value = '';
+	      }
+	    };
+
+	    return _this;
+	  }
+
+	  _createClass(AddNoteForm, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h4',
+	          { className: 'text-center text-grey' },
+	          'Add a note'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { onSubmit: this.onSubmit },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'row center-xs' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-xs-12 padding-none margin-bottom-15' },
+	              _react2.default.createElement('textarea', { className: 'form__input margin--right-none no-resize height--200', ref: function ref(el) {
+	                  return _this2.inputText = el;
+	                }, placeholder: 'Note' })
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-xs-12 padding-none' },
+	              _react2.default.createElement(
+	                'button',
+	                { className: 'button button--medium button--emerald', type: 'submit' },
+	                'Add note'
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return AddNoteForm;
+	}(_react2.default.Component);
+
+	exports.default = AddNoteForm;
+
+/***/ },
+/* 318 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(312);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _note = __webpack_require__(319);
+
+	var _note2 = _interopRequireDefault(_note);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var NoteList = function (_React$Component) {
+	  _inherits(NoteList, _React$Component);
+
+	  function NoteList(props) {
+	    _classCallCheck(this, NoteList);
+
+	    return _possibleConstructorReturn(this, (NoteList.__proto__ || Object.getPrototypeOf(NoteList)).call(this, props));
+	  }
+
+	  _createClass(NoteList, [{
+	    key: 'render',
+	    value: function render() {
+	      var notes = this.props.notes;
+
+	      var notesList = notes.map(function (note, index) {
+	        return _react2.default.createElement(_note2.default, { key: index, note: note });
+	      });
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'sticky-pad__container' },
+	        notesList
+	      );
+	    }
+	  }]);
+
+	  return NoteList;
+	}(_react2.default.Component);
+
+	exports.default = NoteList;
+
+
+	NoteList.propTypes = {
+	  notes: _react2.default.PropTypes.array.isRequired
+	};
+
+/***/ },
+/* 319 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(312);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Note = function (_React$Component) {
+	  _inherits(Note, _React$Component);
+
+	  function Note(props) {
+	    _classCallCheck(this, Note);
+
+	    var _this = _possibleConstructorReturn(this, (Note.__proto__ || Object.getPrototypeOf(Note)).call(this, props));
+
+	    _this.removeNote = function () {
+	      var note = _this.props.note;
+
+	      _app2.default.removeNote(note.id);
+	    };
+
+	    return _this;
+	  }
+
+	  _createClass(Note, [{
+	    key: 'render',
+	    value: function render() {
+	      var note = this.props.note;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'sticky-pad__note', onDoubleClick: this.removeNote },
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          note.text
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Note;
+	}(_react2.default.Component);
+
+	exports.default = Note;
+
+
+	Note.propTypes = {
+	  note: _react2.default.PropTypes.object.isRequired
 	};
 
 /***/ }
