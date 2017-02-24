@@ -25,6 +25,16 @@ const API_NOTES = {
       cancelToken: new CancelToken( c => cancel = c )
     });
     return { request, cancel };
+  },
+  removeNote: (note_id) => {
+    let CancelToken = axios.CancelToken;
+    let cancel;
+    let request = axios({
+      method: 'delete',
+      url: `${BASE_URL}/${note_id}`,
+      cancelToken: new CancelToken( c => cancel = c )
+    });
+    return { request, cancel };
   }
 }
 

@@ -13,6 +13,12 @@ const AppActions = {
       actionType: AppConstants.ADD_NOTE,
       note: note
     });
+  },
+  removeNote: (note_id) => {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.REMOVE_NOTE,
+      note_id
+    });
   }
 }
 

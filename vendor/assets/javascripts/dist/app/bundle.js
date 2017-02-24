@@ -33449,6 +33449,12 @@
 	      actionType: _app4.default.ADD_NOTE,
 	      note: note
 	    });
+	  },
+	  removeNote: function removeNote(note_id) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.REMOVE_NOTE,
+	      note_id: note_id
+	    });
 	  }
 	};
 
@@ -33495,7 +33501,8 @@
 	});
 	var APP_CONSTANTS = {
 	  RECEIVE_NOTES: 'RECEIVE_NOTES',
-	  ADD_NOTE: 'ADD_NOTE'
+	  ADD_NOTE: 'ADD_NOTE',
+	  REMOVE_NOTE: 'REMOVE_NOTE'
 	};
 
 	exports.default = APP_CONSTANTS;
@@ -33545,7 +33552,12 @@
 	  getNotes: function getNotes() {
 	    return _notes;
 	  },
-
+	  removeNote: function removeNote(note_id) {
+	    var index = _notes.findIndex(function (x) {
+	      return x.id === note_id;
+	    });
+	    _notes.splice(index, 1);
+	  },
 	  emitChange: function emitChange() {
 	    this.emit(CHANGE_EVENT);
 	  },
@@ -33583,6 +33595,21 @@
 	      // Save to Store
 	      AppStore.setNotes(action.notes);
 
+	      // Emit a change
+	      AppStore.emitChange();
+	      break;
+	    case _app4.default.REMOVE_NOTE:
+	      console.log('Removing notes');
+	      // Delete in store
+	      AppStore.removeNote(action.note_id);
+	      // Delete in API
+	      _api2.default.removeNote(action.note_id).request.then(function (response) {
+	        console.log(response.data.message);
+	      }, function (error) {
+	        console.log('error, to delete', error);
+	      }).catch(function (error) {
+	        return console.log('error server', error);
+	      });
 	      // Emit a change
 	      AppStore.emitChange();
 	      break;
@@ -33632,6 +33659,18 @@
 	      url: BASE_URL,
 	      responseType: 'json',
 	      data: { pad: { text: note.text } },
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
+	  removeNote: function removeNote(note_id) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'delete',
+	      url: BASE_URL + '/' + note_id,
 	      cancelToken: new CancelToken(function (c) {
 	        return cancel = c;
 	      })
@@ -33811,7 +33850,7 @@
 /* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -33822,6 +33861,10 @@
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(312);
+
+	var _app2 = _interopRequireDefault(_app);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33837,19 +33880,27 @@
 	  function Note(props) {
 	    _classCallCheck(this, Note);
 
-	    return _possibleConstructorReturn(this, (Note.__proto__ || Object.getPrototypeOf(Note)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (Note.__proto__ || Object.getPrototypeOf(Note)).call(this, props));
+
+	    _this.removeNote = function () {
+	      var note = _this.props.note;
+
+	      _app2.default.removeNote(note.id);
+	    };
+
+	    return _this;
 	  }
 
 	  _createClass(Note, [{
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
 	      var note = this.props.note;
 
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "sticky-pad__note" },
+	        'div',
+	        { className: 'sticky-pad__note', onDoubleClick: this.removeNote },
 	        _react2.default.createElement(
-	          "p",
+	          'p',
 	          null,
 	          note.text
 	        )
