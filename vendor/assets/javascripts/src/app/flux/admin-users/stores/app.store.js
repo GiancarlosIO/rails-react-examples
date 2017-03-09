@@ -7,15 +7,22 @@ import ADMIN_USERS from '../utils/api/adminUsers.api';
 const CHANGE_EVENT = 'change';
 
 var _users = [];
+var _roles = []
 
 var AppStore = objectAssign({}, EventEmitter.prototype, {
   // === getters === //
   getUsers: function() {
     return _users;
+  },
+  getRoles: function() {
+    return _roles;
   }, // === end of getters === //
   // === setters === //
   setUsers: function(users) {
     _users = users;
+  },
+  setRoles: function(roles) {
+    _roles = roles;
   }, // === end of setters === //
   addUser: function(user) {
 
@@ -41,6 +48,13 @@ AppDispatcher.register( payload => {
   let action = payload.action;
   switch (action.actionType) {
     case AppConstants.RECEIVE_USERS:
+      console.log('Saving Users and Roles in store');
+      // set users in store
+      AppStore.setUsers(action.users);
+      AppStore.setRoles(action.roles);
+
+      // Emit a change
+      AppStore.emitChange();
       break;
     case AppConstants.ADD_USER:
       break;

@@ -2,10 +2,11 @@ import AppDispatcher from '../dispatcher/app.dispatcher';
 import AppConstants from '../constants/app.constants';
 
 const AppActions = {
-  receiveUsers: (users) => {
+  receiveUsers: (users, roles) => {
     AppDispatcher.handleViewAction({
       actionType: AppConstants.RECEIVE_USERS,
-      users
+      users,
+      roles
     });
   },
   addUser: (user) => {
