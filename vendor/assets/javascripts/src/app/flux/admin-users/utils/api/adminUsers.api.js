@@ -31,7 +31,15 @@ const ADMIN_USERS = {
 
   },
   deleteUser: (user_id) => {
-
+    let CancelToken = axios.CancelToken;
+    let cancel;
+    let request = axios({
+      method: 'delete',
+      url: `${BASE_URL}/${user_id}`,
+      responseType: 'json',
+      cancelToken: new CancelToken( c => cancel = c )
+    });
+    return { request, cancel }
   }
 }
 

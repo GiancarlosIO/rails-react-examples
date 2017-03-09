@@ -1,4 +1,5 @@
 import React from 'react';
+import AppActions from '../actions/app.actions';
 
 export default class User extends React.Component {
   constructor(props) {
@@ -10,7 +11,8 @@ export default class User extends React.Component {
   }
 
   handleDelete = () => {
-
+    let user_id = this.props.user.id;
+    AppActions.deleteUser(user_id);
   }
 
   render() {

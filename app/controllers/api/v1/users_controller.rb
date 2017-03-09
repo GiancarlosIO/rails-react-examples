@@ -31,7 +31,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   end
 
   def destroy
-    if @note.destroy
+    if @user.destroy
       render json: { message: 'Deleted Successfully' }, status: 200
     else
       render json: { error: 'Error to delete the user' }, status: :unprocessable_entity

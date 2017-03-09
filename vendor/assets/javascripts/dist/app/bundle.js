@@ -34245,7 +34245,12 @@
 	    _users = [user].concat(_users);
 	  },
 	  updateUser: function updateUser(user) {},
-	  deleteUser: function deleteUser(user_id) {},
+	  deleteUser: function deleteUser(user_id) {
+	    var index = _users.findIndex(function (user) {
+	      return user.id == user_id;
+	    });
+	    _users.splice(index, 1);
+	  },
 	  emitChange: function emitChange() {
 	    this.emit(CHANGE_EVENT);
 	  },
@@ -34259,36 +34264,50 @@
 
 	_app2.default.register(function (payload) {
 	  var action = payload.action;
-	  switch (action.actionType) {
-	    case _app4.default.RECEIVE_USERS:
-	      console.log('Saving Users and Roles in store');
-	      // set users in store
-	      AppStore.setUsers(action.users);
-	      AppStore.setRoles(action.roles);
-	      // Emit a change
-	      AppStore.emitChange();
-	      break;
-	    case _app4.default.ADD_USER:
-	      var user = action.user;
-	      // save to db
-	      console.log('saving user to db');
-	      _adminUsers2.default.createUser(user).request.then(function (response) {
-	        // save to Store
-	        console.log('Saving user to store');
-	        AppStore.addUser(response.data);
+
+	  (function () {
+	    switch (action.actionType) {
+	      case _app4.default.RECEIVE_USERS:
+	        console.log('Saving Users and Roles in store');
+	        // set users in store
+	        AppStore.setUsers(action.users);
+	        AppStore.setRoles(action.roles);
 	        // Emit a change
 	        AppStore.emitChange();
-	      }).catch(function (error) {
-	        return console.log('error server', error.response);
-	      });
-	      break;
-	    case _app4.default.EDIT_USER:
-	      break;
-	    case _app4.default.UPDATE_USER:
-	      break;
-	    case _app4.default.DELETE_USER:
-	      break;
-	  }
+	        break;
+	      case _app4.default.ADD_USER:
+	        var user = action.user;
+	        // save to db
+	        console.log('saving user to db');
+	        _adminUsers2.default.createUser(user).request.then(function (response) {
+	          // save to Store
+	          console.log('Saving user to store');
+	          AppStore.addUser(response.data);
+	          // Emit a change
+	          AppStore.emitChange();
+	        }).catch(function (error) {
+	          return console.log('error to create user', error.response);
+	        });
+	        break;
+	      case _app4.default.EDIT_USER:
+	        break;
+	      case _app4.default.UPDATE_USER:
+	        break;
+	      case _app4.default.DELETE_USER:
+	        var user_id = action.user_id;
+	        // delete in db
+	        _adminUsers2.default.deleteUser(user_id).request.then(function (response) {
+	          console.log('Delete successfully', response.data.message);
+	          // delete in store
+	          AppStore.deleteUser(user_id);
+	          // emit a change
+	          AppStore.emitChange();
+	        }).catch(function (error) {
+	          return console.log('error to delete user', error.response);
+	        });
+	        break;
+	    }
+	  })();
 	});
 
 	exports.default = AppStore;
@@ -34344,7 +34363,19 @@
 	    return { request: request, cancel: cancel };
 	  },
 	  updateUser: function updateUser(user) {},
-	  deleteUser: function deleteUser(user_id) {}
+	  deleteUser: function deleteUser(user_id) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'delete',
+	      url: BASE_URL + '/' + user_id,
+	      responseType: 'json',
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  }
 	};
 
 	exports.default = ADMIN_USERS;
@@ -34761,7 +34792,7 @@
 /* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -34772,6 +34803,10 @@
 	var _react = __webpack_require__(2);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(321);
+
+	var _app2 = _interopRequireDefault(_app);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -34791,65 +34826,68 @@
 
 	    _this.handleEdit = function () {};
 
-	    _this.handleDelete = function () {};
+	    _this.handleDelete = function () {
+	      var user_id = _this.props.user.id;
+	      _app2.default.deleteUser(user_id);
+	    };
 
 	    return _this;
 	  }
 
 	  _createClass(User, [{
-	    key: "render",
+	    key: 'render',
 	    value: function render() {
 	      var user = this.props.user;
 
 	      return _react2.default.createElement(
-	        "tr",
+	        'tr',
 	        null,
 	        _react2.default.createElement(
-	          "td",
+	          'td',
 	          null,
 	          user.id
 	        ),
 	        _react2.default.createElement(
-	          "td",
+	          'td',
 	          null,
 	          user.first_name
 	        ),
 	        _react2.default.createElement(
-	          "td",
+	          'td',
 	          null,
 	          user.last_name
 	        ),
 	        _react2.default.createElement(
-	          "td",
+	          'td',
 	          null,
 	          user.age
 	        ),
 	        _react2.default.createElement(
-	          "td",
+	          'td',
 	          null,
 	          user.email
 	        ),
 	        _react2.default.createElement(
-	          "td",
+	          'td',
 	          null,
 	          user.role.name
 	        ),
 	        _react2.default.createElement(
-	          "td",
+	          'td',
 	          null,
 	          _react2.default.createElement(
-	            "button",
-	            { onClick: this.handleEdit, className: "button button--min button--emerald" },
-	            "Edit"
+	            'button',
+	            { onClick: this.handleEdit, className: 'button button--min button--emerald' },
+	            'Edit'
 	          )
 	        ),
 	        _react2.default.createElement(
-	          "td",
+	          'td',
 	          null,
 	          _react2.default.createElement(
-	            "button",
-	            { onClick: this.handleDelete, className: "button button--min button--emerald" },
-	            "Delete"
+	            'button',
+	            { onClick: this.handleDelete, className: 'button button--min button--emerald' },
+	            'Delete'
 	          )
 	        )
 	      );

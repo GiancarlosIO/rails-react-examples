@@ -31,7 +31,8 @@ var AppStore = objectAssign({}, EventEmitter.prototype, {
 
   },
   deleteUser: function(user_id) {
-
+    let index = _users.findIndex( user => user.id == user_id );
+    _users.splice(index, 1);
   },
   emitChange: function() {
     this.emit(CHANGE_EVENT);
@@ -67,13 +68,23 @@ AppDispatcher.register( payload => {
           // Emit a change
           AppStore.emitChange();
         }
-      ).catch( error => console.log('error server', error.response) );
+      ).catch( error => console.log('error to create user', error.response) );
       break;
     case AppConstants.EDIT_USER:
       break;
     case AppConstants.UPDATE_USER:
       break;
     case AppConstants.DELETE_USER:
+      let user_id = action.user_id
+      // delete in db
+      ADMIN_USERS.deleteUser(user_id).request.then(
+        response => {
+          console.log('Delete successfully', response.data.message);
+          // delete in store
+          AppStore.deleteUser(user_id)
+          // emit a change
+          AppStore.emitChange();
+        }).catch( error => console.log('error to delete user', error.response) )
       break;
   }
 });
