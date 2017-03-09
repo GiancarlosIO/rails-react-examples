@@ -33547,6 +33547,7 @@
 	  },
 	  addNote: function addNote(note) {
 	    _notes = [note].concat(_notes);
+	    console.log('adding successfully to store');
 	  },
 
 	  getNotes: function getNotes() {
@@ -33574,21 +33575,18 @@
 	  switch (action.actionType) {
 	    case _app4.default.ADD_NOTE:
 	      console.log('Adding note');
-
-	      // Save store
-	      AppStore.addNote(action.note);
-
 	      // Save api
 	      _api2.default.addNote(action.note).request.then(function (response) {
 	        console.log('Added successfully to db');
+	        // Save store
+	        AppStore.addNote(response.data);
+	        // Emit a change
+	        AppStore.emitChange();
 	      }, function (error) {
 	        console.log(error);
 	      }).catch(function (error) {
 	        return console.log(error);
 	      });
-
-	      // Emit a change
-	      AppStore.emitChange();
 	      break;
 	    case _app4.default.RECEIVE_NOTES:
 	      console.log('Receiving Notes');
