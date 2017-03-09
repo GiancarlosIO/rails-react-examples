@@ -25,7 +25,7 @@ var AppStore = objectAssign({}, EventEmitter.prototype, {
     _roles = roles;
   }, // === end of setters === //
   addUser: function(user) {
-
+    _users = [user].concat(_users);
   },
   updateUser: function(user) {
 
@@ -52,11 +52,22 @@ AppDispatcher.register( payload => {
       // set users in store
       AppStore.setUsers(action.users);
       AppStore.setRoles(action.roles);
-
       // Emit a change
       AppStore.emitChange();
       break;
     case AppConstants.ADD_USER:
+      let user = action.user;
+      // save to db
+      console.log('saving user to db');
+      ADMIN_USERS.createUser(user).request.then(
+        response => {
+          // save to Store
+          console.log('Saving user to store');
+          AppStore.addUser(response.data);
+          // Emit a change
+          AppStore.emitChange();
+        }
+      ).catch( error => console.log('error server', error.response) );
       break;
     case AppConstants.EDIT_USER:
       break;

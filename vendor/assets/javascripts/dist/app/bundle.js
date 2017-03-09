@@ -33962,7 +33962,7 @@
 
 	var _addForm2 = _interopRequireDefault(_addForm);
 
-	var _usersList = __webpack_require__(327);
+	var _usersList = __webpack_require__(329);
 
 	var _usersList2 = _interopRequireDefault(_usersList);
 
@@ -34054,12 +34054,25 @@
 	          { className: 'row' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'col-xs-12 col-sm-4 col-md-2 col-lg-2' },
-	            _react2.default.createElement(_addForm2.default, null)
+	            { className: 'col-xs-12' },
+	            _react2.default.createElement(
+	              'h4',
+	              { className: '' },
+	              ' Search box'
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'row' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-xs-12 col-sm-3 col-md-3 col-lg-2 height--fixed flex--column--start' },
+	            _react2.default.createElement(_addForm2.default, { roles: roles })
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'col-xs-12 col-sm-8 col-md-10 col-lg-10' },
+	            { className: 'col-xs-12 col-sm-9 col-md-9 col-lg-10 height--fixed flex--column--start' },
 	            _react2.default.createElement(_usersList2.default, { users: users })
 	          )
 	        )
@@ -34228,7 +34241,9 @@
 	  setRoles: function setRoles(roles) {
 	    _roles = roles;
 	  }, // === end of setters === //
-	  addUser: function addUser(user) {},
+	  addUser: function addUser(user) {
+	    _users = [user].concat(_users);
+	  },
 	  updateUser: function updateUser(user) {},
 	  deleteUser: function deleteUser(user_id) {},
 	  emitChange: function emitChange() {
@@ -34250,11 +34265,22 @@
 	      // set users in store
 	      AppStore.setUsers(action.users);
 	      AppStore.setRoles(action.roles);
-
 	      // Emit a change
 	      AppStore.emitChange();
 	      break;
 	    case _app4.default.ADD_USER:
+	      var user = action.user;
+	      // save to db
+	      console.log('saving user to db');
+	      _adminUsers2.default.createUser(user).request.then(function (response) {
+	        // save to Store
+	        console.log('Saving user to store');
+	        AppStore.addUser(response.data);
+	        // Emit a change
+	        AppStore.emitChange();
+	      }).catch(function (error) {
+	        return console.log('error server', error.response);
+	      });
 	      break;
 	    case _app4.default.EDIT_USER:
 	      break;
@@ -34303,7 +34329,20 @@
 	    });
 	    return { request: request, cancel: cancel };
 	  },
-	  createUser: function createUser(user) {},
+	  createUser: function createUser(user) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'post',
+	      url: BASE_URL,
+	      responseType: 'json',
+	      data: { user: user },
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
 	  updateUser: function updateUser(user) {},
 	  deleteUser: function deleteUser(user_id) {}
 	};
@@ -34326,6 +34365,18 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _emailValidator = __webpack_require__(327);
+
+	var _emailValidator2 = _interopRequireDefault(_emailValidator);
+
+	var _app = __webpack_require__(321);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _roles = __webpack_require__(328);
+
+	var _roles2 = _interopRequireDefault(_roles);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -34340,21 +34391,118 @@
 	  function AddForm(props) {
 	    _classCallCheck(this, AddForm);
 
-	    return _possibleConstructorReturn(this, (AddForm.__proto__ || Object.getPrototypeOf(AddForm)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (AddForm.__proto__ || Object.getPrototypeOf(AddForm)).call(this, props));
+
+	    _this.handleSubmit = function (e) {
+	      e.preventDefault();
+	      if (_this.inputFirstName.value.length > 0 && _this.inputLastName.value.length > 0 && _this.inputEmail.value.length > 0) {
+	        if (_emailValidator2.default.validate(_this.inputEmail.value)) {
+	          var newUser = {
+	            first_name: _this.inputFirstName.value,
+	            last_name: _this.inputLastName.value,
+	            email: _this.inputEmail.value,
+	            age: _this.inputAge.value > 0 ? _this.inputAge.value : undefined,
+	            role_id: _this.inputRole.getRoleId()
+	          };
+	          console.log('newuser', newUser);
+	          _app2.default.addUser(newUser);
+	          _this.inputFirstName.value = '';
+	          _this.inputLastName.value = '';
+	          _this.setState({ emailText: '' });
+	          _this.inputAge.value = '';
+	          _this.inputRole.resetRoleId();
+	        }
+	      };
+	    };
+
+	    _this.handleChangeEmail = function () {
+	      _this.setState({
+	        emailText: _this.inputEmail.value
+	      }, function () {
+	        if (_emailValidator2.default.validate(_this.state.emailText)) {
+	          _this.setState({ errorEmail: '' });
+	        } else {
+	          _this.setState({ errorEmail: 'Email not valid' });
+	        };
+	      });
+	    };
+
+	    _this.state = {
+	      emailText: '',
+	      errorEmail: ''
+	    };
+	    return _this;
 	  }
 
 	  _createClass(AddForm, [{
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
+	      var roles = this.props.roles;
+
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'admin-users__form' },
 	        _react2.default.createElement(
 	          'h5',
 	          null,
 	          'Add a new user'
 	        ),
-	        _react2.default.createElement('form', null)
+	        _react2.default.createElement(
+	          'form',
+	          { onSubmit: this.handleSubmit },
+	          _react2.default.createElement(
+	            'label',
+	            { className: 'admin-users__form__group' },
+	            'First name',
+	            _react2.default.createElement('input', { ref: function ref(el) {
+	                _this2.inputFirstName = el;
+	              }, type: 'text' })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            { className: 'admin-users__form__group' },
+	            'Last name',
+	            _react2.default.createElement('input', { ref: function ref(el) {
+	                _this2.inputLastName = el;
+	              }, type: 'text' })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            { className: 'admin-users__form__group' },
+	            'Email ',
+	            _react2.default.createElement(
+	              'span',
+	              null,
+	              this.state.errorEmail
+	            ),
+	            _react2.default.createElement('input', { value: this.state.emailText, onChange: this.handleChangeEmail, ref: function ref(el) {
+	                _this2.inputEmail = el;
+	              }, type: 'text' })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            { className: 'admin-users__form__group' },
+	            'Age',
+	            _react2.default.createElement('input', { ref: function ref(el) {
+	                _this2.inputAge = el;
+	              }, type: 'number', min: '1', max: '70' })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            { className: 'admin-users__form__group' },
+	            'Role',
+	            _react2.default.createElement(_roles2.default, { roles: roles, ref: function ref(el) {
+	                _this2.inputRole = el;
+	              } })
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'button button--medium button--blue', type: 'submit' },
+	            'Create User'
+	          )
+	        )
 	      );
 	    }
 	  }]);
@@ -34366,6 +34514,58 @@
 
 /***/ },
 /* 327 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var exporter = {};
+
+	var tester = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-?\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+	// Thanks to:
+	// http://fightingforalostcause.net/misc/2006/compare-email-regex.php
+	// http://thedailywtf.com/Articles/Validating_Email_Addresses.aspx
+	// http://stackoverflow.com/questions/201323/what-is-the-best-regular-expression-for-validating-email-addresses/201378#201378
+	function validate(email)
+	{
+		if (!email)
+			return false;
+			
+		if(email.length>254)
+			return false;
+
+		var valid = tester.test(email);
+		if(!valid)
+			return false;
+
+		// Further checking of some things regex can't handle
+		var parts = email.split("@");
+		if(parts[0].length>64)
+			return false;
+
+		var domainParts = parts[1].split(".");
+		if(domainParts.some(function(part) { return part.length>63; }))
+			return false;
+
+		return true;
+	}
+	exporter.validate = validate;
+
+	function validate_async(email, callback)
+	{
+	    var isValidEmail = false;
+	    try {
+	        isValidEmail = exporter.validate(email);
+	        callback(null, isValidEmail);
+	    }
+	    catch(err) {
+	        callback(err, isValidEmail)
+	    }
+	}
+	exporter.validate_async = validate_async;
+
+	module.exports = exporter;
+
+/***/ },
+/* 328 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34380,7 +34580,86 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _user = __webpack_require__(328);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Roles = function (_React$Component) {
+	  _inherits(Roles, _React$Component);
+
+	  function Roles(props) {
+	    _classCallCheck(this, Roles);
+
+	    var _this = _possibleConstructorReturn(this, (Roles.__proto__ || Object.getPrototypeOf(Roles)).call(this, props));
+
+	    _this.getRoleId = function () {
+	      return _this.state.role_id;
+	    };
+
+	    _this.resetRoleId = function () {
+	      _this.setState({ role_id: 1 });
+	    };
+
+	    _this.handleChange = function (e) {
+	      _this.setState({
+	        role_id: e.target.value
+	      });
+	    };
+
+	    _this.state = {
+	      role_id: 1
+	    };
+	    return _this;
+	  }
+
+	  _createClass(Roles, [{
+	    key: 'render',
+	    value: function render() {
+	      var roles = this.props.roles;
+
+	      var rolesOptions = roles.map(function (role) {
+	        return _react2.default.createElement(
+	          'option',
+	          { key: role.id, value: role.id },
+	          ' ',
+	          role.name,
+	          ' '
+	        );
+	      });
+	      return _react2.default.createElement(
+	        'select',
+	        { onChange: this.handleChange },
+	        rolesOptions
+	      );
+	    }
+	  }]);
+
+	  return Roles;
+	}(_react2.default.Component);
+
+	exports.default = Roles;
+
+/***/ },
+/* 329 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _user = __webpack_require__(330);
 
 	var _user2 = _interopRequireDefault(_user);
 
@@ -34439,12 +34718,12 @@
 	              _react2.default.createElement(
 	                'th',
 	                null,
-	                ' Email '
+	                ' Age '
 	              ),
 	              _react2.default.createElement(
 	                'th',
 	                null,
-	                ' Age '
+	                ' Email '
 	              ),
 	              _react2.default.createElement(
 	                'th',
@@ -34479,7 +34758,7 @@
 	};
 
 /***/ },
-/* 328 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

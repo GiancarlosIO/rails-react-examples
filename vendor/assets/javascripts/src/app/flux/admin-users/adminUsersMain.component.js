@@ -48,10 +48,13 @@ export default class AdminUsersMainComponent extends React.Component {
           <div className="col-xs-12"> <h4 className="text-center">Managment Users</h4> </div>
         </div>
         <div className="row">
-          <div className="col-xs-12 col-sm-4 col-md-2 col-lg-2">
-            <AddForm />
+          <div className="col-xs-12"><h4 className=""> Search box</h4></div>
+        </div>
+        <div className="row">
+          <div className="col-xs-12 col-sm-3 col-md-3 col-lg-2 height--fixed flex--column--start">
+            <AddForm roles={roles}/>
           </div>
-          <div className="col-xs-12 col-sm-8 col-md-10 col-lg-10">
+          <div className="col-xs-12 col-sm-9 col-md-9 col-lg-10 height--fixed flex--column--start">
             <UsersList users={users}/>
           </div>
         </div>

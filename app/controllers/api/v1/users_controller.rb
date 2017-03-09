@@ -5,7 +5,7 @@ class Api::V1::UsersController < Api::V1::ApiController
   before_action :set_user, only: [:show, :update, :destroy]
 
   def index
-    @users = User.all
+    @users = User.all.order(created_at: :desc)
     @roles = Role.all
   end
 
@@ -17,6 +17,7 @@ class Api::V1::UsersController < Api::V1::ApiController
     if @user.save
       render template: 'api/v1/users/show', status: 200
     else
+      puts "error to create"
       render json: { error: @user.errors }, status: :unprocessable_entity
     end
   end
@@ -25,7 +26,7 @@ class Api::V1::UsersController < Api::V1::ApiController
     if @user.update(params_user)
       render template: 'api/v1/users/show', status: 200
     else
-      render json: { error: @user.errors }, status: :unprocessable_entity
+      render json: { errors: @user.errors }, status: :unprocessable_entity
     end
   end
 
@@ -46,7 +47,7 @@ class Api::V1::UsersController < Api::V1::ApiController
     end
   end
 
-  def params_note
-    params.require(user).permit(:first_name, :last_name, :age, :email, :role_id)
+  def params_user
+    params.require(:user).permit(:first_name, :last_name, :age, :email, :role_id)
   end
 end
