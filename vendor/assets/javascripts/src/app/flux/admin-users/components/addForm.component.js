@@ -8,7 +8,10 @@ export default class AddForm extends React.Component {
   render() {
     return (
       <div>
-        <h1>ADD FORM USERS</h1>
+        <h5>Add a new user</h5>
+        <form>
+          
+        </form>
       </div>
     )
   }

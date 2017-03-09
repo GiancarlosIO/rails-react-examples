@@ -16,7 +16,7 @@ export default class UsersList extends React.Component {
     });
     return (
       <div>
-        <table className="full-width">
+        <table className="full-width admin-users__table">
           <thead>
             <tr>
               <th> Id </th>

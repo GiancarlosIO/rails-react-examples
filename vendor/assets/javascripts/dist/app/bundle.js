@@ -34350,10 +34350,11 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(
-	          'h1',
+	          'h5',
 	          null,
-	          'ADD FORM USERS'
-	        )
+	          'Add a new user'
+	        ),
+	        _react2.default.createElement('form', null)
 	      );
 	    }
 	  }]);
@@ -34413,7 +34414,7 @@
 	        null,
 	        _react2.default.createElement(
 	          'table',
-	          { className: 'full-width' },
+	          { className: 'full-width admin-users__table' },
 	          _react2.default.createElement(
 	            'thead',
 	            null,
