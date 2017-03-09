@@ -99,6 +99,10 @@
 
 	var _stickypadMain2 = _interopRequireDefault(_stickypadMain);
 
+	var _adminUsersMain = __webpack_require__(320);
+
+	var _adminUsersMain2 = _interopRequireDefault(_adminUsersMain);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	$(document).on('ready', function () {
@@ -115,7 +119,8 @@
 	      _react2.default.createElement(_reactRouter.Route, { path: '/weather', component: _main8.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/simplenote', component: _main10.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/contact-list', component: _contactListMain2.default }),
-	      _react2.default.createElement(_reactRouter.Route, { path: '/sticky-pads', component: _stickypadMain2.default })
+	      _react2.default.createElement(_reactRouter.Route, { path: '/sticky-pads', component: _stickypadMain2.default }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/admin-users', component: _adminUsersMain2.default })
 	    )
 	  ), document.getElementById('app-wrapper'));
 	});
@@ -26597,6 +26602,15 @@
 	          { to: '/sticky-pads', activeClassName: 'link__active' },
 	          'Sticky Pads(FLUX)'
 	        )
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/admin-users', activeClassName: 'link__active' },
+	          'Admin Users(FLUX)'
+	        )
 	      )
 	    )
 	  );
@@ -33915,6 +33929,59 @@
 	Note.propTypes = {
 	  note: _react2.default.PropTypes.object.isRequired
 	};
+
+/***/ },
+/* 320 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AdminUsersMainComponent = function (_React$Component) {
+	  _inherits(AdminUsersMainComponent, _React$Component);
+
+	  function AdminUsersMainComponent(props) {
+	    _classCallCheck(this, AdminUsersMainComponent);
+
+	    return _possibleConstructorReturn(this, (AdminUsersMainComponent.__proto__ || Object.getPrototypeOf(AdminUsersMainComponent)).call(this, props));
+	  }
+
+	  _createClass(AdminUsersMainComponent, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h1',
+	          null,
+	          'ADMIN USERS COMPONENT'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return AdminUsersMainComponent;
+	}(_react2.default.Component);
+
+	exports.default = AdminUsersMainComponent;
 
 /***/ }
 /******/ ]);
