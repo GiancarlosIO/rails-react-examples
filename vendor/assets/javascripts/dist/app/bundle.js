@@ -33946,6 +33946,18 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _app = __webpack_require__(321);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(322);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	var _adminUsers = __webpack_require__(325);
+
+	var _adminUsers2 = _interopRequireDefault(_adminUsers);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -33954,25 +33966,54 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	// === function to get the state === //
+	function getAppState() {
+	  return {
+	    users: _app4.default.getUsers()
+	  };
+	} // === end of function to get the state === //
+
 	var AdminUsersMainComponent = function (_React$Component) {
 	  _inherits(AdminUsersMainComponent, _React$Component);
 
 	  function AdminUsersMainComponent(props) {
 	    _classCallCheck(this, AdminUsersMainComponent);
 
-	    return _possibleConstructorReturn(this, (AdminUsersMainComponent.__proto__ || Object.getPrototypeOf(AdminUsersMainComponent)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (AdminUsersMainComponent.__proto__ || Object.getPrototypeOf(AdminUsersMainComponent)).call(this, props));
+
+	    _this._onChange = function () {
+	      _this.setState(getAppState);
+	    };
+
+	    _this.state = getAppState();
+	    return _this;
 	  }
 
 	  _createClass(AdminUsersMainComponent, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      _app4.default.addChangeListener(this._onChange);
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      _app4.default.removeChangeListener(this._onChange);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'row' },
 	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          'ADMIN USERS COMPONENT'
+	          'div',
+	          { className: 'col-xs-12 col-sm-6 col-md-4 col-lg-2' },
+	          'ADD USER FORM'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-xs-12 col-sm-6 col-md-8 col-lg-10' },
+	          'USERS LIST'
 	        )
 	      );
 	    }
@@ -33982,6 +34023,217 @@
 	}(_react2.default.Component);
 
 	exports.default = AdminUsersMainComponent;
+
+/***/ },
+/* 321 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _app = __webpack_require__(323);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(324);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AppActions = {
+	  receiveUsers: function receiveUsers(users) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.RECEIVE_USERS,
+	      users: users
+	    });
+	  },
+	  addUser: function addUser(user) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.ADD_USER,
+	      user: user
+	    });
+	  },
+	  editUser: function editUser(user) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.EDIT_USER,
+	      user: user
+	    });
+	  },
+	  updateUser: function updateUser(user_id, user) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.UPDATE_USER,
+	      user_id: user_id,
+	      user: user
+	    });
+	  },
+	  deleteUser: function deleteUser(user_id) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.DELETE_USER,
+	      user_id: user_id
+	    });
+	  }
+	};
+
+	exports.default = AppActions;
+
+/***/ },
+/* 322 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _app = __webpack_require__(323);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _app3 = __webpack_require__(324);
+
+	var _app4 = _interopRequireDefault(_app3);
+
+	var _events = __webpack_require__(305);
+
+	var _objectAssign = __webpack_require__(5);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	var _adminUsers = __webpack_require__(325);
+
+	var _adminUsers2 = _interopRequireDefault(_adminUsers);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CHANGE_EVENT = 'change';
+
+	var _users = [];
+
+	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
+	  // === getters === //
+	  getUsers: function getUsers() {
+	    return _users;
+	  }, // === end of getters === //
+	  // === setters === //
+	  setUsers: function setUsers(users) {
+	    _users = users;
+	  }, // === end of setters === //
+	  addUser: function addUser(user) {},
+	  updateUser: function updateUser(user) {},
+	  deleteUser: function deleteUser(user_id) {},
+	  emitChange: function emitChange() {
+	    this.emit(CHANGE_EVENT);
+	  },
+	  addChangeListener: function addChangeListener(callback) {
+	    this.on(CHANGE_EVENT, callback);
+	  },
+	  removeChangeListener: function removeChangeListener(callback) {
+	    this.removeListener(CHANGE_EVENT, callback);
+	  }
+	});
+
+	_app2.default.register(function (payload) {
+	  var action = payload.action;
+	  switch (action.actionType) {
+	    case _app4.default.RECEIVE_USERS:
+	      break;
+	    case _app4.default.ADD_USER:
+	      break;
+	    case _app4.default.EDIT_USER:
+	      break;
+	    case _app4.default.UPDATE_USER:
+	      break;
+	    case _app4.default.DELETE_USER:
+	      break;
+	  }
+	});
+
+	exports.default = AppStore;
+
+/***/ },
+/* 323 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _flux = __webpack_require__(301);
+
+	var _objectAssign = __webpack_require__(5);
+
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AppDispatcher = (0, _objectAssign2.default)(new _flux.Dispatcher(), {
+	  handleViewAction: function handleViewAction(action) {
+	    var payload = {
+	      source: 'VIEW_ACTION',
+	      action: action
+	    };
+	    this.dispatch(payload);
+	  }
+	});
+
+	exports.default = AppDispatcher;
+
+/***/ },
+/* 324 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var APP_CONSTANTS = {
+	  RECEIVE_USERS: 'RECEIVE_USERS',
+	  ADD_USER: 'ADD_USER',
+	  EDIT_USER: 'EDIT_USER',
+	  UPDATE_USER: 'UPDATE_USER',
+	  DELETE_USER: 'DELETE_USER'
+	};
+
+	exports.default = APP_CONSTANTS;
+
+/***/ },
+/* 325 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _app = __webpack_require__(321);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _axios = __webpack_require__(260);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var BASE_URL = '/api/v1/users';
+
+	var ADMIN_USERS = {
+	  getUsers: function getUsers() {},
+	  createUser: function createUser(user) {},
+	  updateUser: function updateUser(user) {},
+	  deleteUser: function deleteUser(user_id) {}
+	};
+
+	exports.default = ADMIN_USERS;
 
 /***/ }
 /******/ ]);
