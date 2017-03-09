@@ -14,6 +14,7 @@ var AppStore = objectAssign({}, EventEmitter.prototype, {
   },
   addNote: function(note) {
     _notes = [note].concat(_notes);
+    console.log('adding successfully to store');
   },
 
   getNotes: function() {
@@ -39,20 +40,17 @@ AppDispatcher.register((payload) => {
   switch (action.actionType) {
     case AppConstants.ADD_NOTE:
       console.log('Adding note');
-
-      // Save store
-      AppStore.addNote(action.note);
-
       // Save api
       ApiNotes.addNote(action.note).request.then(
         (response) => {
           console.log('Added successfully to db');
+          // Save store
+          AppStore.addNote(response.data);
+          // Emit a change
+          AppStore.emitChange();
         },
         (error) => { console.log(error) }
       ).catch( error => console.log(error) );
-
-      // Emit a change
-      AppStore.emitChange();
       break;
     case AppConstants.RECEIVE_NOTES:
       console.log('Receiving Notes');
