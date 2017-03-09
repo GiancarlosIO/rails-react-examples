@@ -33983,7 +33983,8 @@
 	// === function to get the state === //
 	function getAppState() {
 	  return {
-	    users: _app4.default.getUsers()
+	    users: _app4.default.getUsers(),
+	    roles: _app4.default.getRoles()
 	  };
 	} // === end of function to get the state === //
 
@@ -34006,6 +34007,16 @@
 	  _createClass(AdminUsersMainComponent, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      // === Get the users list === //
+	      console.log('Getting users and roles');
+	      _adminUsers2.default.getUsers().request.then(function (response) {
+	        _app2.default.receiveUsers(response.data.users, response.data.roles);
+	      }, function (error) {
+	        console.log('Error to get the users list', error);
+	      }).catch(function (error) {
+	        return console.log('Error server', error);
+	      });
+	      // === end of Get the users list === //
 	      _app4.default.addChangeListener(this._onChange);
 	    }
 	  }, {
@@ -34016,18 +34027,41 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _state = this.state,
+	          users = _state.users,
+	          roles = _state.roles;
+
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row' },
+	        null,
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-xs-12 col-sm-6 col-md-4 col-lg-2' },
-	          _react2.default.createElement(_addForm2.default, null)
+	          { className: 'row' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-xs-12' },
+	            ' ',
+	            _react2.default.createElement(
+	              'h4',
+	              { className: 'text-center' },
+	              'Managment Users'
+	            ),
+	            ' '
+	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-xs-12 col-sm-6 col-md-8 col-lg-10' },
-	          _react2.default.createElement(_usersList2.default, null)
+	          { className: 'row' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-xs-12 col-sm-4 col-md-2 col-lg-2' },
+	            _react2.default.createElement(_addForm2.default, null)
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'col-xs-12 col-sm-8 col-md-10 col-lg-10' },
+	            _react2.default.createElement(_usersList2.default, { users: users })
+	          )
 	        )
 	      );
 	    }
@@ -34059,10 +34093,11 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var AppActions = {
-	  receiveUsers: function receiveUsers(users) {
+	  receiveUsers: function receiveUsers(users, roles) {
 	    _app2.default.handleViewAction({
 	      actionType: _app4.default.RECEIVE_USERS,
-	      users: users
+	      users: users,
+	      roles: roles
 	    });
 	  },
 	  addUser: function addUser(user) {
@@ -34176,15 +34211,22 @@
 	var CHANGE_EVENT = 'change';
 
 	var _users = [];
+	var _roles = [];
 
 	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
 	  // === getters === //
 	  getUsers: function getUsers() {
 	    return _users;
+	  },
+	  getRoles: function getRoles() {
+	    return _roles;
 	  }, // === end of getters === //
 	  // === setters === //
 	  setUsers: function setUsers(users) {
 	    _users = users;
+	  },
+	  setRoles: function setRoles(roles) {
+	    _roles = roles;
 	  }, // === end of setters === //
 	  addUser: function addUser(user) {},
 	  updateUser: function updateUser(user) {},
@@ -34204,6 +34246,13 @@
 	  var action = payload.action;
 	  switch (action.actionType) {
 	    case _app4.default.RECEIVE_USERS:
+	      console.log('Saving Users and Roles in store');
+	      // set users in store
+	      AppStore.setUsers(action.users);
+	      AppStore.setRoles(action.roles);
+
+	      // Emit a change
+	      AppStore.emitChange();
 	      break;
 	    case _app4.default.ADD_USER:
 	      break;
@@ -34241,7 +34290,19 @@
 	var BASE_URL = '/api/v1/users';
 
 	var ADMIN_USERS = {
-	  getUsers: function getUsers() {},
+	  getUsers: function getUsers() {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'get',
+	      url: BASE_URL,
+	      responseType: 'json',
+	      cancelToken: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
 	  createUser: function createUser(user) {},
 	  updateUser: function updateUser(user) {},
 	  deleteUser: function deleteUser(user_id) {}
@@ -34318,6 +34379,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _user = __webpack_require__(328);
+
+	var _user2 = _interopRequireDefault(_user);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -34338,13 +34403,65 @@
 	  _createClass(UsersList, [{
 	    key: 'render',
 	    value: function render() {
+	      var users = this.props.users;
+
+	      var usersList = users.map(function (user) {
+	        return _react2.default.createElement(_user2.default, { key: user.id, user: user });
+	      });
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          'USERS LIST COMPONENT'
+	          'table',
+	          { className: 'full-width' },
+	          _react2.default.createElement(
+	            'thead',
+	            null,
+	            _react2.default.createElement(
+	              'tr',
+	              null,
+	              _react2.default.createElement(
+	                'th',
+	                null,
+	                ' Id '
+	              ),
+	              _react2.default.createElement(
+	                'th',
+	                null,
+	                ' First name '
+	              ),
+	              _react2.default.createElement(
+	                'th',
+	                null,
+	                ' Last name '
+	              ),
+	              _react2.default.createElement(
+	                'th',
+	                null,
+	                ' Email '
+	              ),
+	              _react2.default.createElement(
+	                'th',
+	                null,
+	                ' Age '
+	              ),
+	              _react2.default.createElement(
+	                'th',
+	                null,
+	                ' Role '
+	              ),
+	              _react2.default.createElement(
+	                'th',
+	                { colSpan: '2' },
+	                ' Actions '
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'tbody',
+	            null,
+	            usersList
+	          )
 	        )
 	      );
 	    }
@@ -34354,6 +34471,120 @@
 	}(_react2.default.Component);
 
 	exports.default = UsersList;
+
+
+	UsersList.proptypes = {
+	  users: _react2.default.PropTypes.array.isRequired
+	};
+
+/***/ },
+/* 328 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var User = function (_React$Component) {
+	  _inherits(User, _React$Component);
+
+	  function User(props) {
+	    _classCallCheck(this, User);
+
+	    var _this = _possibleConstructorReturn(this, (User.__proto__ || Object.getPrototypeOf(User)).call(this, props));
+
+	    _this.handleEdit = function () {};
+
+	    _this.handleDelete = function () {};
+
+	    return _this;
+	  }
+
+	  _createClass(User, [{
+	    key: "render",
+	    value: function render() {
+	      var user = this.props.user;
+
+	      return _react2.default.createElement(
+	        "tr",
+	        null,
+	        _react2.default.createElement(
+	          "td",
+	          null,
+	          user.id
+	        ),
+	        _react2.default.createElement(
+	          "td",
+	          null,
+	          user.first_name
+	        ),
+	        _react2.default.createElement(
+	          "td",
+	          null,
+	          user.last_name
+	        ),
+	        _react2.default.createElement(
+	          "td",
+	          null,
+	          user.age
+	        ),
+	        _react2.default.createElement(
+	          "td",
+	          null,
+	          user.email
+	        ),
+	        _react2.default.createElement(
+	          "td",
+	          null,
+	          user.role.name
+	        ),
+	        _react2.default.createElement(
+	          "td",
+	          null,
+	          _react2.default.createElement(
+	            "button",
+	            { onClick: this.handleEdit, className: "button button--min button--emerald" },
+	            "Edit"
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "td",
+	          null,
+	          _react2.default.createElement(
+	            "button",
+	            { onClick: this.handleDelete, className: "button button--min button--emerald" },
+	            "Delete"
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return User;
+	}(_react2.default.Component);
+
+	exports.default = User;
+
+
+	User.propTypes = {
+	  user: _react2.default.PropTypes.object.isRequired
+	};
 
 /***/ }
 /******/ ]);

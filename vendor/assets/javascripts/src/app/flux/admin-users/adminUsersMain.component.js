@@ -43,12 +43,17 @@ export default class AdminUsersMainComponent extends React.Component {
   render() {
     let {users, roles} = this.state;
     return (
-      <div className="row">
-        <div className="col-xs-12 col-sm-6 col-md-4 col-lg-2">
-          <AddForm />
+      <div>
+        <div className="row">
+          <div className="col-xs-12"> <h4 className="text-center">Managment Users</h4> </div>
         </div>
-        <div className="col-xs-12 col-sm-6 col-md-8 col-lg-10">
-          <UsersList users={users} roles={roles}/>
+        <div className="row">
+          <div className="col-xs-12 col-sm-4 col-md-2 col-lg-2">
+            <AddForm />
+          </div>
+          <div className="col-xs-12 col-sm-8 col-md-10 col-lg-10">
+            <UsersList users={users}/>
+          </div>
         </div>
       </div>
     )
