@@ -69,6 +69,9 @@ var AppStore = objectAssign({}, EventEmitter.prototype, {
   },
   deleteUser: function(user_id) {
     let index = _users.findIndex( user => user.id == user_id );
+    if (_userToEdit.id == user_id) {
+      _userToEdit = {};
+    }
     _users.splice(index, 1);
   },
   emitChange: function() {

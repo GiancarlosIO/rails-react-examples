@@ -34315,6 +34315,9 @@
 	    var index = _users.findIndex(function (user) {
 	      return user.id == user_id;
 	    });
+	    if (_userToEdit.id == user_id) {
+	      _userToEdit = {};
+	    }
 	    _users.splice(index, 1);
 	  },
 	  emitChange: function emitChange() {
@@ -34642,7 +34645,7 @@
 	          ),
 	          _react2.default.createElement(
 	            'button',
-	            { className: 'button button--medium button--green-light', type: 'submit' },
+	            { className: 'button button--min button--green-light', type: 'submit' },
 	            'Create User'
 	          )
 	        )
@@ -35009,14 +35012,14 @@
 	          _react2.default.createElement(
 	            'button',
 	            {
-	              className: 'button button--min button--blue',
+	              className: 'button button--min button--green-light',
 	              type: 'submit' },
 	            'Update User'
 	          ),
 	          _react2.default.createElement(
 	            'div',
 	            {
-	              className: 'button button--min button--grey-light margin-left-15',
+	              className: 'button button--min button--grey margin-left-15',
 	              onClick: this.cancelUpdate },
 	            'Cancel'
 	          )

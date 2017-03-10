@@ -116,12 +116,12 @@ export default class EditForm extends React.Component {
               />
           </label>
           <button
-            className="button button--min button--blue"
+            className="button button--min button--green-light"
             type="submit">
             Update User
           </button>
           <div
-            className="button button--min button--grey-light margin-left-15"
+            className="button button--min button--grey margin-left-15"
             onClick={this.cancelUpdate}>
             Cancel
           </div>

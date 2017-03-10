@@ -73,7 +73,7 @@ export default class AddForm extends React.Component {
             Role
             <Roles roles={roles} ref={(el) => { this.inputRole = el; }}/>
           </label>
-          <button  className="button button--medium button--green-light" type="submit">Create User</button>
+          <button  className="button button--min button--green-light" type="submit">Create User</button>
         </form>
       </div>
     )
