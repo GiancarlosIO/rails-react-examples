@@ -7,16 +7,23 @@ import ADMIN_USERS from '../utils/api/adminUsers.api';
 const CHANGE_EVENT = 'change';
 
 var _users = [];
-var _usersFiltered = [];
+var _usersFilteredByFirstName = [];
+var _usersFilteredByRole = [];
+var _usersFilteredMix = [];
 var _roles = [];
 var _userToEdit = {};
 var _searchByFirstName = '';
+var _searchByRole = 'extra';
 
 var AppStore = objectAssign({}, EventEmitter.prototype, {
   // === getters === //
   getUsers: function() {
-    if (_searchByFirstName.length > 0) {
-      return _usersFiltered
+    if (_searchByRole !== "extra" && _searchByFirstName.length > 0) {
+      return _usersFilteredMix;
+    } else if (_searchByFirstName.length > 0) {
+      return _usersFilteredByFirstName
+    } else if (_searchByRole !== "extra"){
+      return _usersFilteredByRole;
     } else {
       return _users;
     }
@@ -37,10 +44,20 @@ var AppStore = objectAssign({}, EventEmitter.prototype, {
   setUserToEdit: function(user) {
     _userToEdit = user;
   }, // === end of setters === //
-  SearchByFirstNameText: function(text) {
+  searchByFirstNameText: function(text) {
     _searchByFirstName = text.trim().toLowerCase();
-    if (text.length > 0) {
-      _usersFiltered = _users.filter( user => user.first_name.toLowerCase().indexOf(_searchByFirstName) > -1 );
+    if (_searchByRole !== 'extra') {
+      _usersFilteredMix = _usersFilteredByRole.filter( user => user.first_name.toLowerCase().indexOf(_searchByFirstName) > -1 );
+    } else {
+      _usersFilteredByFirstName = _users.filter( user => user.first_name.toLowerCase().indexOf(_searchByFirstName) > -1 );
+    }
+  },
+  searchByRole: function(role_id) {
+    _searchByRole = role_id;
+    if (_searchByFirstName.length > 0) {
+      _usersFilteredMix = _usersFilteredByFirstName.filter( user => user.role.id == _searchByRole );
+    } else {
+      _usersFilteredByRole = _users.filter( user => user.role.id == _searchByRole );
     }
   },
   addUser: function(user) {
@@ -128,7 +145,13 @@ AppDispatcher.register( payload => {
       break;
     case AppConstants.SEARCH_BY_FIRST_NAME:
       // save in store
-      AppStore.SearchByFirstNameText(action.text);
+      AppStore.searchByFirstNameText(action.text);
+      // Emit a change
+      AppStore.emitChange();
+      break;
+    case AppConstants.SEARCH_BY_ROLE:
+      // Save in store
+      AppStore.searchByRole(action.text)
       // Emit a change
       AppStore.emitChange();
       break;

@@ -34147,6 +34147,12 @@
 	      actionType: _app4.default.SEARCH_BY_FIRST_NAME,
 	      text: text
 	    });
+	  },
+	  searchByRole: function searchByRole(text) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.SEARCH_BY_ROLE,
+	      text: text
+	    });
 	  }
 	};
 
@@ -34198,7 +34204,8 @@
 	  UPDATE_USER: 'UPDATE_USER',
 	  DELETE_USER: 'DELETE_USER',
 	  CANCEL_UPDATE: 'CANCEL_UPDATE',
-	  SEARCH_BY_FIRST_NAME: 'SEARCH_BY_FIRST_NAME'
+	  SEARCH_BY_FIRST_NAME: 'SEARCH_BY_FIRST_NAME',
+	  SEARCH_BY_ROLE: 'SEARCH_BY_ROLE'
 	};
 
 	exports.default = APP_CONSTANTS;
@@ -34236,16 +34243,23 @@
 	var CHANGE_EVENT = 'change';
 
 	var _users = [];
-	var _usersFiltered = [];
+	var _usersFilteredByFirstName = [];
+	var _usersFilteredByRole = [];
+	var _usersFilteredMix = [];
 	var _roles = [];
 	var _userToEdit = {};
 	var _searchByFirstName = '';
+	var _searchByRole = 'extra';
 
 	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
 	  // === getters === //
 	  getUsers: function getUsers() {
-	    if (_searchByFirstName.length > 0) {
-	      return _usersFiltered;
+	    if (_searchByRole !== "extra" && _searchByFirstName.length > 0) {
+	      return _usersFilteredMix;
+	    } else if (_searchByFirstName.length > 0) {
+	      return _usersFilteredByFirstName;
+	    } else if (_searchByRole !== "extra") {
+	      return _usersFilteredByRole;
 	    } else {
 	      return _users;
 	    }
@@ -34266,11 +34280,27 @@
 	  setUserToEdit: function setUserToEdit(user) {
 	    _userToEdit = user;
 	  }, // === end of setters === //
-	  SearchByFirstNameText: function SearchByFirstNameText(text) {
+	  searchByFirstNameText: function searchByFirstNameText(text) {
 	    _searchByFirstName = text.trim().toLowerCase();
-	    if (text.length > 0) {
-	      _usersFiltered = _users.filter(function (user) {
+	    if (_searchByRole !== 'extra') {
+	      _usersFilteredMix = _usersFilteredByRole.filter(function (user) {
 	        return user.first_name.toLowerCase().indexOf(_searchByFirstName) > -1;
+	      });
+	    } else {
+	      _usersFilteredByFirstName = _users.filter(function (user) {
+	        return user.first_name.toLowerCase().indexOf(_searchByFirstName) > -1;
+	      });
+	    }
+	  },
+	  searchByRole: function searchByRole(role_id) {
+	    _searchByRole = role_id;
+	    if (_searchByFirstName.length > 0) {
+	      _usersFilteredMix = _usersFilteredByFirstName.filter(function (user) {
+	        return user.role.id == _searchByRole;
+	      });
+	    } else {
+	      _usersFilteredByRole = _users.filter(function (user) {
+	        return user.role.id == _searchByRole;
 	      });
 	    }
 	  },
@@ -34367,7 +34397,13 @@
 	        break;
 	      case _app4.default.SEARCH_BY_FIRST_NAME:
 	        // save in store
-	        AppStore.SearchByFirstNameText(action.text);
+	        AppStore.searchByFirstNameText(action.text);
+	        // Emit a change
+	        AppStore.emitChange();
+	        break;
+	      case _app4.default.SEARCH_BY_ROLE:
+	        // Save in store
+	        AppStore.searchByRole(action.text);
 	        // Emit a change
 	        AppStore.emitChange();
 	        break;
@@ -34689,6 +34725,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _app = __webpack_require__(321);
+
+	var _app2 = _interopRequireDefault(_app);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -34718,13 +34758,15 @@
 	    };
 
 	    _this.handleChange = function (e) {
-	      _this.setState({
-	        role_id: e.target.value
+	      _this.setState({ role_id: e.target.value }, function () {
+	        if (_this.props.search) {
+	          _app2.default.searchByRole(_this.state.role_id);
+	        };
 	      });
 	    };
 
 	    _this.state = {
-	      role_id: _this.props.userId ? _this.props.userId : 1
+	      role_id: _this.props.value ? _this.props.value : 1
 	    };
 	    return _this;
 	  }
@@ -34741,6 +34783,11 @@
 	    value: function render() {
 	      var roles = this.props.roles;
 
+	      var extraOption = this.props.search ? _react2.default.createElement(
+	        'option',
+	        { value: 'extra' },
+	        '-----'
+	      ) : '';
 	      var rolesOptions = roles.map(function (role) {
 	        return _react2.default.createElement(
 	          'option',
@@ -34753,6 +34800,7 @@
 	      return _react2.default.createElement(
 	        'select',
 	        { onChange: this.handleChange, value: this.state.role_id },
+	        extraOption,
 	        rolesOptions
 	      );
 	    }
@@ -35276,7 +35324,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'col-xs-12 col-sm-3 col-md-3 col-lg-2 flex--column--start' },
-	          _react2.default.createElement(_roles2.default, { roles: roles })
+	          _react2.default.createElement(_roles2.default, { roles: roles, search: true, value: "extra" })
 	        ),
 	        _react2.default.createElement(
 	          'div',

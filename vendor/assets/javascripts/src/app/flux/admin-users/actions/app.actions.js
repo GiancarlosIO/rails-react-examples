@@ -43,6 +43,12 @@ const AppActions = {
       actionType: AppConstants.SEARCH_BY_FIRST_NAME,
       text
     })
+  },
+  searchByRole: (text) => {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.SEARCH_BY_ROLE,
+      text
+    });
   }
 }
 
