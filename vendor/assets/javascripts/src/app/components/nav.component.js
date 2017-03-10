@@ -11,6 +11,7 @@ const NavComponent = () =>
       <li><Link to="/simplenote" activeClassName="link__active">Simplenote (copy)</Link></li>
       <li><Link to="/contact-list" activeClassName="link__active">Contact List(FLUX)</Link></li>
       <li><Link to="/sticky-pads" activeClassName="link__active">Sticky Pads(FLUX)</Link></li>
+      <li><Link to="/admin-users" activeClassName="link__active">Admin Users(FLUX)</Link></li>
     </ul>
   </nav>
 export default NavComponent;

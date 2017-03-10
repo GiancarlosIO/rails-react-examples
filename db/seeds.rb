@@ -5,3 +5,20 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+User.destroy_all
+Role.destroy_all
+
+Role.create(name: 'Admin');
+Role.create(name: 'Super User')
+Role.create(name: 'Guest')
+
+50.times do |t|
+  if t % 2 == 0
+    role_id = Role.first.id
+  elsif t % 3 == 0
+    role_id = Role.second.id
+  else
+    role_id = Role.third.id
+  end
+  user = User.create(first_name: "user #{t}", last_name: "lastname #{t}", age: t+10, email: "user#{t}@gmail.com", role_id: role_id)
+end

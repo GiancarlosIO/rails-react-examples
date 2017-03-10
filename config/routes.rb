@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       resources :notes
       resources :contacts
       resources :pads
+      resources :users
     end
   end
 

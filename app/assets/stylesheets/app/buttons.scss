@@ -36,6 +36,24 @@
       box-shadow: 0px 4px 10px rgba(black, 0.5);
     }
   }
+  &--green-light {
+    background-color: #64DDBB;
+    color: #fff;
+    transition: all 0.3s ease;
+    &:hover {
+      color: white;
+      box-shadow: 0px 4px 10px rgba(black, 0.5);
+    }
+  }
+  &--red-light {
+    background-color: #FF6766;
+    color: #fff;
+    transition: all 0.3s ease;
+    &:hover {
+      color: white;
+      box-shadow: 0px 4px 10px rgba(black, 0.5);
+    }
+  }
   &--grey {
     background-color: #95a5a6;
     color: #fff;

@@ -59,5 +59,10 @@
 .height {
   &--78vh { height: 78vh; }
   &--200 { height: 200px;}
+  &--fixed {
+    max-height: calc( 100vh - 212px );
+    min-height: calc( 100vh - 212px );
+    overflow: auto;
+  }
 }
 .no-resize { resize: none;}

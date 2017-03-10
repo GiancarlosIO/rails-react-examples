@@ -1,0 +1,129 @@
+.admin-users {
+  font-family: sans-serif;
+  &__title {
+    color: rgba(44, 62, 80,1.0);
+    font-size: 24px;
+    margin: 0;
+    margin-bottom: 10px;
+  }
+  &__search {
+    border-bottom: 1px solid rgba(0,0,0,0.3);
+    padding: 10px 0;
+    div {
+      select {
+        width: 100%;
+        font-size: 14px;
+        font-weight: 300;
+        color: rgba(52, 73, 94,1.0);
+        background-color: #fff;
+        padding: 5px;
+        border-radius: 3px;
+        border: 1px solid #D4D4D4;
+        transition: all 0.3s ease;
+        &:focus {
+          outline: none;
+          border-color: #7CEECE;
+        }
+      }
+      input {
+        width: 100%;
+        padding: 5px 7px;
+        font-size: 14px;
+        color: rgba(52, 73, 94,1.0);
+        font-weight: 300;
+        border-radius: 3px;
+        border: 1px solid #D4D4D4;
+        transition: all 0.3s ease;
+        &:focus {
+          outline: none;
+          border-color: #7CEECE;
+        }
+      }
+    }
+  }
+  &__form {
+    width: 100%;
+    margin-top: 10px;
+    h5 {
+      padding: 10px;
+      padding-top: 15px;
+      margin: 0;
+      color: rgba(41, 128, 185,1.0);
+      text-align: center;
+      font-size: 18px;
+      font-weight: 300;
+    }
+    form {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: center;
+      align-items: center;
+    }
+    &__group {
+      width: 100%;
+      padding: 10px;
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: center;
+      align-content: center;
+      text-align: center;
+      color: #3E4651;
+      font-size: 13px;
+      .error {
+        color: #E3000E;
+        font-size: 12px;
+        font-weight: 300;
+      }
+      input {
+        width: 100%;
+        margin-top: 5px;
+        padding: 5px 7px;
+        font-size: 14px;
+        color: rgba(52, 73, 94,1.0);
+        font-weight: 300;
+        border-radius: 3px;
+        border: 1px solid #D4D4D4;
+        transition: all 0.3s ease;
+        &:focus {
+          outline: none;
+          border-color: #7CEECE;
+        }
+      }
+      select {
+        width: 100%;
+        border: 1px solid #D4D4D4;
+        font-size: 14px;
+        font-weight: 300;
+        color: rgba(52, 73, 94,1.0);
+        background-color: #fff;
+        padding: 3px;
+        border-radius: 5px;
+        &:focus {
+          outline: none;
+          border: 1px solid #7CEECE;
+        }
+      }
+    }
+    .button {
+      margin-top: 10px;
+    }
+  }
+  &__table {
+    min-width: 700px;
+    thead {
+      background-color: #FF770B;
+      th {
+        border-radius: 3px;
+      }
+    }
+    tbody {
+      tr {
+        transition: all 0.3s ease;
+        &:hover {
+          background-color: #F4EDF6;
+        }
+        td { color: #34495E; }
+      }
+    }
+  }
+}
