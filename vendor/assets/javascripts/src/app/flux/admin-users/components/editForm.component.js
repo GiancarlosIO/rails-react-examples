@@ -27,7 +27,6 @@ export default class EditForm extends React.Component {
     e.preventDefault();
     let {user} = this.state;
     user.role_id = this.inputRole.getRoleId();
-    user.role = undefined
     if (user.first_name.length > 0 && user.last_name.length > 0 && this.state.errorEmail == '') {
       AppActions.updateUser(user);
     }
@@ -112,7 +111,7 @@ export default class EditForm extends React.Component {
             <Roles
               roles={roles}
               ref={(el) => { this.inputRole = el; }}
-              userId={user.id}
+              value={user.role.id}
               />
           </label>
           <button
