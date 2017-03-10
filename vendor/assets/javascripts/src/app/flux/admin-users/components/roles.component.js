@@ -38,7 +38,7 @@ export default class Roles extends React.Component {
 
   render() {
     let {roles} = this.props;
-    let extraOption = this.props.search ? (<option value="extra">-----</option>) : '';
+    let extraOption = this.props.search ? (<option value="extra">Search by Role</option>) : '';
     let rolesOptions = roles.map( role => {
       return (
         <option key={role.id} value={role.id}> {role.name} </option>

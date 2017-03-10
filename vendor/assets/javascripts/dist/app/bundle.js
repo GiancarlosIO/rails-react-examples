@@ -34617,7 +34617,7 @@
 	            'Email ',
 	            _react2.default.createElement(
 	              'span',
-	              null,
+	              { className: 'error' },
 	              this.state.errorEmail
 	            ),
 	            _react2.default.createElement('input', { value: this.state.emailText, onChange: this.handleChangeEmail, ref: function ref(el) {
@@ -34642,7 +34642,7 @@
 	          ),
 	          _react2.default.createElement(
 	            'button',
-	            { className: 'button button--medium button--blue', type: 'submit' },
+	            { className: 'button button--medium button--green-light', type: 'submit' },
 	            'Create User'
 	          )
 	        )
@@ -34784,7 +34784,7 @@
 	      var extraOption = this.props.search ? _react2.default.createElement(
 	        'option',
 	        { value: 'extra' },
-	        '-----'
+	        'Search by Role'
 	      ) : '';
 	      var rolesOptions = roles.map(function (role) {
 	        return _react2.default.createElement(
@@ -34969,7 +34969,7 @@
 	            'Email ',
 	            _react2.default.createElement(
 	              'span',
-	              null,
+	              { className: 'error' },
 	              this.state.errorEmail
 	            ),
 	            _react2.default.createElement('input', {
@@ -35016,7 +35016,7 @@
 	          _react2.default.createElement(
 	            'div',
 	            {
-	              className: 'button button--min button--grey',
+	              className: 'button button--min button--grey-light margin-left-15',
 	              onClick: this.cancelUpdate },
 	            'Cancel'
 	          )
@@ -35235,7 +35235,7 @@
 	          null,
 	          _react2.default.createElement(
 	            'button',
-	            { onClick: this.handleEdit, className: 'button button--min button--emerald' },
+	            { onClick: this.handleEdit, className: 'button button--min button--red-light' },
 	            'Edit'
 	          )
 	        ),
@@ -35244,7 +35244,7 @@
 	          null,
 	          _react2.default.createElement(
 	            'button',
-	            { onClick: this.handleDelete, className: 'button button--min button--emerald' },
+	            { onClick: this.handleDelete, className: 'button button--min button--red-light' },
 	            'Delete'
 	          )
 	        )

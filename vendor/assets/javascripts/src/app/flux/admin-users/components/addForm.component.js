@@ -62,7 +62,7 @@ export default class AddForm extends React.Component {
             <input ref={(el) => { this.inputLastName = el }} type="text"/>
           </label>
           <label className="admin-users__form__group">
-            Email <span>{this.state.errorEmail}</span>
+            Email <span className="error">{this.state.errorEmail}</span>
             <input value={this.state.emailText} onChange={this.handleChangeEmail} ref={(el) => { this.inputEmail = el }} type="text"/>
           </label>
           <label className="admin-users__form__group">
@@ -73,7 +73,7 @@ export default class AddForm extends React.Component {
             Role
             <Roles roles={roles} ref={(el) => { this.inputRole = el; }}/>
           </label>
-          <button  className="button button--medium button--blue" type="submit">Create User</button>
+          <button  className="button button--medium button--green-light" type="submit">Create User</button>
         </form>
       </div>
     )

@@ -25,8 +25,8 @@ export default class User extends React.Component {
         <td>{user.age}</td>
         <td>{user.email}</td>
         <td>{user.role.name}</td>
-        <td><button onClick={this.handleEdit} className="button button--min button--emerald">Edit</button></td>
-        <td><button onClick={this.handleDelete} className="button button--min button--emerald">Delete</button></td>
+        <td><button onClick={this.handleEdit} className="button button--min button--red-light">Edit</button></td>
+        <td><button onClick={this.handleDelete} className="button button--min button--red-light">Delete</button></td>
       </tr>
     )
   }

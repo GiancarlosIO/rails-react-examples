@@ -90,7 +90,7 @@ export default class EditForm extends React.Component {
               type="text"/>
           </label>
           <label className="admin-users__form__group">
-            Email <span>{this.state.errorEmail}</span>
+            Email <span className="error">{this.state.errorEmail}</span>
           <input
             value={user.email}
             ref={(el) => { this.inputEmail = el }}
@@ -121,7 +121,7 @@ export default class EditForm extends React.Component {
             Update User
           </button>
           <div
-            className="button button--min button--grey"
+            className="button button--min button--grey-light margin-left-15"
             onClick={this.cancelUpdate}>
             Cancel
           </div>
