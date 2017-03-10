@@ -49,7 +49,9 @@ export default class AdminUsersMainComponent extends React.Component {
     return (
       <div>
         <div className="row">
-          <div className="col-xs-12"> <h4 className="text-center">Managment Users</h4> </div>
+          <div className="col-xs-12">
+            <h4 className="text-center admin-users__title">User Administration</h4>
+          </div>
         </div>
         <Search roles={roles}/>
         <div className="row">

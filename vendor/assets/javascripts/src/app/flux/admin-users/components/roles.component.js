@@ -45,7 +45,10 @@ export default class Roles extends React.Component {
       )
     })
     return (
-      <select onChange={this.handleChange} value={this.state.role_id}>
+      <select
+        className="admin-users__roles"
+        onChange={this.handleChange}
+        value={this.state.role_id}>
         { extraOption }
         {rolesOptions}
       </select>

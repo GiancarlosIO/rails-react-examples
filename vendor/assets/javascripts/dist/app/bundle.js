@@ -34052,13 +34052,11 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'col-xs-12' },
-	            ' ',
 	            _react2.default.createElement(
 	              'h4',
-	              { className: 'text-center' },
-	              'Managment Users'
-	            ),
-	            ' '
+	              { className: 'text-center admin-users__title' },
+	              'User Administration'
+	            )
 	          )
 	        ),
 	        _react2.default.createElement(_search2.default, { roles: roles }),
@@ -34799,7 +34797,10 @@
 	      });
 	      return _react2.default.createElement(
 	        'select',
-	        { onChange: this.handleChange, value: this.state.role_id },
+	        {
+	          className: 'admin-users__roles',
+	          onChange: this.handleChange,
+	          value: this.state.role_id },
 	        extraOption,
 	        rolesOptions
 	      );
@@ -35320,15 +35321,15 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'row' },
+	        { className: 'row admin-users__search' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-xs-12 col-sm-3 col-md-3 col-lg-2 flex--column--start' },
+	          { className: 'col-xs-12 col-sm-3 col-md-3 col-lg-2 flex flex-center' },
 	          _react2.default.createElement(_roles2.default, { roles: roles, search: true, value: "extra" })
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-xs-12 col-sm-9 col-md-9 col-lg-10 flex--column--start' },
+	          { className: 'col-xs-12 col-sm-9 col-md-9 col-lg-10 flex flex-center' },
 	          _react2.default.createElement('input', { onChange: this.onChange, value: this.state.input, type: 'text', placeholder: 'Search by FirstName' })
 	        )
 	      );
