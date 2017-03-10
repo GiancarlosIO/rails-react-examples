@@ -33962,7 +33962,11 @@
 
 	var _addForm2 = _interopRequireDefault(_addForm);
 
-	var _usersList = __webpack_require__(329);
+	var _editForm = __webpack_require__(329);
+
+	var _editForm2 = _interopRequireDefault(_editForm);
+
+	var _usersList = __webpack_require__(330);
 
 	var _usersList2 = _interopRequireDefault(_usersList);
 
@@ -33984,7 +33988,8 @@
 	function getAppState() {
 	  return {
 	    users: _app4.default.getUsers(),
-	    roles: _app4.default.getRoles()
+	    roles: _app4.default.getRoles(),
+	    userToEdit: _app4.default.getUserToEdit()
 	  };
 	} // === end of function to get the state === //
 
@@ -34029,8 +34034,10 @@
 	    value: function render() {
 	      var _state = this.state,
 	          users = _state.users,
-	          roles = _state.roles;
+	          roles = _state.roles,
+	          userToEdit = _state.userToEdit;
 
+	      var form = userToEdit.id == undefined ? _react2.default.createElement(_addForm2.default, { roles: roles }) : _react2.default.createElement(_editForm2.default, { user: userToEdit, roles: roles });
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -34068,7 +34075,7 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'col-xs-12 col-sm-3 col-md-3 col-lg-2 height--fixed flex--column--start' },
-	            _react2.default.createElement(_addForm2.default, { roles: roles })
+	            form
 	          ),
 	          _react2.default.createElement(
 	            'div',
@@ -34125,11 +34132,15 @@
 	      user: user
 	    });
 	  },
-	  updateUser: function updateUser(user_id, user) {
+	  updateUser: function updateUser(user) {
 	    _app2.default.handleViewAction({
 	      actionType: _app4.default.UPDATE_USER,
-	      user_id: user_id,
 	      user: user
+	    });
+	  },
+	  cancelUpdate: function cancelUpdate() {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.CANCEL_UPDATE
 	    });
 	  },
 	  deleteUser: function deleteUser(user_id) {
@@ -34186,7 +34197,8 @@
 	  ADD_USER: 'ADD_USER',
 	  EDIT_USER: 'EDIT_USER',
 	  UPDATE_USER: 'UPDATE_USER',
-	  DELETE_USER: 'DELETE_USER'
+	  DELETE_USER: 'DELETE_USER',
+	  CANCEL_UPDATE: 'CANCEL_UPDATE'
 	};
 
 	exports.default = APP_CONSTANTS;
@@ -34225,6 +34237,7 @@
 
 	var _users = [];
 	var _roles = [];
+	var _userToEdit = {};
 
 	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
 	  // === getters === //
@@ -34233,6 +34246,9 @@
 	  },
 	  getRoles: function getRoles() {
 	    return _roles;
+	  },
+	  getUserToEdit: function getUserToEdit() {
+	    return _userToEdit;
 	  }, // === end of getters === //
 	  // === setters === //
 	  setUsers: function setUsers(users) {
@@ -34240,11 +34256,19 @@
 	  },
 	  setRoles: function setRoles(roles) {
 	    _roles = roles;
+	  },
+	  setUserToEdit: function setUserToEdit(user) {
+	    _userToEdit = user;
 	  }, // === end of setters === //
 	  addUser: function addUser(user) {
 	    _users = [user].concat(_users);
 	  },
-	  updateUser: function updateUser(user) {},
+	  updateUser: function updateUser(user) {
+	    var index = _users.findIndex(function (u) {
+	      return u.id == user.id;
+	    });
+	    _users[index] = user;
+	  },
 	  deleteUser: function deleteUser(user_id) {
 	    var index = _users.findIndex(function (user) {
 	      return user.id == user_id;
@@ -34290,8 +34314,29 @@
 	        });
 	        break;
 	      case _app4.default.EDIT_USER:
+	        // save in store
+	        AppStore.setUserToEdit(action.user);
+	        // Emit a change
+	        AppStore.emitChange();
 	        break;
 	      case _app4.default.UPDATE_USER:
+	        // Save in db
+	        console.log('updating user');
+	        _adminUsers2.default.updateUser(action.user).request.then(function (response) {
+	          console.log('user updated successfully');
+	          // Save in store
+	          AppStore.updateUser(response.data);
+	          // Emit a change
+	          AppStore.emitChange();
+	        }).catch(function (error) {
+	          return console.log('error to update a user', error.response);
+	        });
+	        break;
+	      case _app4.default.CANCEL_UPDATE:
+	        // delete userToEdit in store
+	        AppStore.setUserToEdit({});
+	        // Emit a Change
+	        AppStore.emitChange();
 	        break;
 	      case _app4.default.DELETE_USER:
 	        var user_id = action.user_id;
@@ -34362,7 +34407,20 @@
 	    });
 	    return { request: request, cancel: cancel };
 	  },
-	  updateUser: function updateUser(user) {},
+	  updateUser: function updateUser(user) {
+	    var CancelToken = _axios2.default.CancelToken;
+	    var cancel = void 0;
+	    var request = (0, _axios2.default)({
+	      method: 'put',
+	      url: BASE_URL + '/' + user.id,
+	      data: { user: user },
+	      responseType: 'json',
+	      cancel: new CancelToken(function (c) {
+	        return cancel = c;
+	      })
+	    });
+	    return { request: request, cancel: cancel };
+	  },
 	  deleteUser: function deleteUser(user_id) {
 	    var CancelToken = _axios2.default.CancelToken;
 	    var cancel = void 0;
@@ -34441,7 +34499,7 @@
 	          _this.inputLastName.value = '';
 	          _this.setState({ emailText: '' });
 	          _this.inputAge.value = '';
-	          _this.inputRole.resetRoleId();
+	          _this.inputRole.setRoleId();
 	        }
 	      };
 	    };
@@ -34631,8 +34689,12 @@
 	      return _this.state.role_id;
 	    };
 
-	    _this.resetRoleId = function () {
-	      _this.setState({ role_id: 1 });
+	    _this.setRoleId = function (id) {
+	      if (id) {
+	        _this.setState({ role_id: id });
+	      } else {
+	        _this.setState({ role_id: 1 });
+	      }
 	    };
 
 	    _this.handleChange = function (e) {
@@ -34642,12 +34704,19 @@
 	    };
 
 	    _this.state = {
-	      role_id: 1
+	      role_id: _this.props.userId ? _this.props.userId : 1
 	    };
 	    return _this;
 	  }
 
 	  _createClass(Roles, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.userId == undefined) {
+	        this.setState({ role_id: nextProps.userId });
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var roles = this.props.roles;
@@ -34663,7 +34732,7 @@
 	      });
 	      return _react2.default.createElement(
 	        'select',
-	        { onChange: this.handleChange },
+	        { onChange: this.handleChange, value: this.state.role_id },
 	        rolesOptions
 	      );
 	    }
@@ -34690,7 +34759,222 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _user = __webpack_require__(330);
+	var _emailValidator = __webpack_require__(327);
+
+	var _emailValidator2 = _interopRequireDefault(_emailValidator);
+
+	var _roles = __webpack_require__(328);
+
+	var _roles2 = _interopRequireDefault(_roles);
+
+	var _app = __webpack_require__(321);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EditForm = function (_React$Component) {
+	  _inherits(EditForm, _React$Component);
+
+	  function EditForm(props) {
+	    _classCallCheck(this, EditForm);
+
+	    var _this = _possibleConstructorReturn(this, (EditForm.__proto__ || Object.getPrototypeOf(EditForm)).call(this, props));
+
+	    _this.handleSubmit = function (e) {
+	      e.preventDefault();
+	      var user = _this.state.user;
+
+	      if (user.first_name.length > 0 && user.last_name.length > 0 && _this.state.errorEmail == '') {
+	        _app2.default.updateUser(user);
+	      }
+	    };
+
+	    _this.handleChange = function (type) {
+	      var newUser = _this.state.user;
+	      switch (type) {
+	        case 'first_name':
+	          newUser.first_name = _this.inputFirstName.value;
+	          _this.setState({ user: newUser });
+	          break;
+	        case 'last_name':
+	          newUser.last_name = _this.inputLastName.value;
+	          _this.setState({ user: newUser });
+	          break;
+	        case 'age':
+	          newUser.age = _this.inputAge.value;
+	          _this.setState({ user: newUser });
+	          break;
+	        case 'email':
+	          newUser.email = _this.inputEmail.value;
+	          _this.setState({ user: newUser }, function () {
+	            if (_emailValidator2.default.validate(_this.state.user.email)) {
+	              _this.setState({ errorEmail: '' });
+	            } else {
+	              _this.setState({ errorEmail: 'Email not valid' });
+	            };
+	          });
+	          break;
+	      }
+	    };
+
+	    _this.cancelUpdate = function () {
+	      _app2.default.cancelUpdate();
+	    };
+
+	    _this.state = {
+	      user: _this.props.user,
+	      errorEmail: _emailValidator2.default.validate(_this.props.user.email) ? '' : 'Email not valid'
+	    };
+	    return _this;
+	  }
+
+	  _createClass(EditForm, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      var _this2 = this;
+
+	      this.setState({ user: nextProps.user }, function () {
+	        if (_emailValidator2.default.validate(_this2.state.user.email)) {
+	          _this2.setState({ errorEmail: '' });
+	        } else {
+	          _this2.setState({ errorEmail: 'Email not valid' });
+	        };
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this3 = this;
+
+	      var user = this.state.user;
+	      var roles = this.props.roles;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'admin-users__form' },
+	        _react2.default.createElement(
+	          'h5',
+	          null,
+	          'Add a new user'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { onSubmit: this.handleSubmit },
+	          _react2.default.createElement(
+	            'label',
+	            { className: 'admin-users__form__group' },
+	            'First name',
+	            _react2.default.createElement('input', {
+	              value: user.first_name,
+	              ref: function ref(el) {
+	                _this3.inputFirstName = el;
+	              },
+	              onChange: this.handleChange.bind(this, 'first_name'),
+	              type: 'text' })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            { className: 'admin-users__form__group' },
+	            'Last name',
+	            _react2.default.createElement('input', {
+	              value: user.last_name,
+	              ref: function ref(el) {
+	                _this3.inputLastName = el;
+	              },
+	              onChange: this.handleChange.bind(this, 'last_name'),
+	              type: 'text' })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            { className: 'admin-users__form__group' },
+	            'Email ',
+	            _react2.default.createElement(
+	              'span',
+	              null,
+	              this.state.errorEmail
+	            ),
+	            _react2.default.createElement('input', {
+	              value: user.email,
+	              ref: function ref(el) {
+	                _this3.inputEmail = el;
+	              },
+	              onChange: this.handleChange.bind(this, 'email'),
+	              type: 'text' })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            { className: 'admin-users__form__group' },
+	            'Age',
+	            _react2.default.createElement('input', {
+	              value: user.age,
+	              ref: function ref(el) {
+	                _this3.inputAge = el;
+	              },
+	              onChange: this.handleChange.bind(this, 'age'),
+	              type: 'number',
+	              min: '1',
+	              max: '70' })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            { className: 'admin-users__form__group' },
+	            'Role',
+	            _react2.default.createElement(_roles2.default, {
+	              roles: roles,
+	              ref: function ref(el) {
+	                _this3.inputRole = el;
+	              },
+	              userId: user.id
+	            })
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            {
+	              className: 'button button--min button--blue',
+	              type: 'submit' },
+	            'Update User'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            {
+	              className: 'button button--min button--grey',
+	              onClick: this.cancelUpdate },
+	            'Cancel'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return EditForm;
+	}(_react2.default.Component);
+
+	exports.default = EditForm;
+
+/***/ },
+/* 330 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _user = __webpack_require__(331);
 
 	var _user2 = _interopRequireDefault(_user);
 
@@ -34789,7 +35073,7 @@
 	};
 
 /***/ },
-/* 330 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34824,7 +35108,9 @@
 
 	    var _this = _possibleConstructorReturn(this, (User.__proto__ || Object.getPrototypeOf(User)).call(this, props));
 
-	    _this.handleEdit = function () {};
+	    _this.handleEdit = function () {
+	      _app2.default.editUser(_this.props.user);
+	    };
 
 	    _this.handleDelete = function () {
 	      var user_id = _this.props.user.id;

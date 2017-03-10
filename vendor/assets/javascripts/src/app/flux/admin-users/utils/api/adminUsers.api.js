@@ -28,7 +28,16 @@ const ADMIN_USERS = {
     return { request, cancel }
   },
   updateUser: (user) => {
-
+    let CancelToken = axios.CancelToken;
+    let cancel;
+    let request = axios({
+      method: 'put',
+      url: `${BASE_URL}/${user.id}`,
+      data: {user},
+      responseType: 'json',
+      cancel: new CancelToken( c => cancel = c )
+    });
+    return { request, cancel }
   },
   deleteUser: (user_id) => {
     let CancelToken = axios.CancelToken;

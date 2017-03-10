@@ -21,11 +21,15 @@ const AppActions = {
       user
     });
   },
-  updateUser: (user_id, user) => {
+  updateUser: (user) => {
     AppDispatcher.handleViewAction({
       actionType: AppConstants.UPDATE_USER,
-      user_id,
       user
+    });
+  },
+  cancelUpdate: () => {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.CANCEL_UPDATE
     });
   },
   deleteUser: (user_id) => {

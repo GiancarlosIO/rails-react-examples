@@ -7,7 +7,7 @@ export default class User extends React.Component {
   }
 
   handleEdit = () => {
-
+    AppActions.editUser(this.props.user);
   }
 
   handleDelete = () => {

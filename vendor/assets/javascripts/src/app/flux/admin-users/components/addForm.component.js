@@ -30,7 +30,7 @@ export default class AddForm extends React.Component {
         this.inputLastName.value = '';
         this.setState({emailText: ''});
         this.inputAge.value = '';
-        this.inputRole.resetRoleId();
+        this.inputRole.setRoleId();
       }
     };
   }

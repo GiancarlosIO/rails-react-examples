@@ -7,7 +7,8 @@ import ADMIN_USERS from '../utils/api/adminUsers.api';
 const CHANGE_EVENT = 'change';
 
 var _users = [];
-var _roles = []
+var _roles = [];
+var _userToEdit = {};
 
 var AppStore = objectAssign({}, EventEmitter.prototype, {
   // === getters === //
@@ -16,6 +17,9 @@ var AppStore = objectAssign({}, EventEmitter.prototype, {
   },
   getRoles: function() {
     return _roles;
+  },
+  getUserToEdit: function() {
+    return _userToEdit;
   }, // === end of getters === //
   // === setters === //
   setUsers: function(users) {
@@ -23,12 +27,16 @@ var AppStore = objectAssign({}, EventEmitter.prototype, {
   },
   setRoles: function(roles) {
     _roles = roles;
+  },
+  setUserToEdit: function(user) {
+    _userToEdit = user;
   }, // === end of setters === //
   addUser: function(user) {
     _users = [user].concat(_users);
   },
   updateUser: function(user) {
-
+    let index = _users.findIndex( u => u.id == user.id );
+    _users[index] = user;
   },
   deleteUser: function(user_id) {
     let index = _users.findIndex( user => user.id == user_id );
@@ -71,8 +79,28 @@ AppDispatcher.register( payload => {
       ).catch( error => console.log('error to create user', error.response) );
       break;
     case AppConstants.EDIT_USER:
+      // save in store
+      AppStore.setUserToEdit(action.user);
+      // Emit a change
+      AppStore.emitChange();
       break;
     case AppConstants.UPDATE_USER:
+      // Save in db
+      console.log('updating user');
+      ADMIN_USERS.updateUser(action.user).request.then(
+        response => {
+        console.log('user updated successfully');
+        // Save in store
+        AppStore.updateUser(response.data);
+        // Emit a change
+        AppStore.emitChange();
+        }).catch( error => console.log('error to update a user', error.response));
+      break;
+    case AppConstants.CANCEL_UPDATE:
+      // delete userToEdit in store
+      AppStore.setUserToEdit({});
+      // Emit a Change
+      AppStore.emitChange();
       break;
     case AppConstants.DELETE_USER:
       let user_id = action.user_id

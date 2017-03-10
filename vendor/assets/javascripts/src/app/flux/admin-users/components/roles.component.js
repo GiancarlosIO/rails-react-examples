@@ -4,7 +4,13 @@ export default class Roles extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      role_id: 1
+      role_id: this.props.userId ? this.props.userId : 1
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.userId == undefined) {
+      this.setState({role_id: nextProps.userId});
     }
   }
 
@@ -12,8 +18,12 @@ export default class Roles extends React.Component {
     return this.state.role_id;
   }
 
-  resetRoleId = () => {
-    this.setState({role_id: 1})
+  setRoleId = (id) => {
+    if (id) {
+      this.setState({role_id: id})
+    } else {
+      this.setState({role_id: 1})
+    }
   }
 
   handleChange = (e) => {
@@ -30,7 +40,7 @@ export default class Roles extends React.Component {
       )
     })
     return (
-      <select onChange={this.handleChange}>
+      <select onChange={this.handleChange} value={this.state.role_id}>
         {rolesOptions}
       </select>
     )

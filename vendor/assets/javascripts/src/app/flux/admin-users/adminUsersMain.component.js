@@ -5,6 +5,7 @@ import ADMIN_USERS from './utils/api/adminUsers.api';
 
 // === Import Component ===//
 import AddForm from './components/addForm.component';
+import EditForm from './components/editForm.component';
 import UsersList from './components/usersList.component';
 // === end of Import Component ===//
 
@@ -13,7 +14,8 @@ import UsersList from './components/usersList.component';
 function getAppState() {
   return {
     users: AppStore.getUsers(),
-    roles: AppStore.getRoles()
+    roles: AppStore.getRoles(),
+    userToEdit: AppStore.getUserToEdit()
   }
 }// === end of function to get the state === //
 
@@ -41,7 +43,8 @@ export default class AdminUsersMainComponent extends React.Component {
   }
 
   render() {
-    let {users, roles} = this.state;
+    let {users, roles, userToEdit} = this.state;
+    let form = userToEdit.id == undefined ? (<AddForm roles={roles} />) : (<EditForm user={userToEdit} roles={roles} />);
     return (
       <div>
         <div className="row">
@@ -52,7 +55,7 @@ export default class AdminUsersMainComponent extends React.Component {
         </div>
         <div className="row">
           <div className="col-xs-12 col-sm-3 col-md-3 col-lg-2 height--fixed flex--column--start">
-            <AddForm roles={roles}/>
+            {form}
           </div>
           <div className="col-xs-12 col-sm-9 col-md-9 col-lg-10 height--fixed flex--column--start">
             <UsersList users={users}/>
