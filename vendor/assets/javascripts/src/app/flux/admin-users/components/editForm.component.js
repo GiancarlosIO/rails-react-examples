@@ -31,6 +31,7 @@ export default class EditForm extends React.Component {
     if (user.first_name.length > 0 && user.last_name.length > 0 && this.state.errorEmail == '') {
       AppActions.updateUser(user);
     }
+    AppActions.cancelUpdate();
   }
 
   handleChange = (type) => {
@@ -70,7 +71,7 @@ export default class EditForm extends React.Component {
     let {roles} = this.props;
     return (
       <div className="admin-users__form">
-        <h5>Add a new user</h5>
+        <h5>Edit a user</h5>
         <form onSubmit={this.handleSubmit}>
           <label className="admin-users__form__group">
             First name

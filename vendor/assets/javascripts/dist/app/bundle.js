@@ -33970,6 +33970,10 @@
 
 	var _usersList2 = _interopRequireDefault(_usersList);
 
+	var _search = __webpack_require__(332);
+
+	var _search2 = _interopRequireDefault(_search);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -34035,7 +34039,8 @@
 	      var _state = this.state,
 	          users = _state.users,
 	          roles = _state.roles,
-	          userToEdit = _state.userToEdit;
+	          userToEdit = _state.userToEdit,
+	          searchFirstName = _state.searchFirstName;
 
 	      var form = userToEdit.id == undefined ? _react2.default.createElement(_addForm2.default, { roles: roles }) : _react2.default.createElement(_editForm2.default, { user: userToEdit, roles: roles });
 	      return _react2.default.createElement(
@@ -34056,19 +34061,7 @@
 	            ' '
 	          )
 	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'row' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'col-xs-12' },
-	            _react2.default.createElement(
-	              'h4',
-	              { className: '' },
-	              ' Search box'
-	            )
-	          )
-	        ),
+	        _react2.default.createElement(_search2.default, { roles: roles }),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'row' },
@@ -34148,6 +34141,12 @@
 	      actionType: _app4.default.DELETE_USER,
 	      user_id: user_id
 	    });
+	  },
+	  searchByFirstName: function searchByFirstName(text) {
+	    _app2.default.handleViewAction({
+	      actionType: _app4.default.SEARCH_BY_FIRST_NAME,
+	      text: text
+	    });
 	  }
 	};
 
@@ -34198,7 +34197,8 @@
 	  EDIT_USER: 'EDIT_USER',
 	  UPDATE_USER: 'UPDATE_USER',
 	  DELETE_USER: 'DELETE_USER',
-	  CANCEL_UPDATE: 'CANCEL_UPDATE'
+	  CANCEL_UPDATE: 'CANCEL_UPDATE',
+	  SEARCH_BY_FIRST_NAME: 'SEARCH_BY_FIRST_NAME'
 	};
 
 	exports.default = APP_CONSTANTS;
@@ -34236,13 +34236,19 @@
 	var CHANGE_EVENT = 'change';
 
 	var _users = [];
+	var _usersFiltered = [];
 	var _roles = [];
 	var _userToEdit = {};
+	var _searchByFirstName = '';
 
 	var AppStore = (0, _objectAssign2.default)({}, _events.EventEmitter.prototype, {
 	  // === getters === //
 	  getUsers: function getUsers() {
-	    return _users;
+	    if (_searchByFirstName.length > 0) {
+	      return _usersFiltered;
+	    } else {
+	      return _users;
+	    }
 	  },
 	  getRoles: function getRoles() {
 	    return _roles;
@@ -34260,6 +34266,14 @@
 	  setUserToEdit: function setUserToEdit(user) {
 	    _userToEdit = user;
 	  }, // === end of setters === //
+	  SearchByFirstNameText: function SearchByFirstNameText(text) {
+	    _searchByFirstName = text.trim().toLowerCase();
+	    if (text.length > 0) {
+	      _usersFiltered = _users.filter(function (user) {
+	        return user.first_name.toLowerCase().indexOf(_searchByFirstName) > -1;
+	      });
+	    }
+	  },
 	  addUser: function addUser(user) {
 	    _users = [user].concat(_users);
 	  },
@@ -34350,6 +34364,12 @@
 	        }).catch(function (error) {
 	          return console.log('error to delete user', error.response);
 	        });
+	        break;
+	      case _app4.default.SEARCH_BY_FIRST_NAME:
+	        // save in store
+	        AppStore.SearchByFirstNameText(action.text);
+	        // Emit a change
+	        AppStore.emitChange();
 	        break;
 	    }
 	  })();
@@ -34796,6 +34816,7 @@
 	      if (user.first_name.length > 0 && user.last_name.length > 0 && _this.state.errorEmail == '') {
 	        _app2.default.updateUser(user);
 	      }
+	      _app2.default.cancelUpdate();
 	    };
 
 	    _this.handleChange = function (type) {
@@ -34864,7 +34885,7 @@
 	        _react2.default.createElement(
 	          'h5',
 	          null,
-	          'Add a new user'
+	          'Edit a user'
 	        ),
 	        _react2.default.createElement(
 	          'form',
@@ -35191,6 +35212,85 @@
 	User.propTypes = {
 	  user: _react2.default.PropTypes.object.isRequired
 	};
+
+/***/ },
+/* 332 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _app = __webpack_require__(321);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _roles = __webpack_require__(328);
+
+	var _roles2 = _interopRequireDefault(_roles);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Search = function (_React$Component) {
+	  _inherits(Search, _React$Component);
+
+	  function Search(props) {
+	    _classCallCheck(this, Search);
+
+	    var _this = _possibleConstructorReturn(this, (Search.__proto__ || Object.getPrototypeOf(Search)).call(this, props));
+
+	    _this.onChange = function (e) {
+	      var input = e.target.value;
+	      _this.setState({ input: input });
+	      _app2.default.searchByFirstName(input);
+	    };
+
+	    _this.state = {
+	      input: ''
+	    };
+	    return _this;
+	  }
+
+	  _createClass(Search, [{
+	    key: 'render',
+	    value: function render() {
+	      var roles = this.props.roles;
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-xs-12 col-sm-3 col-md-3 col-lg-2 flex--column--start' },
+	          _react2.default.createElement(_roles2.default, { roles: roles })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-xs-12 col-sm-9 col-md-9 col-lg-10 flex--column--start' },
+	          _react2.default.createElement('input', { onChange: this.onChange, value: this.state.input, type: 'text', placeholder: 'Search by FirstName' })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Search;
+	}(_react2.default.Component);
+
+	exports.default = Search;
 
 /***/ }
 /******/ ]);

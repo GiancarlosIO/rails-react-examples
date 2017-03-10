@@ -37,6 +37,12 @@ const AppActions = {
       actionType: AppConstants.DELETE_USER,
       user_id
     });
+  },
+  searchByFirstName: (text) => {
+    AppDispatcher.handleViewAction({
+      actionType: AppConstants.SEARCH_BY_FIRST_NAME,
+      text
+    })
   }
 }
 

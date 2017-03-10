@@ -7,6 +7,7 @@ import ADMIN_USERS from './utils/api/adminUsers.api';
 import AddForm from './components/addForm.component';
 import EditForm from './components/editForm.component';
 import UsersList from './components/usersList.component';
+import Search from './components/search.component';
 // === end of Import Component ===//
 
 
@@ -43,16 +44,14 @@ export default class AdminUsersMainComponent extends React.Component {
   }
 
   render() {
-    let {users, roles, userToEdit} = this.state;
+    let {users, roles, userToEdit, searchFirstName} = this.state;
     let form = userToEdit.id == undefined ? (<AddForm roles={roles} />) : (<EditForm user={userToEdit} roles={roles} />);
     return (
       <div>
         <div className="row">
           <div className="col-xs-12"> <h4 className="text-center">Managment Users</h4> </div>
         </div>
-        <div className="row">
-          <div className="col-xs-12"><h4 className=""> Search box</h4></div>
-        </div>
+        <Search roles={roles}/>
         <div className="row">
           <div className="col-xs-12 col-sm-3 col-md-3 col-lg-2 height--fixed flex--column--start">
             {form}

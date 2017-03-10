@@ -7,13 +7,19 @@ import ADMIN_USERS from '../utils/api/adminUsers.api';
 const CHANGE_EVENT = 'change';
 
 var _users = [];
+var _usersFiltered = [];
 var _roles = [];
 var _userToEdit = {};
+var _searchByFirstName = '';
 
 var AppStore = objectAssign({}, EventEmitter.prototype, {
   // === getters === //
   getUsers: function() {
-    return _users;
+    if (_searchByFirstName.length > 0) {
+      return _usersFiltered
+    } else {
+      return _users;
+    }
   },
   getRoles: function() {
     return _roles;
@@ -31,6 +37,12 @@ var AppStore = objectAssign({}, EventEmitter.prototype, {
   setUserToEdit: function(user) {
     _userToEdit = user;
   }, // === end of setters === //
+  SearchByFirstNameText: function(text) {
+    _searchByFirstName = text.trim().toLowerCase();
+    if (text.length > 0) {
+      _usersFiltered = _users.filter( user => user.first_name.toLowerCase().indexOf(_searchByFirstName) > -1 );
+    }
+  },
   addUser: function(user) {
     _users = [user].concat(_users);
   },
@@ -113,6 +125,12 @@ AppDispatcher.register( payload => {
           // emit a change
           AppStore.emitChange();
         }).catch( error => console.log('error to delete user', error.response) )
+      break;
+    case AppConstants.SEARCH_BY_FIRST_NAME:
+      // save in store
+      AppStore.SearchByFirstNameText(action.text);
+      // Emit a change
+      AppStore.emitChange();
       break;
   }
 });
