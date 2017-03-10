@@ -34791,6 +34791,8 @@
 	      e.preventDefault();
 	      var user = _this.state.user;
 
+	      user.role_id = _this.inputRole.getRoleId();
+	      user.role = undefined;
 	      if (user.first_name.length > 0 && user.last_name.length > 0 && _this.state.errorEmail == '') {
 	        _app2.default.updateUser(user);
 	      }

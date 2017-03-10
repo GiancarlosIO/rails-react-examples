@@ -26,6 +26,8 @@ export default class EditForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     let {user} = this.state;
+    user.role_id = this.inputRole.getRoleId();
+    user.role = undefined
     if (user.first_name.length > 0 && user.last_name.length > 0 && this.state.errorEmail == '') {
       AppActions.updateUser(user);
     }
